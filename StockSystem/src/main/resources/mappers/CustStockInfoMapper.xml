@@ -35,7 +35,7 @@
     </select>
 
     <insert id="insert" >
-        INSERT INTO stock_info ( stockcode, name, ISIN_code, publish_date, market_type, industry_type, updated_time)
+        INSERT IGNORE INTO stock_info ( stockcode, name, ISIN_code, publish_date, market_type, industry_type, updated_time)
         VALUES
         <foreach collection="list" item="item" separator=",">
             ( #{item.stockcode}, #{item.name}, #{item.isinCode},  #{item.publishDate},  #{item.marketType}, #{item.industryType}, NOW())

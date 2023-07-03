@@ -51,7 +51,7 @@ public class StockInfoService {
 
             stockInfoList.add(stockInfo);
         }
-        stockInfoDataAccess.saveAll(stockInfoList);
+        stockInfoDataAccess.insertAll(stockInfoList);
     }
 
     public List<StockInfo> findAllStockInfo() {

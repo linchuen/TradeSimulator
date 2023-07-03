@@ -9,15 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.io.IOException;
 
-@Disabled
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("dev")
-@ContextConfiguration(classes = {StockInfoService.class, StockInfoDataAccess.class})
 class StockInfoServiceTest {
 
     @InjectMocks
@@ -28,7 +23,9 @@ class StockInfoServiceTest {
 
     @Test
     void crawlIndustry() throws IOException {
-        Mockito.doReturn(null).when(stockInfoDataAccess).saveAll(Mockito.anyList());
+        Mockito.doReturn(null).when(stockInfoDataAccess).insertAll(Mockito.anyList());
         stockInfoService.crawlIndustry();
+        //assure that before insert data into database has no errors
+        Mockito.verify(stockInfoDataAccess).insertAll(Mockito.anyList());
     }
 }
