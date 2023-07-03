@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="AccountSystem" />
+        <module name="TradeSystem" />
+        <module name="common" />
+        <module name="StockSystem" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="AccountSystem" options="-parameters" />
+      <module name="StockSystem" options="-parameters" />
+      <module name="TradeSimulator" options="-parameters" />
+      <module name="TradeSystem" options="-parameters" />
+      <module name="common" options="-parameters" />
+    </option>
+  </component>
+</project>
