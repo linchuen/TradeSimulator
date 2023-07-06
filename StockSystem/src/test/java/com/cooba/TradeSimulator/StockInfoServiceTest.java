@@ -1,8 +1,7 @@
 package com.cooba.TradeSimulator;
 
-import com.cooba.TradeSimulator.DataAccess.StockInfoDataAccess;
+import com.cooba.TradeSimulator.DataAccess.StockInfoDataLink;
 import com.cooba.TradeSimulator.Service.StockInfoService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,13 +18,13 @@ class StockInfoServiceTest {
     StockInfoService stockInfoService;
 
     @Mock
-    StockInfoDataAccess stockInfoDataAccess;
+    StockInfoDataLink stockInfoDataLink;
 
     @Test
     void crawlIndustry() throws IOException {
-        Mockito.doReturn(null).when(stockInfoDataAccess).insertAll(Mockito.anyList());
+        Mockito.doReturn(null).when(stockInfoDataLink).insertAll(Mockito.anyList());
         stockInfoService.crawlIndustry();
         //assure that before insert data into database has no errors
-        Mockito.verify(stockInfoDataAccess).insertAll(Mockito.anyList());
+        Mockito.verify(stockInfoDataLink).insertAll(Mockito.anyList());
     }
 }

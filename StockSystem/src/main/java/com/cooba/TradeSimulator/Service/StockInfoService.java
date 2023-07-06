@@ -1,6 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataAccess.StockInfoDataAccess;
+import com.cooba.TradeSimulator.DataAccess.StockInfoDataLink;
 import com.cooba.TradeSimulator.Entity.StockInfo;
 import com.cooba.TradeSimulator.Util.SSLHelper;
 import org.jsoup.Jsoup;
@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class StockInfoService {
     @Autowired
-    private StockInfoDataAccess stockInfoDataAccess;
+    private StockInfoDataLink stockInfoDataLink;
 
     public void crawlIndustry() throws IOException {
         String siteurl = "https://isin.twse.com.tw/isin/C_public.jsp?strMode=2";
@@ -49,10 +49,10 @@ public class StockInfoService {
 
             stockInfoList.add(stockInfo);
         }
-        stockInfoDataAccess.insertAll(stockInfoList);
+        stockInfoDataLink.insertAll(stockInfoList);
     }
 
     public List<StockInfo> findAllStockInfo() {
-        return stockInfoDataAccess.findAll();
+        return stockInfoDataLink.findAll();
     }
 }

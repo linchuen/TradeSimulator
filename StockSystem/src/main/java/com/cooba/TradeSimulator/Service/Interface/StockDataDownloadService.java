@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 public interface StockDataDownloadService {
 
-    void downloadData(String stockcode, LocalDate localDate);
+    void downloadData(String stockcode, LocalDate localDate) throws Exception;
 }

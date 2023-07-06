@@ -1,13 +1,12 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.Entity.StockTradeInfo;
+import com.cooba.TradeSimulator.DataAccess.StockTradeRecordDataLink;
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Util.DateUtil;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,39 +18,33 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-@Slf4j
 @Service
-public class twseDataDownloadService implements StockDataDownloadService {
+public class TWSEDataDownloadService implements StockDataDownloadService {
     @Autowired
     HttpUtil httpUtil;
+    @Autowired
+    StockTradeRecordDataLink stockTradeRecordDataLink;
 
     @Override
-    public void downloadData(String stockcode, LocalDate localDate) {
-        try {
-            List<StockTradeInfo> stockTradeInfoList = sendHttpRequest(stockcode, localDate)
+    public void downloadData(String stockcode, LocalDate localDate) throws IOException, CsvException {
+            List<StockTradeRecord> stockTradeRecordList = sendHttpRequest(stockcode, localDate)
                     .readResponseByCSV()
-                    .transferRawDataToStockData();
-
-            saveDataToDB(stockTradeInfoList);
-        } catch (Exception e) {
-
-        }
+                    .transferRawData();
+            stockTradeRecordDataLink.saveAll(stockTradeRecordList);
     }
 
     private StockDataResponse sendHttpRequest(String stockcode, LocalDate localDate) {
-        Map<String, String> map = new HashMap<>(Map.of("response", "csv", "date", DateUtil.toFormatString(localDate), "stockNo", String.valueOf(stockcode)));
+        Map<String, String> map = new HashMap<>(Map.of(
+                "response", "csv",
+                "date", DateUtil.toFormatString(localDate),
+                "stockNo", String.valueOf(stockcode)));
         Response response = httpUtil.httpGet("https://www.twse.com.tw/exchangeReport/STOCK_DAY", map);
         return new StockDataResponse(stockcode, response);
     }
 
-    public void saveDataToDB(List<StockTradeInfo> stockTradeInfoList) {
-
-    }
-
-    @Data
     private static class StockDataResponse {
-        private String stockcode;
-        private Response response;
+        private final String stockcode;
+        private final Response response;
         private List<String[]> dataRows;
 
         public StockDataResponse(String stockcode, Response response) {
@@ -66,7 +59,7 @@ public class twseDataDownloadService implements StockDataDownloadService {
             return this;
         }
 
-        private List<StockTradeInfo> transferRawDataToStockData() {
+        private List<StockTradeRecord> transferRawData() {
             if (dataRows.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -104,7 +97,7 @@ public class twseDataDownloadService implements StockDataDownloadService {
                 BigDecimal turnover = new BigDecimal(strings[8]
                         .replace(",", ""));
 
-                return StockTradeInfo.builder()
+                return StockTradeRecord.builder()
                         .stockcode(this.stockcode)
                         .date(dataDate)
                         .year(y)

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class StockInfoDataAccess implements BaseMapper<StockInfo> {
+public class StockInfoDataLink implements BaseMapper<StockInfo> {
     @Autowired
     CustStockInfoMapper custStockInfoMapper;
 
