@@ -13,14 +13,15 @@ public class StockTradeRecord {
     private Long id;
     private String stockcode;
     private LocalDate date;
-    private int year;
-    private int month;
+    //成交股數
     private BigDecimal tradingVolume;
+    //成交金額
     private BigDecimal transaction;
     private BigDecimal openingPrice;
     private BigDecimal highestPrice;
     private BigDecimal lowestPrice;
     private BigDecimal closingPrice;
+    //成交筆數
     private BigDecimal turnover;
     private LocalDateTime createdTime;
 }

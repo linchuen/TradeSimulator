@@ -2,6 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataAccess.StockTradeRecordDataLink;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Util.DateUtil;
 import com.cooba.TradeSimulator.Util.HttpUtil;
@@ -24,6 +25,8 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
     HttpUtil httpUtil;
     @Autowired
     StockTradeRecordDataLink stockTradeRecordDataLink;
+    @Autowired
+    SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException, CsvException {
@@ -100,8 +103,6 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
                 return StockTradeRecord.builder()
                         .stockcode(this.stockcode)
                         .date(dataDate)
-                        .year(y)
-                        .month(m)
                         .tradingVolume(tradingVolume)
                         .transaction(transaction)
                         .openingPrice(openingPrice)
