@@ -1,45 +1,48 @@
 package com.cooba.TradeSimulator.DataAccess;
 
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+
 import java.util.List;
 
-public class StockTradeRecordDataLink implements BaseMapper{
+public class StockTradeRecordDataLink implements BaseMapper<StockTradeRecord>{
+
     @Override
-    public List find(Object entity) {
+    public List<StockTradeRecord> find(StockTradeRecord entity) {
         return null;
     }
 
     @Override
-    public List findAll() {
+    public List<StockTradeRecord> findAll() {
         return null;
     }
 
     @Override
-    public Object save(Object entity) {
+    public StockTradeRecord save(StockTradeRecord entity) {
         return null;
     }
 
     @Override
-    public List saveAll(List entities) {
+    public List<StockTradeRecord> saveAll(List<StockTradeRecord> entities) {
         return null;
     }
 
     @Override
-    public Object insert(Object entity) {
+    public StockTradeRecord insert(StockTradeRecord entity) {
         return null;
     }
 
     @Override
-    public List insertAll(List entities) {
+    public List<StockTradeRecord> insertAll(List<StockTradeRecord> entities) {
         return null;
     }
 
     @Override
-    public Object delete(Object entity) {
+    public StockTradeRecord delete(StockTradeRecord entity) {
         return null;
     }
 
     @Override
-    public List deleteAll(List entities) {
+    public List<StockTradeRecord> deleteAll(List<StockTradeRecord> entities) {
         return null;
     }
 }

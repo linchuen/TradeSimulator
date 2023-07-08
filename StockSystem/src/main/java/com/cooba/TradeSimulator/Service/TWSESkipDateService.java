@@ -35,7 +35,7 @@ public class TWSESkipDateService implements SkipDateService {
     }
 
     private SkipDataResponse sendHttpRequest(int year) {
-        Map<String,String> map = new HashMap(Map.of(
+        Map<String, String> map = new HashMap(Map.of(
                 "response", "csv",
                 "queryYear", year - 1911));
         Response response = httpUtil.httpGet("https://www.twse.com.tw/holidaySchedule/holidaySchedule", map);
@@ -64,21 +64,26 @@ public class TWSESkipDateService implements SkipDateService {
                 return Collections.emptyList();
             }
             dataRows = dataRows.subList(2, dataRows.size() - 1);
-            return dataRows.stream().map(strings -> {
+            return dataRows.stream().filter(strings -> {
+                String reason = strings[0];
                 String date = strings[1];
                 String regex = "(\\d+)月(\\d+)日";
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(date);
 
-                if (matcher.find()) {
-                    int month = Integer.parseInt(matcher.group(1));
-                    int day = Integer.parseInt(matcher.group(2));
+                return !reason.contains("開始") && matcher.find();
+            }).map(strings -> {
+                String date = strings[1];
+                String regex = "(\\d+)月(\\d+)日";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(date);
 
-                    return SkipDate.builder()
-                            .skipDate(LocalDate.of(year, month, day))
-                            .build();
-                }
-                return SkipDate.builder().build();
+                int month = Integer.parseInt(matcher.group(1));
+                int day = Integer.parseInt(matcher.group(2));
+
+                return SkipDate.builder()
+                        .skipDate(LocalDate.of(year, month, day))
+                        .build();
             }).collect(Collectors.toList());
         }
     }
