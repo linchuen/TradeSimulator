@@ -1,9 +1,11 @@
 package com.cooba.TradeSimulator.DataAccess;
 
+import com.cooba.TradeSimulator.Object.Request;
+
 import java.util.List;
 
-public interface BaseMapper<T> {
-    List<T> find(T entity);
+public interface BaseMapper<T, R extends Request> {
+    List<T> find(R request);
 
     List<T> findAll();
 
@@ -15,7 +17,7 @@ public interface BaseMapper<T> {
 
     List<T> insertAll(List<T> entities);
 
-    T delete(T entity);
+    T delete(R request);
 
     List<T> deleteAll(List<T> entities);
 }

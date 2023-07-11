@@ -1,45 +1,52 @@
 package com.cooba.TradeSimulator.DataAccess;
 
+import com.cooba.TradeSimulator.Entity.SkipDate;
+import com.cooba.TradeSimulator.Object.SkipDateReq;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
-public class SkipDateDataLink implements BaseMapper{
+@Component
+public class SkipDateDataLink implements BaseMapper<SkipDate, SkipDateReq> {
+
     @Override
-    public List find(Object entity) {
+    public List<SkipDate> find(SkipDateReq request) {
+
         return null;
     }
 
     @Override
-    public List findAll() {
+    public List<SkipDate> findAll() {
         return null;
     }
 
     @Override
-    public Object save(Object entity) {
+    public SkipDate save(SkipDate entity) {
         return null;
     }
 
     @Override
-    public List saveAll(List entities) {
+    public List<SkipDate> saveAll(List<SkipDate> entities) {
         return null;
     }
 
     @Override
-    public Object insert(Object entity) {
+    public SkipDate insert(SkipDate entity) {
         return null;
     }
 
     @Override
-    public List insertAll(List entities) {
+    public List<SkipDate> insertAll(List<SkipDate> entities) {
         return null;
     }
 
     @Override
-    public Object delete(Object entity) {
+    public SkipDate delete(SkipDateReq request) {
         return null;
     }
 
     @Override
-    public List deleteAll(List entities) {
+    public List<SkipDate> deleteAll(List<SkipDate> entities) {
         return null;
     }
 }

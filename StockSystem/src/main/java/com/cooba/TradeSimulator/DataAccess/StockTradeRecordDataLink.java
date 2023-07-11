@@ -1,13 +1,16 @@
 package com.cooba.TradeSimulator.DataAccess;
 
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+import com.cooba.TradeSimulator.Object.StockTradeRecordReq;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public class StockTradeRecordDataLink implements BaseMapper<StockTradeRecord>{
+@Component
+public class StockTradeRecordDataLink implements BaseMapper<StockTradeRecord, StockTradeRecordReq>{
 
     @Override
-    public List<StockTradeRecord> find(StockTradeRecord entity) {
+    public List<StockTradeRecord> find(StockTradeRecordReq request) {
         return null;
     }
 
@@ -37,7 +40,7 @@ public class StockTradeRecordDataLink implements BaseMapper<StockTradeRecord>{
     }
 
     @Override
-    public StockTradeRecord delete(StockTradeRecord entity) {
+    public StockTradeRecord delete(StockTradeRecordReq request) {
         return null;
     }
 

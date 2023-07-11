@@ -1,27 +1,25 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class StockDownloadPriorityService {
-    @Autowired
-    TWSEDataDownloadService twseDataDownloadService;
-    @Autowired
-    GoodInfoDataDownloadService goodInfoDataDownloadService;
-    @Autowired
-    AnueDataDownloadService anueDataDownloadService;
-    @Autowired
-    YahooDataDownloadService yahooDataDownloadService;
+    private final TWSEDataDownloadService twseDataDownloadService;
+    private final GoodInfoDataDownloadService goodInfoDataDownloadService;
+    private final AnueDataDownloadService anueDataDownloadService;
+    private final YahooDataDownloadService yahooDataDownloadService;
 
     final Map<Integer, StockDataDownloadService> downloadPriorityMap = new HashMap<>();
+    List<StockDataDownloadService> downloadPriorityList;
     final Map<StockDataDownloadService, Integer> downloadWeightMap = new HashMap<>();
 
     @PostConstruct
@@ -35,10 +33,15 @@ public class StockDownloadPriorityService {
         downloadWeightMap.put(anueDataDownloadService, 25);
         downloadWeightMap.put(goodInfoDataDownloadService, 15);
         downloadWeightMap.put(twseDataDownloadService, 10);
+
+        downloadPriorityList = downloadPriorityMap.entrySet().stream()
+                .sorted((Map.Entry.comparingByKey()))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
     }
 
-    public StockDataDownloadService getDownloadService(int priority) {
-        return downloadPriorityMap.get(priority);
+    public List<StockDataDownloadService> getDownloadServiceList() {
+        return downloadPriorityList;
     }
 
     public StockDataDownloadService getDownloadServiceByWeight() {

@@ -10,4 +10,3 @@ CREATE TABLE IF NOT EXISTS `stock_info` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `stock_info_stockcode_IDX` (`stockcode`,`market_type`,`industry_type`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;

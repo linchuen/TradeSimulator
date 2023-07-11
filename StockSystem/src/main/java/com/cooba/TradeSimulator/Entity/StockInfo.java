@@ -1,13 +1,13 @@
 package com.cooba.TradeSimulator.Entity;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@SuperBuilder
 public class StockInfo {
     private Long id;
 

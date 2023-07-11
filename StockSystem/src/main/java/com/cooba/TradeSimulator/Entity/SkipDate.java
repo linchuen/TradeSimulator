@@ -1,15 +1,16 @@
 package com.cooba.TradeSimulator.Entity;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@SuperBuilder
 public class SkipDate {
     private int id;
+    private String reason;
     private LocalDate skipDate;
     private LocalDateTime createdTime;
 }
