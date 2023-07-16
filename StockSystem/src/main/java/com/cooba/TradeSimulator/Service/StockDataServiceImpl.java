@@ -6,7 +6,9 @@ import com.cooba.TradeSimulator.Object.StockTradeRecordReq;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataService;
+import com.cooba.TradeSimulator.Util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,25 +28,43 @@ public class StockDataServiceImpl implements StockDataService {
     StockDownloadPriorityService stockDownloadPriorityService;
 
     @Override
-    public StockTradeRecord getNowStockData(String stockcode) throws Exception {
-        LocalDateTime now = LocalDateTime.now();
+    public StockTradeRecord getTodayStockData(String stockcode) throws Exception {
+        LocalDate date = findExistStockTradeDate();
+
+        Optional<StockTradeRecord> optionalStockTradeRecord = findTradeRecordOptional(stockcode, date);
+        if (optionalStockTradeRecord.isPresent()) {
+            return optionalStockTradeRecord.get();
+        }
+
+        downloadStockData(stockcode);
+        return findTradeRecordOptional(stockcode, date).orElseThrow(Exception::new);
+    }
+
+    @NotNull
+    private Optional<StockTradeRecord> findTradeRecordOptional(String stockcode, LocalDate date) {
+        return stockTradeRecordDataLink
+                .find(StockTradeRecordReq.builder().stockcode(stockcode).date(date).build())
+                .stream()
+                .findFirst();
+    }
+
+    @NotNull
+    private LocalDate findExistStockTradeDate() {
+        LocalDateTime now = DateUtil.now();
         LocalDate date = now.toLocalDate();
 
         if (now.isBefore(date.atTime(10, 0))) {
             date = date.minusDays(1);
         }
 
-        if (skipDateService.isSkipDate(date)) {
+        while (skipDateService.isSkipDate(date)) {
             date = date.minusDays(1);
         }
+        return date;
+    }
 
-        Optional<StockTradeRecord> optionalStockTradeRecord = stockTradeRecordDataLink
-                .find(StockTradeRecordReq.builder().stockcode(stockcode).date(date).build())
-                .stream()
-                .findFirst();
-        if (optionalStockTradeRecord.isPresent()) return optionalStockTradeRecord.get();
-
-        List<StockDataDownloadService> downloadServices = stockDownloadPriorityService.getDownloadServiceList();
+    private void downloadStockData(String stockcode) {
+        List<StockDataDownloadService> downloadServices = stockDownloadPriorityService.getDownloadPriorityList();
         for (StockDataDownloadService downloadService : downloadServices) {
             try {
                 downloadService.downloadData(stockcode, LocalDate.now());
@@ -53,9 +73,5 @@ public class StockDataServiceImpl implements StockDataService {
                 log.error("Error downloading stock data Code:{}, Date:{}", stockcode, LocalDate.now());
             }
         }
-        return stockTradeRecordDataLink
-                .find(StockTradeRecordReq.builder().stockcode(stockcode).date(date).build())
-                .stream()
-                .findFirst().orElseThrow(Exception::new);
     }
 }

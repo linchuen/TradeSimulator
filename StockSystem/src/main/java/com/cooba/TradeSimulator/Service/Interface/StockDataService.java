@@ -4,5 +4,5 @@ import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 
 public interface StockDataService {
 
-    StockTradeRecord getNowStockData(String stockcode) throws Exception;
+    StockTradeRecord getTodayStockData(String stockcode) throws Exception;
 }

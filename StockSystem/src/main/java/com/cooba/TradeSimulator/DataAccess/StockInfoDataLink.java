@@ -1,6 +1,5 @@
 package com.cooba.TradeSimulator.DataAccess;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cooba.TradeSimulator.Entity.StockInfo;
 import com.cooba.TradeSimulator.Mapper.StockInfoMapper;
 import com.cooba.TradeSimulator.Object.StockInfoReq;

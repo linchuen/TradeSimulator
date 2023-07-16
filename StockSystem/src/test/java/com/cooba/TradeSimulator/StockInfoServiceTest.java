@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 
+import static org.mockito.ArgumentMatchers.anyList;
+
 @ExtendWith(MockitoExtension.class)
 class StockInfoServiceTest {
 
@@ -22,9 +24,10 @@ class StockInfoServiceTest {
 
     @Test
     void crawlIndustry() throws IOException {
-        Mockito.doReturn(null).when(stockInfoDataLink).insertAll(Mockito.anyList());
+        Mockito.doReturn(null).when(stockInfoDataLink).insertAll(anyList());
+
         stockInfoService.crawlIndustry();
         //assure that before insert data into database has no errors
-        Mockito.verify(stockInfoDataLink).insertAll(Mockito.anyList());
+        Mockito.verify(stockInfoDataLink).insertAll(anyList());
     }
 }

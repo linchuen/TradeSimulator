@@ -40,7 +40,7 @@ public class StockDownloadPriorityService {
                 .collect(Collectors.toList());
     }
 
-    public List<StockDataDownloadService> getDownloadServiceList() {
+    public List<StockDataDownloadService> getDownloadPriorityList() {
         return downloadPriorityList;
     }
 

@@ -2,6 +2,7 @@ package com.cooba.TradeSimulator.Util;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtil {
@@ -24,5 +25,9 @@ public class DateUtil {
         DateTimeFormatter format = DateTimeFormatter.ofPattern(NORMAL_FORMAT);
         if (str.length() == 6) return LocalDate.parse(str + "01", format);
         return LocalDate.parse(str, format);
+    }
+
+    public static LocalDateTime now() {
+        return LocalDateTime.now();
     }
 }

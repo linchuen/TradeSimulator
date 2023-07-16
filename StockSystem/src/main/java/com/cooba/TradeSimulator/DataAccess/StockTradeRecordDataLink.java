@@ -1,17 +1,24 @@
 package com.cooba.TradeSimulator.DataAccess;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+import com.cooba.TradeSimulator.Mapper.StockTradeRecordMapper;
 import com.cooba.TradeSimulator.Object.StockTradeRecordReq;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class StockTradeRecordDataLink implements BaseMapper<StockTradeRecord, StockTradeRecordReq>{
+public class StockTradeRecordDataLink implements BaseMapper<StockTradeRecord, StockTradeRecordReq> {
+    @Autowired
+    StockTradeRecordMapper stockTradeRecordMapper;
 
     @Override
     public List<StockTradeRecord> find(StockTradeRecordReq request) {
-        return null;
+        QueryWrapper<StockTradeRecord> query = new QueryWrapper<>();
+        query.eq("stockcode", request.getStockcode()).eq("date", request.getDate());
+        return stockTradeRecordMapper.selectList(query);
     }
 
     @Override

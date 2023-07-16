@@ -18,6 +18,8 @@
     <modules>
         <module>common</module>
         <module>AccountSystem</module>
+        <module>StockSystem</module>
+        <module>TradeSystem</module>
     </modules>
 
     <properties>
