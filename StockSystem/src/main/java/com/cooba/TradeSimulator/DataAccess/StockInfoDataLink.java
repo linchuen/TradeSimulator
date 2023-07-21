@@ -1,7 +1,7 @@
 package com.cooba.TradeSimulator.DataAccess;
 
 import com.cooba.TradeSimulator.Entity.StockInfo;
-import com.cooba.TradeSimulator.Mapper.StockInfoMapper;
+import com.cooba.TradeSimulator.Mapper.CustStockInfoMapper;
 import com.cooba.TradeSimulator.Object.StockInfoReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class StockInfoDataLink implements BaseMapper<StockInfo, StockInfoReq> {
     @Autowired
-    StockInfoMapper stockInfoMapper;
+    CustStockInfoMapper custStockInfoMapper;
 
     @Override
     public List<StockInfo> find(StockInfoReq request) {
@@ -24,38 +24,32 @@ public class StockInfoDataLink implements BaseMapper<StockInfo, StockInfoReq> {
     }
 
     @Override
-    public StockInfo save(StockInfo entity) {
-        return null;
+    public boolean save(StockInfo entity) {
+        return false;
     }
 
     @Override
-    public List<StockInfo> saveAll(List<StockInfo> entities) {
-        return null;
+    public boolean saveAll(List<StockInfo> entities) {
+        return false;
     }
 
     @Override
-    public StockInfo insert(StockInfo entity) {
-        return null;
+    public boolean insert(StockInfo entity) {
+        return false;
     }
 
     @Override
-    public List<StockInfo> insertAll(List<StockInfo> entities) {
-        entities.forEach(entity -> {
-            try {
-                stockInfoMapper.insert(entity);
-            } catch (Exception ignored) {
-            }
-        });
-        return entities;
+    public boolean insertAll(List<StockInfo> entities) {
+        return custStockInfoMapper.insertAll(entities)==1;
     }
 
     @Override
-    public StockInfo delete(StockInfoReq request) {
-        return null;
+    public boolean delete(StockInfoReq request) {
+        return false;
     }
 
     @Override
-    public List<StockInfo> deleteAll(List<StockInfo> entities) {
-        return null;
+    public boolean deleteAll(List<StockInfo> entities) {
+        return false;
     }
 }

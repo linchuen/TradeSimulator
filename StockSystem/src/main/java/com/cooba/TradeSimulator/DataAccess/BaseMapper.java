@@ -9,15 +9,15 @@ public interface BaseMapper<T, R extends Request> {
 
     List<T> findAll();
 
-    T save(T entity);
+    boolean save(T entity);
 
-    List<T> saveAll(List<T> entities);
+    boolean saveAll(List<T> entities);
 
-    T insert(T entity);
+    boolean insert(T entity);
 
-    List<T> insertAll(List<T> entities);
+    boolean insertAll(List<T> entities);
 
-    T delete(R request);
+    boolean delete(R request);
 
-    List<T> deleteAll(List<T> entities);
+    boolean deleteAll(List<T> entities);
 }

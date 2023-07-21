@@ -2,6 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataAccess.StockTradeRecordDataLink;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+import com.cooba.TradeSimulator.Exception.DownloadException;
 import com.cooba.TradeSimulator.Object.StockTradeRecordReq;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
@@ -29,19 +30,19 @@ public class StockDataServiceImpl implements StockDataService {
 
     @Override
     public StockTradeRecord getTodayStockData(String stockcode) throws Exception {
-        LocalDate date = findExistStockTradeDate();
+        LocalDate date = findLastTradeDate();
 
-        Optional<StockTradeRecord> optionalStockTradeRecord = findTradeRecordOptional(stockcode, date);
+        Optional<StockTradeRecord> optionalStockTradeRecord = findTradeRecordByDate(stockcode, date);
         if (optionalStockTradeRecord.isPresent()) {
             return optionalStockTradeRecord.get();
         }
 
         downloadStockData(stockcode);
-        return findTradeRecordOptional(stockcode, date).orElseThrow(Exception::new);
+        return findTradeRecordByDate(stockcode, date).orElseThrow(DownloadException::new);
     }
 
     @NotNull
-    private Optional<StockTradeRecord> findTradeRecordOptional(String stockcode, LocalDate date) {
+    private Optional<StockTradeRecord> findTradeRecordByDate(String stockcode, LocalDate date) {
         return stockTradeRecordDataLink
                 .find(StockTradeRecordReq.builder().stockcode(stockcode).date(date).build())
                 .stream()
@@ -49,7 +50,7 @@ public class StockDataServiceImpl implements StockDataService {
     }
 
     @NotNull
-    private LocalDate findExistStockTradeDate() {
+    private LocalDate findLastTradeDate() {
         LocalDateTime now = DateUtil.now();
         LocalDate date = now.toLocalDate();
 

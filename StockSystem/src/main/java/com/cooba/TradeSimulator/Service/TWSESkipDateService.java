@@ -97,7 +97,5 @@ public class TWSESkipDateService implements SkipDateService {
         }
         return Optional.ofNullable(skipDateDataLink.find(SkipDateReq.builder().skipDate(date).build())).isPresent();
     }
-
-
 }
 

@@ -1,18 +1,25 @@
 package com.cooba.TradeSimulator.DataAccess;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cooba.TradeSimulator.Entity.SkipDate;
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+import com.cooba.TradeSimulator.Mapper.SkipDateMapper;
 import com.cooba.TradeSimulator.Object.SkipDateReq;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class SkipDateDataLink implements BaseMapper<SkipDate, SkipDateReq> {
+    @Autowired
+    SkipDateMapper skipDateMapper;
 
     @Override
     public List<SkipDate> find(SkipDateReq request) {
-
-        return null;
+        QueryWrapper<SkipDate> query = new QueryWrapper<>();
+        query.eq("skip_date", request.getSkipDate());
+        return skipDateMapper.selectList(query);
     }
 
     @Override
@@ -21,32 +28,32 @@ public class SkipDateDataLink implements BaseMapper<SkipDate, SkipDateReq> {
     }
 
     @Override
-    public SkipDate save(SkipDate entity) {
-        return null;
+    public boolean save(SkipDate entity) {
+        return false;
     }
 
     @Override
-    public List<SkipDate> saveAll(List<SkipDate> entities) {
-        return null;
+    public boolean saveAll(List<SkipDate> entities) {
+        return false;
     }
 
     @Override
-    public SkipDate insert(SkipDate entity) {
-        return null;
+    public boolean insert(SkipDate entity) {
+        return false;
     }
 
     @Override
-    public List<SkipDate> insertAll(List<SkipDate> entities) {
-        return null;
+    public boolean insertAll(List<SkipDate> entities) {
+        return false;
     }
 
     @Override
-    public SkipDate delete(SkipDateReq request) {
-        return null;
+    public boolean delete(SkipDateReq request) {
+        return false;
     }
 
     @Override
-    public List<SkipDate> deleteAll(List<SkipDate> entities) {
-        return null;
+    public boolean deleteAll(List<SkipDate> entities) {
+        return false;
     }
 }

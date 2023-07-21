@@ -23,36 +23,36 @@ public class StockTradeRecordDataLink implements BaseMapper<StockTradeRecord, St
 
     @Override
     public List<StockTradeRecord> findAll() {
-        return null;
+        return stockTradeRecordMapper.selectList(new QueryWrapper<>());
     }
 
     @Override
-    public StockTradeRecord save(StockTradeRecord entity) {
-        return null;
+    public boolean save(StockTradeRecord entity) {
+        return stockTradeRecordMapper.updateById(entity) == 1;
     }
 
     @Override
-    public List<StockTradeRecord> saveAll(List<StockTradeRecord> entities) {
-        return null;
+    public boolean saveAll(List<StockTradeRecord> entities) {
+        return false;
     }
 
     @Override
-    public StockTradeRecord insert(StockTradeRecord entity) {
-        return null;
+    public boolean insert(StockTradeRecord entity) {
+        return stockTradeRecordMapper.insert(entity) == 1;
     }
 
     @Override
-    public List<StockTradeRecord> insertAll(List<StockTradeRecord> entities) {
-        return null;
+    public boolean insertAll(List<StockTradeRecord> entities) {
+        return false;
     }
 
     @Override
-    public StockTradeRecord delete(StockTradeRecordReq request) {
-        return null;
+    public boolean delete(StockTradeRecordReq request) {
+        return false;
     }
 
     @Override
-    public List<StockTradeRecord> deleteAll(List<StockTradeRecord> entities) {
-        return null;
+    public boolean deleteAll(List<StockTradeRecord> entities) {
+        return false;
     }
 }
