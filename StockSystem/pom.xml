@@ -16,52 +16,6 @@
         <java.version>17</java.version>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/profile/dev</directory>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-
-        <profile>
-            <id>prod</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/profile/prod</directory>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-
-        <profile>
-            <id>test</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/profile/test</directory>
-                    </resource>
-                </resources>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                    <scope>runtime</scope>
-                </dependency>
-            </dependencies>
-
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-    </profiles>
-
     <dependencies>
         <dependency>
             <groupId>com.cooba</groupId>
@@ -84,37 +38,4 @@
             <artifactId>opencsv</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.sql</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.13</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.mybatis</groupId>
-                        <artifactId>mybatis-typehandlers-jsr310</artifactId>
-                        <version>1.0.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
