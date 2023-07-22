@@ -8,7 +8,13 @@
         <option value="$PROJECT_DIR$/AccountSystem/pom.xml" />
         <option value="$PROJECT_DIR$/StockSystem/pom.xml" />
         <option value="$PROJECT_DIR$/TradeSystem/pom.xml" />
+        <option value="$PROJECT_DIR$/MybatisPlugin/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/AccountSystem/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">

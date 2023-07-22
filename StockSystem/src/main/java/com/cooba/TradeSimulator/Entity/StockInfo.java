@@ -5,9 +5,10 @@ import java.time.LocalDateTime;
 import javax.annotation.Generated;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 public class StockInfo {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private Long id;

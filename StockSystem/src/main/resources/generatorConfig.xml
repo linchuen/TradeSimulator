@@ -55,8 +55,11 @@
         <!-- 表名和生成的实体名 -->
 
         <!-- 表名和生成所有TABLE -->
+        <table tableName="skip_date">
+        </table>
         <table tableName="stock_info">
-
+        </table>
+        <table tableName="stock_trade_record">
         </table>
     </context>
 </generatorConfiguration>
