@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -16,51 +16,6 @@
         <java.version>17</java.version>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/profile/dev</directory>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-
-        <profile>
-            <id>prod</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/profile/prod</directory>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-
-        <profile>
-            <id>test</id>
-            <build>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/profile/test</directory>
-                    </resource>
-                </resources>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                </dependency>
-            </dependencies>
-
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-    </profiles>
-
     <dependencies>
         <dependency>
             <groupId>com.cooba</groupId>
@@ -69,4 +24,20 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.mybatis</groupId>
+                        <artifactId>mybatis-typehandlers-jsr310</artifactId>
+                        <version>1.0.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

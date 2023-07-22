@@ -1,5 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
+import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
 import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
 import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.wallet.Wallet;
@@ -33,7 +34,7 @@ public class UserWalletService implements WalletService {
                     return a;
                 }
             });
-            walletDataAccess.updateWallet(wallet);
+            walletDataAccess.save(wallet);
         } catch (Exception ignored) {
 
         } finally {

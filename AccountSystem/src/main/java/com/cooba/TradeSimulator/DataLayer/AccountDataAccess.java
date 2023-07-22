@@ -1,10 +1,8 @@
 package com.cooba.TradeSimulator.DataLayer;
 
 
-import com.cooba.TradeSimulator.Mapper.AccountMapper;
 import com.cooba.TradeSimulator.Object.Account;
 import com.cooba.TradeSimulator.Request.AccountReq;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +10,6 @@ import java.util.List;
 
 @Service
 public class AccountDataAccess implements BaseMapper<Account, AccountReq> {
-    @Autowired
-    private AccountMapper accountMapper;
 
     @Override
     public List<Account> find(AccountReq request) {

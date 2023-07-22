@@ -1,10 +1,8 @@
 package com.cooba.TradeSimulator.Mapper;
 
-import com.cooba.TradeSimulator.Entity.StockInfo;
-
 import java.util.List;
 
-public interface CustStockInfoMapper extends StockInfoMapper{
+public interface CustStockInfoMapper {
     int insertAll(List<StockInfo> stockInfos);
     int update(StockInfo stockInfo);
     int updateAll(List<StockInfo> stockInfos);

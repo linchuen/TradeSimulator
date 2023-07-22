@@ -1,12 +1,12 @@
 package com.cooba.TradeSimulator.Object;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
 @Data
-@Builder
+@SuperBuilder
 public class Account {
     private Long id;
     private String uuid;
