@@ -1,13 +1,11 @@
 package com.cooba.TradeSimulator;
 
-import com.cooba.TradeSimulator.DataAccess.WalletDataAccess;
-import com.cooba.TradeSimulator.DataAccess.WalletDataAccessImp;
+import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
 import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
 import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
 import com.cooba.TradeSimulator.Object.wallet.Wallet;
-import com.cooba.TradeSimulator.Service.Interface.WalletService;
-import com.cooba.TradeSimulator.Service.WalletServiceImpl;
+import com.cooba.TradeSimulator.Service.UserWalletService;
 import com.cooba.TradeSimulator.Util.RLock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -28,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Disabled
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = {WalletServiceImpl.class, RLock.class, WalletDataAccessImp.class})
+@ContextConfiguration(classes = {UserWalletService.class, RLock.class, WalletDataAccess.class})
 class WalletServiceTest {
 
     @Autowired
-    WalletServiceImpl walletService;
+    UserWalletService walletService;
 
     @Mock
     WalletDataAccess walletDataAccess;

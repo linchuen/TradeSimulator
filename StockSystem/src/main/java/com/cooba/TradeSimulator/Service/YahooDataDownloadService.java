@@ -1,6 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataAccess.StockTradeRecordDataLink;
+import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Service
 public class YahooDataDownloadService implements StockDataDownloadService {
     @Autowired
-    private StockTradeRecordDataLink stockTradeRecordDataLink;
+    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
     @Autowired
     SkipDateService skipDateService;
 
@@ -57,7 +57,7 @@ public class YahooDataDownloadService implements StockDataDownloadService {
                     .tradingVolume(new BigDecimal(tradingVolume))
                     .build();
 
-            stockTradeRecordDataLink.insert(stockTradeRecord);
+            stockTradeRecordDataAccess.insert(stockTradeRecord);
         } catch (Exception e) {
 
         }

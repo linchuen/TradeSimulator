@@ -1,15 +1,15 @@
-package com.cooba.TradeSimulator.DataAccess;
+package com.cooba.TradeSimulator.DataLayer;
 
 import com.cooba.TradeSimulator.Entity.StockInfo;
 import com.cooba.TradeSimulator.Mapper.CustStockInfoMapper;
-import com.cooba.TradeSimulator.Object.StockInfoReq;
+import com.cooba.TradeSimulator.Request.StockInfoReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class StockInfoDataLink implements BaseMapper<StockInfo, StockInfoReq> {
+public class StockInfoDataAccess implements BaseMapper<StockInfo, StockInfoReq> {
     @Autowired
     CustStockInfoMapper custStockInfoMapper;
 

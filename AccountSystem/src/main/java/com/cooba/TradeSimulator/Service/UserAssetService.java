@@ -9,21 +9,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AssetServiceImpl implements AssetService {
+public class UserAssetService implements AssetService {
     @Autowired
-    private WalletServiceImpl walletServiceImpl;
+    private UserWalletService userWalletService;
 
     @Override
     public void showAssets(List<Wallet> wallets) {
         for (Wallet wallet : wallets) {
-            walletServiceImpl.showAsset(wallet);
+            userWalletService.showAsset(wallet);
         }
     }
 
     @Override
     public void showAssetsByUnit(List<Wallet> wallets, Asset asset) {
         for (Wallet wallet : wallets) {
-            walletServiceImpl.showAsset(wallet);
+            userWalletService.showAsset(wallet);
         }
     }
 

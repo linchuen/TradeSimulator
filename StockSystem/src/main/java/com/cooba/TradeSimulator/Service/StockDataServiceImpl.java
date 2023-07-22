@@ -1,9 +1,9 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataAccess.StockTradeRecordDataLink;
+import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Exception.DownloadException;
-import com.cooba.TradeSimulator.Object.StockTradeRecordReq;
+import com.cooba.TradeSimulator.Request.StockTradeRecordReq;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataService;
@@ -24,7 +24,7 @@ public class StockDataServiceImpl implements StockDataService {
     @Autowired
     SkipDateService skipDateService;
     @Autowired
-    StockTradeRecordDataLink stockTradeRecordDataLink;
+    StockTradeRecordDataAccess stockTradeRecordDataAccess;
     @Autowired
     StockDownloadPriorityService stockDownloadPriorityService;
 
@@ -43,7 +43,7 @@ public class StockDataServiceImpl implements StockDataService {
 
     @NotNull
     private Optional<StockTradeRecord> findTradeRecordByDate(String stockcode, LocalDate date) {
-        return stockTradeRecordDataLink
+        return stockTradeRecordDataAccess
                 .find(StockTradeRecordReq.builder().stockcode(stockcode).date(date).build())
                 .stream()
                 .findFirst();

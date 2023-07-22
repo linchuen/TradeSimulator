@@ -1,6 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataAccess.StockTradeRecordDataLink;
+import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
@@ -24,7 +24,7 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
     @Autowired
     HttpUtil httpUtil;
     @Autowired
-    StockTradeRecordDataLink stockTradeRecordDataLink;
+    StockTradeRecordDataAccess stockTradeRecordDataAccess;
     @Autowired
     SkipDateService skipDateService;
 
@@ -33,7 +33,7 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
             List<StockTradeRecord> stockTradeRecordList = sendHttpRequest(stockcode, localDate)
                     .readResponseByCSV()
                     .transferRawData();
-            stockTradeRecordDataLink.saveAll(stockTradeRecordList);
+            stockTradeRecordDataAccess.saveAll(stockTradeRecordList);
     }
 
     private StockDataResponse sendHttpRequest(String stockcode, LocalDate localDate) {

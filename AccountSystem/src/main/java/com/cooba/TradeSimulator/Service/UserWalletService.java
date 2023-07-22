@@ -1,6 +1,5 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataAccess.WalletDataAccess;
 import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
 import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.wallet.Wallet;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class WalletServiceImpl implements WalletService {
+public class UserWalletService implements WalletService {
     @Autowired
     private DistributedLock lock;
     @Autowired

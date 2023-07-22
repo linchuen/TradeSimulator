@@ -1,6 +1,7 @@
-package com.cooba.TradeSimulator.Object;
+package com.cooba.TradeSimulator.Request;
 
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+import com.cooba.TradeSimulator.Object.Request;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,6 +15,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
-public class StockTradeRecordReq extends StockTradeRecord implements Request{
+public class StockTradeRecordReq extends StockTradeRecord implements Request {
 
 }

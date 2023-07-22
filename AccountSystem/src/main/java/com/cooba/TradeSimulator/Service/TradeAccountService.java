@@ -1,6 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataAccess.AccountDataAccess;
+import com.cooba.TradeSimulator.DataLayer.AccountDataAccess;
 import com.cooba.TradeSimulator.Object.Account;
 import com.cooba.TradeSimulator.Service.Interface.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.UUID;
 
-public class AccountServiceImpl implements AccountService {
+public class TradeAccountService implements AccountService {
     @Autowired
     private AccountDataAccess accountDataAccess;
 

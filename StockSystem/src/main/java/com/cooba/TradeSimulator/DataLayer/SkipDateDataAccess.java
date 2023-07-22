@@ -1,17 +1,16 @@
-package com.cooba.TradeSimulator.DataAccess;
+package com.cooba.TradeSimulator.DataLayer;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cooba.TradeSimulator.Entity.SkipDate;
-import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Mapper.SkipDateMapper;
-import com.cooba.TradeSimulator.Object.SkipDateReq;
+import com.cooba.TradeSimulator.Request.SkipDateReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class SkipDateDataLink implements BaseMapper<SkipDate, SkipDateReq> {
+public class SkipDateDataAccess implements BaseMapper<SkipDate, SkipDateReq> {
     @Autowired
     SkipDateMapper skipDateMapper;
 
