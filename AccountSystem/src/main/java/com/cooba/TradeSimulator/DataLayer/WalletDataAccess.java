@@ -98,26 +98,18 @@ public class WalletDataAccess {
                 .build());
     }
 
-    public Optional<CurrencyWallet> selectCurrencyWallet(Integer userId) {
+    public List<CurrencyAsset> selectCurrencyAssetList(Integer userId) {
         SelectStatementProvider query = SqlBuilder.select(UserCurrencyWalletMapper.selectList)
                 .from(UserCurrencyWalletDynamicSqlSupport.userCurrencyWallet)
                 .where(UserCurrencyWalletDynamicSqlSupport.accountId, isEqualTo(userId))
                 .build().render(RenderingStrategies.MYBATIS3);
         List<UserCurrencyWallet> currencyWalletList = userCurrencyWalletMapper.selectMany(query);
 
-        if (currencyWalletList.isEmpty()) {
-            return Optional.empty();
-        }
-
-        List<CurrencyAsset> currencyAssetList = currencyWalletList.stream()
+        return currencyWalletList.stream()
                 .map(userCurrencyWallet -> CurrencyAsset.builder()
                         .currencyId(userCurrencyWallet.getCurrencyId())
                         .build())
                 .collect(Collectors.toList());
-        return Optional.of(CurrencyWallet.builder()
-                .userId(userId)
-                .assets(currencyAssetList)
-                .build());
     }
 
     public Optional<StockInfoAsset> selectStockAsset(Integer userId, Integer stockId) {
@@ -139,24 +131,17 @@ public class WalletDataAccess {
                 .build());
     }
 
-    public Optional<StockWallet> selectStockWallet(Integer userId) {
+    public List<StockInfoAsset> selectStockAssetList(Integer userId) {
         SelectStatementProvider query = SqlBuilder.select(UserStockWalletMapper.selectList)
                 .from(UserStockWalletDynamicSqlSupport.userStockWallet)
                 .where(UserStockWalletDynamicSqlSupport.accountId, isEqualTo(userId))
                 .build().render(RenderingStrategies.MYBATIS3);
         List<UserStockWallet> stockWalletList = userStockWalletMapper.selectMany(query);
 
-        if (stockWalletList.isEmpty()) {
-            return Optional.empty();
-        }
-        List<StockInfoAsset> stockInfoAssetList = stockWalletList.stream()
+        return stockWalletList.stream()
                 .map(userStockWallet -> StockInfoAsset.builder()
                         .stockId(userStockWallet.getStockId())
                         .build())
                 .collect(Collectors.toList());
-        return Optional.of(StockWallet.builder()
-                .userId(userId)
-                .assets(stockInfoAssetList)
-                .build());
     }
 }

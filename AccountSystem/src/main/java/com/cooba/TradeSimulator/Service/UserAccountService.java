@@ -2,8 +2,8 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.AccountDataAccess;
 import com.cooba.TradeSimulator.Entity.Account;
+import com.cooba.TradeSimulator.Object.AccountDto;
 import com.cooba.TradeSimulator.Service.Interface.AccountService;
-import org.mybatis.dynamic.sql.delete.DeleteDSLCompleter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +14,8 @@ import java.util.UUID;
 public class UserAccountService implements AccountService {
     @Autowired
     AccountDataAccess accountDataAccess;
+    @Autowired
+    UserWalletService userWalletService;
 
     @Override
     public void createAccount(String name) {
@@ -41,7 +43,17 @@ public class UserAccountService implements AccountService {
     }
 
     @Override
-    public com.cooba.TradeSimulator.Object.Account showAccount(String uuid) {
-        return null;
+    public Optional<AccountDto> getAccount(String uuid) {
+        Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            return Optional.of(AccountDto.builder()
+                    .uuid(account.getUuid())
+                    .name(account.getName())
+                    .password(account.getPassword())
+                    .wallets(userWalletService.getWallets(account.getId()))
+                    .build());
+        }
+        return Optional.empty();
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
-public class Account {
+public class AccountDto {
     private String uuid;
     private String name;
     private String password;

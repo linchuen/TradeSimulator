@@ -7,11 +7,12 @@ import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface WalletService {
     void deposit(Integer userId, Integer currencyId, BigDecimal amount);
 
     void withdraw(Integer userId, Integer currencyId, BigDecimal amount) throws InsufficientBalanceException;
 
-    void showAsset(Wallet wallet);
+    List<Wallet> getWallets(Integer userId);
 }

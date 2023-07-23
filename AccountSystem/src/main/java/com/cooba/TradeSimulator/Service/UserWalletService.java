@@ -5,13 +5,16 @@ import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
 import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.Wallet;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
+import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
+import com.cooba.TradeSimulator.Object.wallet.StockWallet;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import com.cooba.TradeSimulator.Util.DistributedLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -54,12 +57,11 @@ public class UserWalletService implements WalletService {
     }
 
     @Override
-    public void showAsset(Wallet wallet) {
-        Map<String, Asset> assetMap = wallet.getAssets();
-        for (Map.Entry<String, Asset> entry : assetMap.entrySet()) {
-            Asset asset = entry.getValue();
-
-            System.out.println(asset.getType() + ":" + asset.getAmount());
-        }
+    public List<Wallet> getWallets(Integer userId) {
+        List<CurrencyAsset> currencyAssetList = walletDataAccess.selectCurrencyAssetList(userId);
+        List<StockInfoAsset> stockAssetList = walletDataAccess.selectStockAssetList(userId);
+        CurrencyWallet currencyWallet = CurrencyWallet.builder().userId(userId).assets(currencyAssetList).build();
+        StockWallet stockWallet = StockWallet.builder().userId(userId).assets(stockAssetList).build();
+        return List.of(currencyWallet, stockWallet);
     }
 }

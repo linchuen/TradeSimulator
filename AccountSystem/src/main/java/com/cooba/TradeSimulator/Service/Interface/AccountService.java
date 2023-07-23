@@ -1,6 +1,8 @@
 package com.cooba.TradeSimulator.Service.Interface;
 
-import com.cooba.TradeSimulator.Object.Account;
+import com.cooba.TradeSimulator.Object.AccountDto;
+
+import java.util.Optional;
 
 public interface AccountService {
     void createAccount(String name);
@@ -9,5 +11,5 @@ public interface AccountService {
 
     void deleteAccountIfExist(String uuid);
 
-    Account showAccount(String uuid);
+    Optional<AccountDto> getAccount(String uuid);
 }
