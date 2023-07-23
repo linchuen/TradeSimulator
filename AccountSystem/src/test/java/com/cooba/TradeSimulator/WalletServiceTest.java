@@ -4,7 +4,7 @@ import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
 import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
 import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
-import com.cooba.TradeSimulator.Object.wallet.Wallet;
+import com.cooba.TradeSimulator.Object.Wallet;
 import com.cooba.TradeSimulator.Service.UserWalletService;
 import com.cooba.TradeSimulator.Util.RLock;
 import org.junit.jupiter.api.BeforeEach;

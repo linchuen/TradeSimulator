@@ -1,24 +1,31 @@
 package com.cooba.TradeSimulator.Entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.annotation.Generated;
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder
-public class SkipDate {
+@Builder
+public class Account {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private Integer id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private String reason;
+    private String uuid;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private LocalDate date;
+    private String name;
+
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
+    private String password;
+
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
+    private Boolean isEnable;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private LocalDateTime createdTime;
+
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
+    private LocalDateTime updatedTime;
 }

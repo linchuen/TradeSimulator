@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class StockInfo {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private Long id;
+    private Integer id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private String stockcode;

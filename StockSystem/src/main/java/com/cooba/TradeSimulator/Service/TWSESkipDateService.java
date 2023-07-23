@@ -1,8 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.SkipDateDataAccess;
-import com.cooba.TradeSimulator.Entity.SkipDate;
-import com.cooba.TradeSimulator.Request.SkipDateReq;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.CSVReader;
@@ -84,7 +82,7 @@ public class TWSESkipDateService implements SkipDateService {
 
                 return SkipDate.builder()
                         .reason(strings[0])
-                        .skipDate(LocalDate.of(year, month, day))
+                        .date(LocalDate.of(year, month, day))
                         .build();
             }).collect(Collectors.toList());
         }
@@ -95,7 +93,7 @@ public class TWSESkipDateService implements SkipDateService {
         if (weekend.contains(date.getDayOfWeek())) {
             return true;
         }
-        return Optional.ofNullable(skipDateDataAccess.find(SkipDateReq.builder().skipDate(date).build())).isPresent();
+        return skipDateDataAccess.findByDate(date).isPresent();
     }
 }
 

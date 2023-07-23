@@ -3,67 +3,53 @@ package com.cooba.TradeSimulator.Service;
 import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
 import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
 import com.cooba.TradeSimulator.Object.Asset;
-import com.cooba.TradeSimulator.Object.wallet.Wallet;
+import com.cooba.TradeSimulator.Object.Wallet;
+import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
+import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import com.cooba.TradeSimulator.Util.DistributedLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserWalletService implements WalletService {
     @Autowired
-    private DistributedLock lock;
-    @Autowired
     private WalletDataAccess walletDataAccess;
 
     @Override
-    public void deposit(Wallet wallet, Asset asset) {
-        lock.getLock();
-
-        try {
-            lock.lock();
-            Map<String, Asset> assetMap = wallet.getAssets();
-
-            assetMap.compute(asset.getType(), (k, a) -> {
-                if (a == null) {
-                    return asset;
-                } else {
-                    a.setAmount(a.getAmount() + asset.getAmount());
-                    return a;
-                }
-            });
-            walletDataAccess.save(wallet);
-        } catch (Exception ignored) {
-
-        } finally {
-            lock.unlock();
+    public void deposit(Integer userId, Integer currencyId, BigDecimal amount) {
+        Optional<CurrencyAsset> currencyWalletOptional = walletDataAccess.selectCurrencyAsset(userId, currencyId);
+        if (currencyWalletOptional.isEmpty()) {
+            CurrencyAsset currencyAsset = CurrencyAsset.builder()
+                    .currencyId(currencyId)
+                    .amount(BigDecimal.ZERO).build();
+            walletDataAccess.insertWallet(userId, currencyAsset);
+        } else {
+            CurrencyAsset currencyAsset = currencyWalletOptional.get();
+            currencyAsset.setAmount(currencyAsset.getAmount().add(amount));
+            walletDataAccess.updateAssetAmount(userId, currencyAsset);
         }
     }
 
     @Override
-    public void withdraw(Wallet wallet, Asset asset) throws InsufficientBalanceException {
-        lock.getLock();
-
-        try {
-            lock.lock();
-            Map<String, Asset> assetMap = wallet.getAssets();
-
-
-            Asset walletAsset = assetMap.get(asset.getType());
-            if (walletAsset == null) {
-                throw new InsufficientBalanceException(asset.getType());
-            }
-
-            if (walletAsset.getAmount() < asset.getAmount()) {
-                throw new InsufficientBalanceException(asset.getType());
-            }
-            walletAsset.setAmount(walletAsset.getAmount() - asset.getAmount());
-            assetMap.put(asset.getType(), walletAsset);
-            walletDataAccess.updateWallet(wallet);
-        } finally {
-            lock.unlock();
+    public void withdraw(Integer userId, Integer currencyId, BigDecimal amount) throws InsufficientBalanceException {
+        Optional<CurrencyAsset> currencyWalletOptional = walletDataAccess.selectCurrencyAsset(userId, currencyId);
+        if (currencyWalletOptional.isEmpty()) {
+            CurrencyAsset currencyAsset = CurrencyAsset.builder()
+                    .currencyId(currencyId)
+                    .amount(BigDecimal.ZERO).build();
+            walletDataAccess.insertWallet(userId, currencyAsset);
+            throw new InsufficientBalanceException();
+        } else {
+            CurrencyAsset currencyAsset = currencyWalletOptional.get();
+            BigDecimal result = currencyAsset.getAmount().subtract(amount);
+            if (result.compareTo(BigDecimal.ZERO) < 0) throw new InsufficientBalanceException();
+            currencyAsset.setAmount(result);
+            walletDataAccess.updateAssetAmount(userId, currencyAsset);
         }
     }
 

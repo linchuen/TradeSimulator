@@ -1,9 +1,9 @@
 package com.cooba.TradeSimulator.Mapper;
 
-import static com.cooba.TradeSimulator.Mapper.SkipDateDynamicSqlSupport.*;
+import static com.cooba.TradeSimulator.Mapper.AccountDynamicSqlSupport.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.*;
 
-import com.cooba.TradeSimulator.Entity.SkipDate;
+import com.cooba.TradeSimulator.Entity.Account;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -33,9 +33,9 @@ import org.mybatis.dynamic.sql.util.SqlProviderAdapter;
 import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
 
 @Mapper
-public interface SkipDateMapper {
+public interface AccountMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    BasicColumn[] selectList = BasicColumn.columnList(id, reason, date, createdTime);
+    BasicColumn[] selectList = BasicColumn.columnList(id, uuid, name, password, isEnable, createdTime, updatedTime);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -47,26 +47,29 @@ public interface SkipDateMapper {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @InsertProvider(type=SqlProviderAdapter.class, method="insert")
-    int insert(InsertStatementProvider<SkipDate> insertStatement);
+    int insert(InsertStatementProvider<Account> insertStatement);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @InsertProvider(type=SqlProviderAdapter.class, method="insertMultiple")
-    int insertMultiple(MultiRowInsertStatementProvider<SkipDate> multipleInsertStatement);
+    int insertMultiple(MultiRowInsertStatementProvider<Account> multipleInsertStatement);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
-    @ResultMap("SkipDateResult")
-    Optional<SkipDate> selectOne(SelectStatementProvider selectStatement);
+    @ResultMap("AccountResult")
+    Optional<Account> selectOne(SelectStatementProvider selectStatement);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
-    @Results(id="SkipDateResult", value = {
+    @Results(id="AccountResult", value = {
         @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
-        @Result(column="reason", property="reason", jdbcType=JdbcType.VARCHAR),
-        @Result(column="date", property="date", jdbcType=JdbcType.DATE),
-        @Result(column="created_time", property="createdTime", jdbcType=JdbcType.TIMESTAMP)
+        @Result(column="uuid", property="uuid", jdbcType=JdbcType.VARCHAR),
+        @Result(column="name", property="name", jdbcType=JdbcType.VARCHAR),
+        @Result(column="password", property="password", jdbcType=JdbcType.VARCHAR),
+        @Result(column="is_enable", property="isEnable", jdbcType=JdbcType.BIT),
+        @Result(column="created_time", property="createdTime", jdbcType=JdbcType.TIMESTAMP),
+        @Result(column="updated_time", property="updatedTime", jdbcType=JdbcType.TIMESTAMP)
     })
-    List<SkipDate> selectMany(SelectStatementProvider selectStatement);
+    List<Account> selectMany(SelectStatementProvider selectStatement);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @UpdateProvider(type=SqlProviderAdapter.class, method="update")
@@ -74,12 +77,12 @@ public interface SkipDateMapper {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default long count(CountDSLCompleter completer) {
-        return MyBatis3Utils.countFrom(this::count, skipDate, completer);
+        return MyBatis3Utils.countFrom(this::count, account, completer);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default int delete(DeleteDSLCompleter completer) {
-        return MyBatis3Utils.deleteFrom(this::delete, skipDate, completer);
+        return MyBatis3Utils.deleteFrom(this::delete, account, completer);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
@@ -90,52 +93,61 @@ public interface SkipDateMapper {
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default int insert(SkipDate record) {
-        return MyBatis3Utils.insert(this::insert, record, skipDate, c ->
+    default int insert(Account record) {
+        return MyBatis3Utils.insert(this::insert, record, account, c ->
             c.map(id).toProperty("id")
-            .map(reason).toProperty("reason")
-            .map(date).toProperty("date")
+            .map(uuid).toProperty("uuid")
+            .map(name).toProperty("name")
+            .map(password).toProperty("password")
+            .map(isEnable).toProperty("isEnable")
             .map(createdTime).toProperty("createdTime")
+            .map(updatedTime).toProperty("updatedTime")
         );
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default int insertMultiple(Collection<SkipDate> records) {
-        return MyBatis3Utils.insertMultiple(this::insertMultiple, records, skipDate, c ->
+    default int insertMultiple(Collection<Account> records) {
+        return MyBatis3Utils.insertMultiple(this::insertMultiple, records, account, c ->
             c.map(id).toProperty("id")
-            .map(reason).toProperty("reason")
-            .map(date).toProperty("date")
+            .map(uuid).toProperty("uuid")
+            .map(name).toProperty("name")
+            .map(password).toProperty("password")
+            .map(isEnable).toProperty("isEnable")
             .map(createdTime).toProperty("createdTime")
+            .map(updatedTime).toProperty("updatedTime")
         );
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default int insertSelective(SkipDate record) {
-        return MyBatis3Utils.insert(this::insert, record, skipDate, c ->
+    default int insertSelective(Account record) {
+        return MyBatis3Utils.insert(this::insert, record, account, c ->
             c.map(id).toPropertyWhenPresent("id", record::getId)
-            .map(reason).toPropertyWhenPresent("reason", record::getReason)
-            .map(date).toPropertyWhenPresent("date", record::getDate)
+            .map(uuid).toPropertyWhenPresent("uuid", record::getUuid)
+            .map(name).toPropertyWhenPresent("name", record::getName)
+            .map(password).toPropertyWhenPresent("password", record::getPassword)
+            .map(isEnable).toPropertyWhenPresent("isEnable", record::getIsEnable)
             .map(createdTime).toPropertyWhenPresent("createdTime", record::getCreatedTime)
+            .map(updatedTime).toPropertyWhenPresent("updatedTime", record::getUpdatedTime)
         );
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default Optional<SkipDate> selectOne(SelectDSLCompleter completer) {
-        return MyBatis3Utils.selectOne(this::selectOne, selectList, skipDate, completer);
+    default Optional<Account> selectOne(SelectDSLCompleter completer) {
+        return MyBatis3Utils.selectOne(this::selectOne, selectList, account, completer);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default List<SkipDate> select(SelectDSLCompleter completer) {
-        return MyBatis3Utils.selectList(this::selectMany, selectList, skipDate, completer);
+    default List<Account> select(SelectDSLCompleter completer) {
+        return MyBatis3Utils.selectList(this::selectMany, selectList, account, completer);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default List<SkipDate> selectDistinct(SelectDSLCompleter completer) {
-        return MyBatis3Utils.selectDistinct(this::selectMany, selectList, skipDate, completer);
+    default List<Account> selectDistinct(SelectDSLCompleter completer) {
+        return MyBatis3Utils.selectDistinct(this::selectMany, selectList, account, completer);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default Optional<SkipDate> selectByPrimaryKey(Integer id_) {
+    default Optional<Account> selectByPrimaryKey(Integer id_) {
         return selectOne(c ->
             c.where(id, isEqualTo(id_))
         );
@@ -143,41 +155,53 @@ public interface SkipDateMapper {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     default int update(UpdateDSLCompleter completer) {
-        return MyBatis3Utils.update(this::update, skipDate, completer);
+        return MyBatis3Utils.update(this::update, account, completer);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    static UpdateDSL<UpdateModel> updateAllColumns(SkipDate record, UpdateDSL<UpdateModel> dsl) {
+    static UpdateDSL<UpdateModel> updateAllColumns(Account record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalTo(record::getId)
-                .set(reason).equalTo(record::getReason)
-                .set(date).equalTo(record::getDate)
-                .set(createdTime).equalTo(record::getCreatedTime);
+                .set(uuid).equalTo(record::getUuid)
+                .set(name).equalTo(record::getName)
+                .set(password).equalTo(record::getPassword)
+                .set(isEnable).equalTo(record::getIsEnable)
+                .set(createdTime).equalTo(record::getCreatedTime)
+                .set(updatedTime).equalTo(record::getUpdatedTime);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    static UpdateDSL<UpdateModel> updateSelectiveColumns(SkipDate record, UpdateDSL<UpdateModel> dsl) {
+    static UpdateDSL<UpdateModel> updateSelectiveColumns(Account record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalToWhenPresent(record::getId)
-                .set(reason).equalToWhenPresent(record::getReason)
-                .set(date).equalToWhenPresent(record::getDate)
-                .set(createdTime).equalToWhenPresent(record::getCreatedTime);
+                .set(uuid).equalToWhenPresent(record::getUuid)
+                .set(name).equalToWhenPresent(record::getName)
+                .set(password).equalToWhenPresent(record::getPassword)
+                .set(isEnable).equalToWhenPresent(record::getIsEnable)
+                .set(createdTime).equalToWhenPresent(record::getCreatedTime)
+                .set(updatedTime).equalToWhenPresent(record::getUpdatedTime);
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default int updateByPrimaryKey(SkipDate record) {
+    default int updateByPrimaryKey(Account record) {
         return update(c ->
-            c.set(reason).equalTo(record::getReason)
-            .set(date).equalTo(record::getDate)
+            c.set(uuid).equalTo(record::getUuid)
+            .set(name).equalTo(record::getName)
+            .set(password).equalTo(record::getPassword)
+            .set(isEnable).equalTo(record::getIsEnable)
             .set(createdTime).equalTo(record::getCreatedTime)
+            .set(updatedTime).equalTo(record::getUpdatedTime)
             .where(id, isEqualTo(record::getId))
         );
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default int updateByPrimaryKeySelective(SkipDate record) {
+    default int updateByPrimaryKeySelective(Account record) {
         return update(c ->
-            c.set(reason).equalToWhenPresent(record::getReason)
-            .set(date).equalToWhenPresent(record::getDate)
+            c.set(uuid).equalToWhenPresent(record::getUuid)
+            .set(name).equalToWhenPresent(record::getName)
+            .set(password).equalToWhenPresent(record::getPassword)
+            .set(isEnable).equalToWhenPresent(record::getIsEnable)
             .set(createdTime).equalToWhenPresent(record::getCreatedTime)
+            .set(updatedTime).equalToWhenPresent(record::getUpdatedTime)
             .where(id, isEqualTo(record::getId))
         );
     }

@@ -1,53 +1,65 @@
 package com.cooba.TradeSimulator.DataLayer;
 
 
-import com.cooba.TradeSimulator.Object.Account;
-import com.cooba.TradeSimulator.Request.AccountReq;
+import com.cooba.TradeSimulator.Entity.Account;
+import com.cooba.TradeSimulator.Mapper.AccountDynamicSqlSupport;
+import com.cooba.TradeSimulator.Mapper.AccountMapper;
+import org.mybatis.dynamic.sql.SqlBuilder;
+import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
+import org.mybatis.dynamic.sql.update.UpdateDSL;
+import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 
 @Service
-public class AccountDataAccess implements BaseMapper<Account, AccountReq> {
+public class AccountDataAccess {
+    @Autowired
+    AccountMapper accountMapper;
 
-    @Override
-    public List<Account> find(AccountReq request) {
-        return null;
+    public boolean insertAccount(Account account) {
+        account.setCreatedTime(LocalDateTime.now());
+        account.setUpdatedTime(LocalDateTime.now());
+        return accountMapper.insert(account) == 1;
     }
 
-    @Override
-    public List<Account> findAll() {
-        return null;
+    public boolean updateAccount(Account account) {
+        UpdateStatementProvider query = SqlBuilder.update(AccountDynamicSqlSupport.account)
+                .set(AccountDynamicSqlSupport.name).equalTo(account.getName())
+                .set(AccountDynamicSqlSupport.updatedTime).equalTo(LocalDateTime.now())
+                .where(AccountDynamicSqlSupport.uuid, isEqualTo(account.getUuid()))
+                .build().render(RenderingStrategies.MYBATIS3);
+        return accountMapper.update(query) == 1;
     }
 
-    @Override
-    public boolean save(Account entity) {
-        return false;
+    public boolean deleteAccount(String uuid) {
+        DeleteStatementProvider query = SqlBuilder.deleteFrom(AccountDynamicSqlSupport.account)
+                .where(AccountDynamicSqlSupport.uuid, isEqualTo(uuid))
+                .build()
+                .render(RenderingStrategies.MYBATIS3);
+        return accountMapper.delete(query) == 1;
     }
 
-    @Override
-    public boolean saveAll(List<Account> entities) {
-        return false;
+    public Optional<Account> selectAccount(String uuid) {
+        SelectStatementProvider query = SqlBuilder.select(AccountMapper.selectList)
+                .from(AccountDynamicSqlSupport.account)
+                .where(AccountDynamicSqlSupport.uuid, isEqualTo(uuid))
+                .build().render(RenderingStrategies.MYBATIS3);
+        return accountMapper.selectOne(query);
     }
 
-    @Override
-    public boolean insert(Account entity) {
-        return false;
-    }
-
-    @Override
-    public boolean insertAll(List<Account> entities) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(AccountReq request) {
-        return false;
-    }
-
-    @Override
-    public boolean deleteAll(List<Account> entities) {
-        return false;
+    public Optional<Account> selectDetailAccount(String uuid) {
+        SelectStatementProvider query = SqlBuilder.select(AccountMapper.selectList)
+                .from(AccountDynamicSqlSupport.account)
+                .where(AccountDynamicSqlSupport.uuid, isEqualTo(uuid))
+                .build().render(RenderingStrategies.MYBATIS3);
+        return accountMapper.selectOne(query);
     }
 }

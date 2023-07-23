@@ -1,7 +1,7 @@
 package com.cooba.TradeSimulator.Service.Interface;
 
 import com.cooba.TradeSimulator.Object.Asset;
-import com.cooba.TradeSimulator.Object.wallet.Wallet;
+import com.cooba.TradeSimulator.Object.Wallet;
 
 import java.util.List;
 

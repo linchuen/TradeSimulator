@@ -7,10 +7,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
-public class Account {
-    private String uuid;
-    private String name;
-    private String password;
-
-    private List<Wallet> wallets;
+public  abstract  class Wallet<T extends Asset> {
+    private Integer userId;
+    private List<T> assets;
 }

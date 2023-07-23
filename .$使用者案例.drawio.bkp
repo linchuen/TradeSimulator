@@ -1,0 +1,106 @@
+<mxfile host="Electron" modified="2023-06-24T16:21:03.804Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.5.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="N5n8VrmpB9rLpUoEW-bD" version="21.5.0" type="device">
+  <diagram name="第 1 页" id="rs-sukUCXtvCadHAMDVi">
+    <mxGraphModel dx="1418" dy="828" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2339" pageHeight="3300" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-1" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="40" y="340" width="70" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-18" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="220" y="110" width="290" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-15" value="創建帳戶" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-18" vertex="1">
+          <mxGeometry x="20" y="90" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-16" value="修改帳戶" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-18" vertex="1">
+          <mxGeometry x="20" y="200" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-17" value="刪除帳戶" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-18" vertex="1">
+          <mxGeometry x="20" y="310" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-7" value="帳戶系統" style="rounded=0;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-18" vertex="1">
+          <mxGeometry x="20" y="10" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-20" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="580" y="20" width="565" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-11" value="資產系統" style="rounded=0;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-20" vertex="1">
+          <mxGeometry x="30" y="20" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-35" value="" style="swimlane;startSize=0;" parent="hFO19jDDCzYTC2dBVx3V-20" vertex="1">
+          <mxGeometry x="30" y="90" width="210" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-36" value="錢包" style="rounded=0;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-35" vertex="1">
+          <mxGeometry x="20" y="30" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-37" value="存款" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-35" vertex="1">
+          <mxGeometry x="20" y="110" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-38" value="提款" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-35" vertex="1">
+          <mxGeometry x="20" y="210" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-39" value="顯示資產" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-35" vertex="1">
+          <mxGeometry x="30" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-32" value="" style="swimlane;startSize=0;" parent="hFO19jDDCzYTC2dBVx3V-20" vertex="1">
+          <mxGeometry x="285" y="90" width="210" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-34" value="股票錢包" style="rounded=0;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-32" vertex="1">
+          <mxGeometry x="20" y="30" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-21" value="存款" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-32" vertex="1">
+          <mxGeometry x="20" y="110" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-22" value="提款" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-32" vertex="1">
+          <mxGeometry x="20" y="210" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-23" value="顯示資產" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-32" vertex="1">
+          <mxGeometry x="30" y="320" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-26" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="690" y="680" width="440" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-13" value="股票系統" style="rounded=0;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-26" vertex="1">
+          <mxGeometry x="20" y="30" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-29" value="下載股票資料" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-26" vertex="1">
+          <mxGeometry x="30" y="100" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-30" value="管理股票" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-26" vertex="1">
+          <mxGeometry x="30" y="190" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-31" value="股票排行" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-26" vertex="1">
+          <mxGeometry x="30" y="290" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-42" value="" style="swimlane;startSize=0;" parent="1" vertex="1">
+          <mxGeometry x="190" y="680" width="330" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-12" value="交易系統" style="rounded=0;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-42" vertex="1">
+          <mxGeometry x="40" y="30" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hFO19jDDCzYTC2dBVx3V-43" value="交易" style="ellipse;whiteSpace=wrap;html=1;" parent="hFO19jDDCzYTC2dBVx3V-42" vertex="1">
+          <mxGeometry x="40" y="100" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="-mfcTh3-wIGNM3k63Aew-9" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.4;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.639;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="hFO19jDDCzYTC2dBVx3V-20" target="hFO19jDDCzYTC2dBVx3V-42" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="670" y="630" as="sourcePoint" />
+            <mxPoint x="770" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-mfcTh3-wIGNM3k63Aew-10" value="交換資料" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;" parent="-mfcTh3-wIGNM3k63Aew-9" connectable="0" vertex="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="-mfcTh3-wIGNM3k63Aew-11" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" source="hFO19jDDCzYTC2dBVx3V-26" target="hFO19jDDCzYTC2dBVx3V-42" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="670" y="830" as="sourcePoint" />
+            <mxPoint x="770" y="830" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="-mfcTh3-wIGNM3k63Aew-12" value="取得資料" style="edgeLabel;resizable=0;html=1;align=center;verticalAlign=middle;" parent="-mfcTh3-wIGNM3k63Aew-11" connectable="0" vertex="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

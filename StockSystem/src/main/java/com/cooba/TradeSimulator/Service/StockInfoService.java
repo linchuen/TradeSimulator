@@ -1,7 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.StockInfoDataAccess;
-import com.cooba.TradeSimulator.Entity.StockInfo;
 import com.cooba.TradeSimulator.Util.SSLHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

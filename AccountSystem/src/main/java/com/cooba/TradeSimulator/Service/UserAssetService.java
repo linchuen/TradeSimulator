@@ -1,7 +1,7 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Object.Asset;
-import com.cooba.TradeSimulator.Object.wallet.Wallet;
+import com.cooba.TradeSimulator.Object.Wallet;
 import com.cooba.TradeSimulator.Service.Interface.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

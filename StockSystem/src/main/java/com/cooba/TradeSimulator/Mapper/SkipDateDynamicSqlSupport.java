@@ -12,7 +12,7 @@ public final class SkipDateDynamicSqlSupport {
     public static final SkipDate skipDate = new SkipDate();
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<Long> id = skipDate.id;
+    public static final SqlColumn<Integer> id = skipDate.id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> reason = skipDate.reason;
@@ -25,7 +25,7 @@ public final class SkipDateDynamicSqlSupport {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final class SkipDate extends SqlTable {
-        public final SqlColumn<Long> id = column("id", JDBCType.BIGINT);
+        public final SqlColumn<Integer> id = column("id", JDBCType.INTEGER);
 
         public final SqlColumn<String> reason = column("reason", JDBCType.VARCHAR);
 

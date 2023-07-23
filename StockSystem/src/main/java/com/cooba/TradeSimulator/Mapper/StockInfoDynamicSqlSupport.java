@@ -12,7 +12,7 @@ public final class StockInfoDynamicSqlSupport {
     public static final StockInfo stockInfo = new StockInfo();
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<Long> id = stockInfo.id;
+    public static final SqlColumn<Integer> id = stockInfo.id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> stockcode = stockInfo.stockcode;
@@ -37,7 +37,7 @@ public final class StockInfoDynamicSqlSupport {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final class StockInfo extends SqlTable {
-        public final SqlColumn<Long> id = column("id", JDBCType.BIGINT);
+        public final SqlColumn<Integer> id = column("id", JDBCType.INTEGER);
 
         public final SqlColumn<String> stockcode = column("stockcode", JDBCType.VARCHAR);
 
