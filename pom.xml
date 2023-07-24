@@ -20,6 +20,7 @@
         <module>AccountSystem</module>
         <module>StockSystem</module>
         <module>TradeSystem</module>
+        <module>CurrencySystem</module>
     </modules>
 
     <profiles>

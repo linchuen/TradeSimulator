@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
@@ -12,10 +13,8 @@ import java.time.LocalDate;
 @SuperBuilder
 public class StockInfoAsset extends Asset {
     private Integer stockId;
+    private BigDecimal closingPrice;
     private String stockcode;
     private String name;
-    private String isinCode;
-    private LocalDate publishDate;
-    private String marketType;
     private String industryType;
 }
