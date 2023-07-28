@@ -1,0 +1,21 @@
+server:
+  port : 8080
+spring:
+  profiles:
+    active: prod
+  datasource:
+    driver-class-name: org.h2.Driver
+    schema: classpath:db/schema-testdb.sql #，每次启动程序，程序都会运行schema.sql文件，对数据库的数据操作
+    data: classpath:db/data-testdb.sql #，每次启动程序，程序都会运行data.sql文件，对数据库的数据操作
+    url: jdbc:h2:mem:testdb;MODE=MYSQL
+    initialize: true
+    username: sa
+    password: sa
+  h2:
+    console:
+      enabled: true
+mybatis:
+  mapper-locations: classpath:mappers/*xml
+pagehelper:
+  reasonable: false
+  defaultCount: true

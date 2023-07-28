@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @SuperBuilder
-public  abstract  class Wallet<T extends Asset> {
+public abstract class Wallet<T extends Asset> {
     private Integer userId;
     private List<T> assets;
 }
