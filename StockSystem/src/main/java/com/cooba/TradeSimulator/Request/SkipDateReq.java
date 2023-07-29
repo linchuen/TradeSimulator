@@ -1,5 +1,6 @@
 package com.cooba.TradeSimulator.Request;
 
+import com.cooba.TradeSimulator.Entity.SkipDate;
 import com.cooba.TradeSimulator.Object.Request;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

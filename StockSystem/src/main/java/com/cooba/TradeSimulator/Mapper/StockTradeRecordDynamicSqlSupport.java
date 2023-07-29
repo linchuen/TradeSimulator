@@ -22,7 +22,7 @@ public final class StockTradeRecordDynamicSqlSupport {
     public static final SqlColumn<LocalDate> date = stockTradeRecord.date;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<String> tradingVolume = stockTradeRecord.tradingVolume;
+    public static final SqlColumn<BigDecimal> tradingVolume = stockTradeRecord.tradingVolume;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<BigDecimal> transaction = stockTradeRecord.transaction;
@@ -40,6 +40,9 @@ public final class StockTradeRecordDynamicSqlSupport {
     public static final SqlColumn<BigDecimal> closingPrice = stockTradeRecord.closingPrice;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
+    public static final SqlColumn<BigDecimal> turnover = stockTradeRecord.turnover;
+
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<LocalDateTime> createdTime = stockTradeRecord.createdTime;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
@@ -50,7 +53,7 @@ public final class StockTradeRecordDynamicSqlSupport {
 
         public final SqlColumn<LocalDate> date = column("date", JDBCType.DATE);
 
-        public final SqlColumn<String> tradingVolume = column("trading_volume", JDBCType.VARCHAR);
+        public final SqlColumn<BigDecimal> tradingVolume = column("trading_volume", JDBCType.DECIMAL);
 
         public final SqlColumn<BigDecimal> transaction = column("transaction", JDBCType.DECIMAL);
 
@@ -61,6 +64,8 @@ public final class StockTradeRecordDynamicSqlSupport {
         public final SqlColumn<BigDecimal> lowestPrice = column("lowest_price", JDBCType.DECIMAL);
 
         public final SqlColumn<BigDecimal> closingPrice = column("closing_price", JDBCType.DECIMAL);
+
+        public final SqlColumn<BigDecimal> turnover = column("turnover", JDBCType.DECIMAL);
 
         public final SqlColumn<LocalDateTime> createdTime = column("created_time", JDBCType.TIMESTAMP);
 

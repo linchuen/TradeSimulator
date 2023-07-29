@@ -35,7 +35,7 @@ import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
 @Mapper
 public interface StockTradeRecordMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    BasicColumn[] selectList = BasicColumn.columnList(id, stockcode, date, tradingVolume, transaction, openingPrice, highestPrice, lowestPrice, closingPrice, createdTime);
+    BasicColumn[] selectList = BasicColumn.columnList(id, stockcode, date, tradingVolume, transaction, openingPrice, highestPrice, lowestPrice, closingPrice, turnover, createdTime);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -64,12 +64,13 @@ public interface StockTradeRecordMapper {
         @Result(column="id", property="id", jdbcType=JdbcType.BIGINT, id=true),
         @Result(column="stockcode", property="stockcode", jdbcType=JdbcType.VARCHAR),
         @Result(column="date", property="date", jdbcType=JdbcType.DATE),
-        @Result(column="trading_volume", property="tradingVolume", jdbcType=JdbcType.VARCHAR),
+        @Result(column="trading_volume", property="tradingVolume", jdbcType=JdbcType.DECIMAL),
         @Result(column="transaction", property="transaction", jdbcType=JdbcType.DECIMAL),
         @Result(column="opening_price", property="openingPrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="highest_price", property="highestPrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="lowest_price", property="lowestPrice", jdbcType=JdbcType.DECIMAL),
         @Result(column="closing_price", property="closingPrice", jdbcType=JdbcType.DECIMAL),
+        @Result(column="turnover", property="turnover", jdbcType=JdbcType.DECIMAL),
         @Result(column="created_time", property="createdTime", jdbcType=JdbcType.TIMESTAMP)
     })
     List<StockTradeRecord> selectMany(SelectStatementProvider selectStatement);
@@ -107,6 +108,7 @@ public interface StockTradeRecordMapper {
             .map(highestPrice).toProperty("highestPrice")
             .map(lowestPrice).toProperty("lowestPrice")
             .map(closingPrice).toProperty("closingPrice")
+            .map(turnover).toProperty("turnover")
             .map(createdTime).toProperty("createdTime")
         );
     }
@@ -123,6 +125,7 @@ public interface StockTradeRecordMapper {
             .map(highestPrice).toProperty("highestPrice")
             .map(lowestPrice).toProperty("lowestPrice")
             .map(closingPrice).toProperty("closingPrice")
+            .map(turnover).toProperty("turnover")
             .map(createdTime).toProperty("createdTime")
         );
     }
@@ -139,6 +142,7 @@ public interface StockTradeRecordMapper {
             .map(highestPrice).toPropertyWhenPresent("highestPrice", record::getHighestPrice)
             .map(lowestPrice).toPropertyWhenPresent("lowestPrice", record::getLowestPrice)
             .map(closingPrice).toPropertyWhenPresent("closingPrice", record::getClosingPrice)
+            .map(turnover).toPropertyWhenPresent("turnover", record::getTurnover)
             .map(createdTime).toPropertyWhenPresent("createdTime", record::getCreatedTime)
         );
     }
@@ -181,6 +185,7 @@ public interface StockTradeRecordMapper {
                 .set(highestPrice).equalTo(record::getHighestPrice)
                 .set(lowestPrice).equalTo(record::getLowestPrice)
                 .set(closingPrice).equalTo(record::getClosingPrice)
+                .set(turnover).equalTo(record::getTurnover)
                 .set(createdTime).equalTo(record::getCreatedTime);
     }
 
@@ -195,6 +200,7 @@ public interface StockTradeRecordMapper {
                 .set(highestPrice).equalToWhenPresent(record::getHighestPrice)
                 .set(lowestPrice).equalToWhenPresent(record::getLowestPrice)
                 .set(closingPrice).equalToWhenPresent(record::getClosingPrice)
+                .set(turnover).equalToWhenPresent(record::getTurnover)
                 .set(createdTime).equalToWhenPresent(record::getCreatedTime);
     }
 
@@ -209,6 +215,7 @@ public interface StockTradeRecordMapper {
             .set(highestPrice).equalTo(record::getHighestPrice)
             .set(lowestPrice).equalTo(record::getLowestPrice)
             .set(closingPrice).equalTo(record::getClosingPrice)
+            .set(turnover).equalTo(record::getTurnover)
             .set(createdTime).equalTo(record::getCreatedTime)
             .where(id, isEqualTo(record::getId))
         );
@@ -225,6 +232,7 @@ public interface StockTradeRecordMapper {
             .set(highestPrice).equalToWhenPresent(record::getHighestPrice)
             .set(lowestPrice).equalToWhenPresent(record::getLowestPrice)
             .set(closingPrice).equalToWhenPresent(record::getClosingPrice)
+            .set(turnover).equalToWhenPresent(record::getTurnover)
             .set(createdTime).equalToWhenPresent(record::getCreatedTime)
             .where(id, isEqualTo(record::getId))
         );

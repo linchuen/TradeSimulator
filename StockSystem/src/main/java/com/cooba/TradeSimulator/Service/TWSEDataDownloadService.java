@@ -1,12 +1,14 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Util.DateUtil;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import lombok.AllArgsConstructor;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,20 +21,18 @@ import java.util.stream.Collectors;
 
 
 @Service
+@AllArgsConstructor
 public class TWSEDataDownloadService implements StockDataDownloadService {
-    @Autowired
-    HttpUtil httpUtil;
-    @Autowired
-    StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    @Autowired
-    SkipDateService skipDateService;
+    private final HttpUtil httpUtil;
+    private final StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private final SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException, CsvException {
             List<StockTradeRecord> stockTradeRecordList = sendHttpRequest(stockcode, localDate)
                     .readResponseByCSV()
                     .transferRawData();
-            stockTradeRecordDataAccess.saveAll(stockTradeRecordList);
+            stockTradeRecordDataAccess.insertAll(stockTradeRecordList);
     }
 
     private StockDataResponse sendHttpRequest(String stockcode, LocalDate localDate) {

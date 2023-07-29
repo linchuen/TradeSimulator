@@ -1,10 +1,12 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.SkipDateDataAccess;
+import com.cooba.TradeSimulator.Entity.SkipDate;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
+import lombok.AllArgsConstructor;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +21,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@AllArgsConstructor
 public class TWSESkipDateService implements SkipDateService {
-    @Autowired
-    private HttpUtil httpUtil;
-    @Autowired
-    private SkipDateDataAccess skipDateDataAccess;
+    private final HttpUtil httpUtil;
+    private final SkipDateDataAccess skipDateDataAccess;
 
     @Override
     public void downloadData(int year) throws IOException, CsvException {
         List<SkipDate> skipDateList = sendHttpRequest(year)
                 .readResponseByCSV()
                 .transferRawData();
-        skipDateDataAccess.saveAll(skipDateList);
+        skipDateDataAccess.insertAll(skipDateList);
     }
 
     private SkipDataResponse sendHttpRequest(int year) {

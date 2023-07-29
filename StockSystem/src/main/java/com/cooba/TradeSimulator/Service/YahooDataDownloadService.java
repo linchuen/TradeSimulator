@@ -1,8 +1,10 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
+import lombok.AllArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,11 +16,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
+@AllArgsConstructor
 public class YahooDataDownloadService implements StockDataDownloadService {
-    @Autowired
-    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    @Autowired
-    SkipDateService skipDateService;
+    private final StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private final SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) {

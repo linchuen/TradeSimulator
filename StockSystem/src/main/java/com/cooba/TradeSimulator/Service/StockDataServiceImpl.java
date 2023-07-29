@@ -1,11 +1,13 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Exception.DownloadException;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataService;
 import com.cooba.TradeSimulator.Util.DateUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,11 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class StockDataServiceImpl implements StockDataService {
-    @Autowired
-    SkipDateService skipDateService;
-    @Autowired
-    StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    @Autowired
-    StockDownloadPriorityService stockDownloadPriorityService;
+    private final SkipDateService skipDateService;
+    private final StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private final StockDownloadPriorityService stockDownloadPriorityService;
 
     @Override
     public StockTradeRecord getTodayStockData(String stockcode) throws Exception {

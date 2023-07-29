@@ -1,5 +1,7 @@
 package com.cooba.TradeSimulator.DataLayer;
 
+import com.cooba.TradeSimulator.Entity.StockInfo;
+import com.cooba.TradeSimulator.Mapper.StockInfoMapper;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;

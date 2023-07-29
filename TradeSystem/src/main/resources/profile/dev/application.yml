@@ -1,6 +1,8 @@
 server:
-  port: 8081
+  port: 8082
 spring:
+  application:
+    name: local-grpc-client
   profiles:
     active: dev
   datasource:
@@ -16,3 +18,10 @@ mybatis:
 pagehelper:
   reasonable: false
   defaultCount: true
+grpc:
+  client:
+    local-grpc-server:
+      address: 'static://127.0.0.1:9090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

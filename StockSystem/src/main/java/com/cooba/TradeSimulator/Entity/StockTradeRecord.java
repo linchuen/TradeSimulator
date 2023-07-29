@@ -21,7 +21,7 @@ public class StockTradeRecord {
     private LocalDate date;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private String tradingVolume;
+    private BigDecimal tradingVolume;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private BigDecimal transaction;
@@ -37,6 +37,9 @@ public class StockTradeRecord {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private BigDecimal closingPrice;
+
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
+    private BigDecimal turnover;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private LocalDateTime createdTime;
