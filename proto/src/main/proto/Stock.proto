@@ -20,6 +20,8 @@ message StockRequest {
 
 // The response message containing the greetings
 message StockReply {
-    string stockcode = 1;
+    int32 stockId = 1;
+    string stockcode = 2;
     string currentPrice = 3;
+    int64 date = 4;
 }

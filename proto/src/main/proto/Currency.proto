@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package com.cooba.TradeSimulator.currency;
+
+option java_multiple_files = true;
+option java_package = "com.cooba.TradeSimulator.service";
+option java_outer_classname = "CurrencyProto";
+
+// The greeting service definition.
+service CurrencyService {
+    // Sends a greeting
+    rpc GetCurrencyInfo(CurrencyRequest) returns (CurrencyReply) {
+    }
+}
+
+// The request message containing the user's name.
+message CurrencyRequest {
+    int32 currencyId = 1;
+}
+
+// The response message containing the greetings
+message CurrencyReply {
+    int32 currencyId = 1;
+    string name = 2;
+    string exchangeRate = 3;
+}

@@ -1,7 +1,6 @@
 package com.cooba.TradeSimulator.Channel;
 
 
-import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.StockDataService;
 import com.cooba.TradeSimulator.service.StockReply;
 import com.cooba.TradeSimulator.service.StockRequest;

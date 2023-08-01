@@ -1,11 +1,11 @@
 package com.cooba.TradeSimulator.Entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import javax.annotation.Generated;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+
+import javax.annotation.Generated;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
