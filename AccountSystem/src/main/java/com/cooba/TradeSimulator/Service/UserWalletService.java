@@ -3,6 +3,8 @@ package com.cooba.TradeSimulator.Service;
 import com.cooba.TradeSimulator.DataLayer.CurrencyDataAcccess;
 import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
 import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
+import com.cooba.TradeSimulator.Exception.InsufficientException;
+import com.cooba.TradeSimulator.Exception.InsufficientStockException;
 import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
 import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.Wallet;
@@ -19,6 +21,7 @@ import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 public class UserWalletService implements WalletService {
@@ -29,35 +32,23 @@ public class UserWalletService implements WalletService {
 
     @Override
     public void deposit(Integer userId, Integer currencyId, BigDecimal amount) {
-        Optional<CurrencyAsset> currencyWalletOptional = walletDataAccess.selectCurrencyAsset(userId, currencyId);
-        if (currencyWalletOptional.isEmpty()) {
-            CurrencyAsset currencyAsset = CurrencyAsset.builder()
-                    .currencyId(currencyId)
-                    .amount(BigDecimal.ZERO).build();
-            walletDataAccess.insertWallet(userId, currencyAsset);
-        } else {
-            CurrencyAsset currencyAsset = currencyWalletOptional.get();
-            currencyAsset.setAmount(currencyAsset.getAmount().add(amount));
-            walletDataAccess.updateAssetAmount(userId, currencyAsset);
+        CurrencyAsset currencyAsset = CurrencyAsset.builder()
+                .currencyId(currencyId)
+                .amount(amount)
+                .build();
+        try {
+            assetChange(userId, currencyAsset, true);
+        } catch (InsufficientException ignored) {
         }
     }
 
     @Override
-    public void withdraw(Integer userId, Integer currencyId, BigDecimal amount) throws InsufficientBalanceException {
-        Optional<CurrencyAsset> currencyWalletOptional = walletDataAccess.selectCurrencyAsset(userId, currencyId);
-        if (currencyWalletOptional.isEmpty()) {
-            CurrencyAsset currencyAsset = CurrencyAsset.builder()
-                    .currencyId(currencyId)
-                    .amount(BigDecimal.ZERO).build();
-            walletDataAccess.insertWallet(userId, currencyAsset);
-            throw new InsufficientBalanceException();
-        } else {
-            CurrencyAsset currencyAsset = currencyWalletOptional.get();
-            BigDecimal result = currencyAsset.getAmount().subtract(amount);
-            if (result.compareTo(BigDecimal.ZERO) < 0) throw new InsufficientBalanceException();
-            currencyAsset.setAmount(result);
-            walletDataAccess.updateAssetAmount(userId, currencyAsset);
-        }
+    public void withdraw(Integer userId, Integer currencyId, BigDecimal amount) throws InsufficientException {
+        CurrencyAsset currencyAsset = CurrencyAsset.builder()
+                .currencyId(currencyId)
+                .amount(amount)
+                .build();
+        assetChange(userId, currencyAsset, false);
     }
 
     @Override
@@ -108,5 +99,37 @@ public class UserWalletService implements WalletService {
             return output;
         }
         throw new NotSupportCurrencyException();
+    }
+
+    @Override
+    public void assetChange(Integer userId, Asset asset, boolean isPlus) throws InsufficientException {
+        if (asset instanceof CurrencyAsset) {
+            int currencyId = ((CurrencyAsset) asset).getCurrencyId();
+            assetChange(userId, asset, isPlus, () -> walletDataAccess.selectCurrencyAsset(userId, currencyId));
+        }
+        if (asset instanceof StockInfoAsset) {
+            int stockId = ((StockInfoAsset) asset).getStockId();
+            assetChange(userId, asset, isPlus, () -> walletDataAccess.selectStockAsset(userId, stockId));
+        }
+    }
+
+    private <T extends Asset> void assetChange(Integer userId, Asset asset, boolean isPlus, Supplier<Optional<T>> supplier) throws InsufficientException {
+        BigDecimal amount = asset.getAmount();
+
+        Optional<T> assetOptional = supplier.get();
+        if (assetOptional.isEmpty()) {
+            BigDecimal result = isPlus ? asset.getAmount() : BigDecimal.ZERO;
+            asset.setAmount(result);
+            walletDataAccess.insertWallet(userId, asset);
+
+            if (result.compareTo(BigDecimal.ZERO) == 0) throw new InsufficientException();
+        } else {
+            Asset dbAsset = assetOptional.get();
+            BigDecimal result = dbAsset.getAmount().add(isPlus ? amount : amount.negate());
+            if (result.compareTo(BigDecimal.ZERO) < 0) throw new InsufficientException();
+
+            dbAsset.setAmount(result);
+            walletDataAccess.updateAssetAmount(userId, dbAsset);
+        }
     }
 }
