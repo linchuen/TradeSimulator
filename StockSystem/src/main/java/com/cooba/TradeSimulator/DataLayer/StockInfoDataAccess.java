@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.cooba.TradeSimulator.Mapper.StockInfoDynamicSqlSupport.stockInfo;
 
@@ -23,6 +24,10 @@ public class StockInfoDataAccess {
                 .build()
                 .render(RenderingStrategies.MYBATIS3);
         return stockInfoMapper.selectMany(query);
+    }
+
+    public Optional<StockInfo> findById(int id) {
+        return stockInfoMapper.selectByPrimaryKey(id);
     }
 
     public boolean insertAll(List<StockInfo> entities) {

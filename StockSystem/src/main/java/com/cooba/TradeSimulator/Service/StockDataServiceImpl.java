@@ -1,5 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
+import com.cooba.TradeSimulator.DataLayer.StockInfoDataAccess;
 import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Exception.DownloadException;
@@ -25,6 +26,7 @@ public class StockDataServiceImpl implements StockDataService {
     private final SkipDateService skipDateService;
     private final StockTradeRecordDataAccess stockTradeRecordDataAccess;
     private final StockDownloadPriorityService stockDownloadPriorityService;
+    private final StockInfoDataAccess stockInfoDataAccess;
 
     @Override
     public StockTradeRecord getTodayStockData(String stockcode) throws Exception {
@@ -37,6 +39,12 @@ public class StockDataServiceImpl implements StockDataService {
 
         downloadStockData(stockcode);
         return findTradeRecordByDate(stockcode, date).orElseThrow(DownloadException::new);
+    }
+
+    @Override
+    public StockTradeRecord getTodayStockData(Integer stockId) throws Exception {
+        String stockcode = stockInfoDataAccess.findById(stockId).get().getStockcode();
+        return getTodayStockData(stockcode);
     }
 
     @NotNull

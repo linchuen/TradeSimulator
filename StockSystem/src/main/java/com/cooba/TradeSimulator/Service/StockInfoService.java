@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StockInfoService {
@@ -54,5 +55,9 @@ public class StockInfoService {
 
     public List<StockInfo> findAllStockInfo() {
         return stockInfoDataAccess.findAll();
+    }
+
+    public Optional<StockInfo> findStockInfo(int id) {
+        return stockInfoDataAccess.findById(id);
     }
 }

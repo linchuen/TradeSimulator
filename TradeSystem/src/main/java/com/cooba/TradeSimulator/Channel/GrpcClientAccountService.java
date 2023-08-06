@@ -2,8 +2,6 @@ package com.cooba.TradeSimulator.Channel;
 
 
 import com.cooba.TradeSimulator.service.AccountServiceGrpc;
-import com.cooba.TradeSimulator.service.BuyStockRequest;
-import com.cooba.TradeSimulator.service.GetStockRequest;
 import com.cooba.TradeSimulator.service.MoneyRequest;
 import com.cooba.TradeSimulator.service.Reply;
 import com.cooba.TradeSimulator.service.StockTradeRequest;

@@ -1,6 +1,7 @@
 package com.cooba.TradeSimulator.Channel;
 
 
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.StockDataService;
 import com.cooba.TradeSimulator.service.StockReply;
 import com.cooba.TradeSimulator.service.StockRequest;
@@ -16,17 +17,17 @@ public class GrpcStockService extends StockServiceGrpc.StockServiceImplBase {
 
     @Override
     public void getStockInfo(StockRequest request, StreamObserver<StockReply> responseObserver) {
-        String stockcode = request.getStockcode();
+        int stockId = request.getStockId();
         try {
-            //StockTradeRecord stockTradeRecord = stockDataService.getTodayStockData(stockcode);
+            StockTradeRecord stockTradeRecord = stockDataService.getTodayStockData(stockId);
             StockReply reply = StockReply.newBuilder()
-                    .setStockcode(stockcode)
-                    .setCurrentPrice("123456")
+                    .setStockId(stockId)
+                    .setStockcode(stockTradeRecord.getStockcode())
+                    .setCurrentPrice(stockTradeRecord.getClosingPrice().toPlainString())
                     .build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (Exception e) {
-            e.printStackTrace();
             responseObserver.onError(e);
         }
     }
