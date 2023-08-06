@@ -19,9 +19,9 @@ public class GrpcClientStockService {
     @GrpcClient("stock-grpc-server")
     private StockServiceGrpc.StockServiceBlockingStub stockServiceBlockingStub;
 
-    public TradeStockInfo getStockInfo(String name) {
+    public TradeStockInfo getStockInfo(Integer id) {
         StockRequest request = StockRequest.newBuilder()
-                .setStockcode(name)
+                .setStockId(id)
                 .build();
         StockReply stockReply = stockServiceBlockingStub.getStockInfo(request);
 

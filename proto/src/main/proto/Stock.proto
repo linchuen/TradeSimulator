@@ -9,13 +9,12 @@ option java_outer_classname = "StockProto";
 // The greeting service definition.
 service StockService {
     // Sends a greeting
-    rpc GetStockInfo(StockRequest) returns (StockReply) {
-    }
+    rpc GetStockInfo(StockRequest) returns (StockReply) {}
 }
 
 // The request message containing the user's name.
 message StockRequest {
-    string stockcode = 1;
+    int32 stockId = 1;
 }
 
 // The response message containing the greetings

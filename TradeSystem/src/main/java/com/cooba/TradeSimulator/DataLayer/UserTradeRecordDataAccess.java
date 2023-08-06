@@ -22,13 +22,27 @@ public class UserTradeRecordDataAccess {
     }
 
     public boolean update(UserTradeRecord userTradeRecord) {
-        UpdateStatementProvider query = SqlBuilder.update(UserTradeRecordDynamicSqlSupport.userTradeRecord)
-                .set(UserTradeRecordDynamicSqlSupport.status).equalTo(userTradeRecord.getStatus())
-                .set(UserTradeRecordDynamicSqlSupport.errMsg).equalTo(userTradeRecord.getErrMsg())
-                .set(UserTradeRecordDynamicSqlSupport.updatedTime).equalTo(DateUtil.now())
-                .where(UserTradeRecordDynamicSqlSupport.accountId, isEqualTo(userTradeRecord.getAccountId()))
-                .and(UserTradeRecordDynamicSqlSupport.billId, isEqualTo(userTradeRecord.getBillId()))
-                .build().render(RenderingStrategies.MYBATIS3);
-        return userTradeRecordMapper.update(query) == 1;
+        if (userTradeRecord.getStatus() == 1) {
+            UpdateStatementProvider query = SqlBuilder.update(UserTradeRecordDynamicSqlSupport.userTradeRecord)
+                    .set(UserTradeRecordDynamicSqlSupport.status).equalTo(1)
+                    .set(UserTradeRecordDynamicSqlSupport.price).equalTo(userTradeRecord.getPrice())
+                    .set(UserTradeRecordDynamicSqlSupport.stockDate).equalTo(userTradeRecord.getStockDate())
+                    .set(UserTradeRecordDynamicSqlSupport.updatedTime).equalTo(DateUtil.now())
+                    .where(UserTradeRecordDynamicSqlSupport.accountId, isEqualTo(userTradeRecord.getAccountId()))
+                    .and(UserTradeRecordDynamicSqlSupport.billId, isEqualTo(userTradeRecord.getBillId()))
+                    .build().render(RenderingStrategies.MYBATIS3);
+            return userTradeRecordMapper.update(query) == 1;
+        }
+        if (userTradeRecord.getStatus() == -1) {
+            UpdateStatementProvider query = SqlBuilder.update(UserTradeRecordDynamicSqlSupport.userTradeRecord)
+                    .set(UserTradeRecordDynamicSqlSupport.status).equalTo(-1)
+                    .set(UserTradeRecordDynamicSqlSupport.errMsg).equalTo(userTradeRecord.getErrMsg())
+                    .set(UserTradeRecordDynamicSqlSupport.updatedTime).equalTo(DateUtil.now())
+                    .where(UserTradeRecordDynamicSqlSupport.accountId, isEqualTo(userTradeRecord.getAccountId()))
+                    .and(UserTradeRecordDynamicSqlSupport.billId, isEqualTo(userTradeRecord.getBillId()))
+                    .build().render(RenderingStrategies.MYBATIS3);
+            return userTradeRecordMapper.update(query) == 1;
+        }
+        return false;
     }
 }

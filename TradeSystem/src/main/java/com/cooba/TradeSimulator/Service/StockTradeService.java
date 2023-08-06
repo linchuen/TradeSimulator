@@ -3,77 +3,83 @@ package com.cooba.TradeSimulator.Service;
 import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDataAccess;
 import com.cooba.TradeSimulator.Entity.UserTradeRecord;
 import com.cooba.TradeSimulator.Object.CurrencyInfo;
+import com.cooba.TradeSimulator.Object.TradeData;
 import com.cooba.TradeSimulator.Object.TradeStockInfo;
+import com.cooba.TradeSimulator.Object.Transaction;
 import com.cooba.TradeSimulator.Service.Interface.TradeService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class StockTradeService implements TradeService {
+    private final Transaction<TradeData> buyStockTransaction;
+    private final Transaction<TradeData> sellStockTransaction;
     private final UserTradeRecordDataAccess userTradeRecordDataAccess;
 
-    public void buy(Integer userId, String stockcode, Integer currencyId, BigDecimal amount) {
-        String billId = UUID.randomUUID().toString();
-        try {
-            TradeStockInfo tradeStockInfo = getStockInfo(stockcode);
-            CurrencyInfo currency = getCurrencyRate(currencyId);
-            BigDecimal payPrice = tradeStockInfo.getCurrentPrice().divide(currency.getExchangeRate(), 5, RoundingMode.DOWN);
+    public StockTradeService(@Qualifier("BuyStock") Transaction<TradeData> buyStockTransaction, @Qualifier("SellStock") Transaction<TradeData> sellStockTransaction, UserTradeRecordDataAccess userTradeRecordDataAccess) {
+        this.buyStockTransaction = buyStockTransaction;
+        this.sellStockTransaction = sellStockTransaction;
+        this.userTradeRecordDataAccess = userTradeRecordDataAccess;
+    }
 
-            logTradeRecord(billId, userId, tradeStockInfo, currency, amount, false);
-            payMoney(userId, currencyId, payPrice);
-            logTradeRecord(billId, userId, tradeStockInfo, currency, amount, true);
+    public void buy(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
+        String billId = UUID.randomUUID().toString();
+        TradeData tradeData = new TradeData();
+        tradeData.setBillId(billId);
+        tradeData.setAmount(amount);
+
+        try {
+            logBeforeTrade(billId, userId, stockId, currencyId, amount);
+            buyStockTransaction.startTransaction(tradeData);
+            logAfterTrade(billId, userId, tradeData.getTradeStockInfo(), tradeData.getCurrencyInfo());
         } catch (Exception e) {
-            if (isPaySuccess()) {
-                payBack();
-            }
             logTradeError(userId, billId, e.getMessage());
         }
     }
 
     public void sell(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
+        String billId = UUID.randomUUID().toString();
+        TradeData tradeData = new TradeData();
+        tradeData.setBillId(billId);
+        tradeData.setAmount(amount);
 
+        try {
+            logBeforeTrade(billId, userId, stockId, currencyId, amount.negate());
+            sellStockTransaction.startTransaction(tradeData);
+            logAfterTrade(billId, userId, tradeData.getTradeStockInfo(), tradeData.getCurrencyInfo());
+        } catch (Exception e) {
+            logTradeError(userId, billId, e.getMessage());
+        }
     }
 
-    private TradeStockInfo getStockInfo(String stockcode) {
-        return TradeStockInfo.builder().build();
-    }
-
-    private void payMoney(Integer userId, Integer currencyId, BigDecimal amount) {
-
-    }
-
-    private CurrencyInfo getCurrencyRate(Integer currencyId) {
-        return CurrencyInfo.builder().build();
-    }
-
-    private boolean isPaySuccess() {
-        return false;
-    }
-
-    private void payBack() {
-
-    }
-
-    private void logTradeRecord(String billId, Integer userId, TradeStockInfo tradeStockInfo, CurrencyInfo currency, BigDecimal amount, boolean isCompleted) {
+    private void logBeforeTrade(String billId, Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
         UserTradeRecord userTradeRecord = UserTradeRecord.builder()
                 .billId(billId)
                 .accountId(userId)
-                .currencyId(currency.getCurrencyId())
-                .stockId(tradeStockInfo.getStockId())
-                .price(tradeStockInfo.getCurrentPrice())
-                .stockDate(tradeStockInfo.getDate())
+                .currencyId(currencyId)
+                .stockId(stockId)
                 .amount(amount)
                 .status(0)
                 .createdTime(LocalDateTime.now())
                 .updatedTime(LocalDateTime.now())
                 .build();
         userTradeRecordDataAccess.insert(userTradeRecord);
+    }
+
+    private void logAfterTrade(String billId, Integer userId, TradeStockInfo tradeStockInfo, CurrencyInfo currency) {
+        UserTradeRecord userTradeRecord = UserTradeRecord.builder()
+                .billId(billId)
+                .accountId(userId)
+                .price(tradeStockInfo.getCurrentPrice())
+                .stockDate(tradeStockInfo.getDate())
+                .status(1)
+                .updatedTime(LocalDateTime.now())
+                .build();
+        userTradeRecordDataAccess.update(userTradeRecord);
     }
 
     private void logTradeError(Integer userId, String billId, String errMsg) {

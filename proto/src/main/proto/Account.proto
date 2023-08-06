@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package com.cooba.TradeSimulator.account;
+
+option java_multiple_files = true;
+option java_package = "com.cooba.TradeSimulator.service";
+option java_outer_classname = "AccountProto";
+
+// The greeting service definition.
+service AccountService {
+    rpc  minusMoney(MoneyRequest) returns (Reply) {}
+    rpc  addMoney(MoneyRequest) returns (Reply) {}
+
+    rpc  addStock(StockTradeRequest) returns (Reply) {}
+    rpc  minusStock(StockTradeRequest) returns (Reply) {}
+}
+
+// The request message containing the user's name.
+message MoneyRequest {
+    int32 userId = 1;
+    int32 currencyId = 2;
+    string payPrice = 3;
+}
+
+message StockTradeRequest {
+    int32 userId = 1;
+    int32 stockId = 2;
+    string amount = 3;
+}
+
+// The response message containing the greetings
+message Reply {
+    bool isSuccess = 1;
+}

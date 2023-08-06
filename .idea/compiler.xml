@@ -9,8 +9,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="AccountSystem" />
         <module name="MybatisPlugin" />
-        <module name="TradeSystem" />
         <module name="common" />
+        <module name="proto" />
+        <module name="TradeSystem" />
+        <module name="CurrencySystem" />
         <module name="StockSystem" />
       </profile>
     </annotationProcessing>
@@ -18,10 +20,12 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="AccountSystem" options="-parameters" />
+      <module name="CurrencySystem" options="-parameters" />
       <module name="StockSystem" options="-parameters" />
       <module name="TradeSimulator" options="-parameters" />
       <module name="TradeSystem" options="-parameters" />
       <module name="common" options="-parameters" />
+      <module name="proto" options="-parameters" />
     </option>
   </component>
 </project>
