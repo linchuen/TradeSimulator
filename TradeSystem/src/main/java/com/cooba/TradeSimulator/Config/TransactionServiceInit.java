@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Configuration
 public class TransactionServiceInit {

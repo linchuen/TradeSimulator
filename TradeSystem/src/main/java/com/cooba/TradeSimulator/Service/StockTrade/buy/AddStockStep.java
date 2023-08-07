@@ -6,8 +6,6 @@ import com.cooba.TradeSimulator.Object.TradeData;
 import com.cooba.TradeSimulator.Object.TradeStep;
 import lombok.AllArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Step(transaction = "BuyStock", sort =3)
 @AllArgsConstructor
 public class AddStockStep extends TradeStep<TradeData> {
