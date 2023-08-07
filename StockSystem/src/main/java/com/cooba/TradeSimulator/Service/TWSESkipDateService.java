@@ -2,7 +2,9 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.SkipDateDataAccess;
 import com.cooba.TradeSimulator.Entity.SkipDate;
+import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
+import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -28,65 +30,44 @@ public class TWSESkipDateService implements SkipDateService {
 
     @Override
     public void downloadData(int year) throws IOException, CsvException {
-        List<SkipDate> skipDateList = sendHttpRequest(year)
-                .readResponseByCSV()
-                .transferRawData();
-        skipDateDataAccess.insertAll(skipDateList);
-    }
-
-    private SkipDataResponse sendHttpRequest(int year) {
         Map<String, String> map = new HashMap(Map.of(
                 "response", "csv",
                 "queryYear", year - 1911));
-        Response response = httpUtil.httpGet("https://www.twse.com.tw/holidaySchedule/holidaySchedule", map);
-        return new SkipDataResponse(year, response);
+
+        List<SkipDate> skipDateList = HttpCsvResponse.build(httpUtil)
+                .sendHttpRequest("https://www.twse.com.tw/holidaySchedule/holidaySchedule", map)
+                .readResponseByCSV()
+                .transferRawData(dataRows -> transferFunction(dataRows, year));
+        skipDateDataAccess.insertAll(skipDateList);
     }
 
-    private static class SkipDataResponse {
-        private final int year;
-        private final Response response;
-        private List<String[]> dataRows;
-
-        public SkipDataResponse(int year, Response response) {
-            this.year = year;
-            this.response = response;
-            dataRows = null;
+    private List<SkipDate> transferFunction(List<String[]> dataRows, int year) {
+        if (dataRows.isEmpty()) {
+            return Collections.emptyList();
         }
+        dataRows = dataRows.subList(2, dataRows.size() - 1);
+        return dataRows.stream().filter(strings -> {
+            String reason = strings[0];
+            String date = strings[1];
+            String regex = "(\\d+)月(\\d+)日";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(date);
 
-        public SkipDataResponse readResponseByCSV() throws IOException, CsvException {
-            CSVReader csvReader = new CSVReader(Objects.requireNonNull(this.response.body()).charStream());
-            dataRows = csvReader.readAll();
-            return this;
-        }
+            return !reason.contains("開始") && matcher.find();
+        }).map(strings -> {
+            String date = strings[1];
+            String regex = "(\\d+)月(\\d+)日";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(date);
 
-        private List<SkipDate> transferRawData() {
-            if (dataRows.isEmpty()) {
-                return Collections.emptyList();
-            }
-            dataRows = dataRows.subList(2, dataRows.size() - 1);
-            return dataRows.stream().filter(strings -> {
-                String reason = strings[0];
-                String date = strings[1];
-                String regex = "(\\d+)月(\\d+)日";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(date);
+            int month = Integer.parseInt(matcher.group(1));
+            int day = Integer.parseInt(matcher.group(2));
 
-                return !reason.contains("開始") && matcher.find();
-            }).map(strings -> {
-                String date = strings[1];
-                String regex = "(\\d+)月(\\d+)日";
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(date);
-
-                int month = Integer.parseInt(matcher.group(1));
-                int day = Integer.parseInt(matcher.group(2));
-
-                return SkipDate.builder()
-                        .reason(strings[0])
-                        .date(LocalDate.of(year, month, day))
-                        .build();
-            }).collect(Collectors.toList());
-        }
+            return SkipDate.builder()
+                    .reason(strings[0])
+                    .date(LocalDate.of(year, month, day))
+                    .build();
+        }).collect(Collectors.toList());
     }
 
     public boolean isSkipDate(LocalDate date) {

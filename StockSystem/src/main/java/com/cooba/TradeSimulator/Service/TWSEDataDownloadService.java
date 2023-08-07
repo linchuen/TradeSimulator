@@ -5,6 +5,7 @@ import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Util.DateUtil;
+import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -29,88 +30,67 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException, CsvException {
-            List<StockTradeRecord> stockTradeRecordList = sendHttpRequest(stockcode, localDate)
-                    .readResponseByCSV()
-                    .transferRawData();
-            stockTradeRecordDataAccess.insertAll(stockTradeRecordList);
-    }
-
-    private StockDataResponse sendHttpRequest(String stockcode, LocalDate localDate) {
         Map<String, String> map = new HashMap<>(Map.of(
                 "response", "csv",
                 "date", DateUtil.toFormatString(localDate),
                 "stockNo", String.valueOf(stockcode)));
-        Response response = httpUtil.httpGet("https://www.twse.com.tw/exchangeReport/STOCK_DAY", map);
-        return new StockDataResponse(stockcode, response);
+
+        List<StockTradeRecord> stockTradeRecordList = HttpCsvResponse.build(httpUtil)
+                .sendHttpRequest("https://www.twse.com.tw/exchangeReport/STOCK_DAY", map)
+                .readResponseByCSV()
+                .transferRawData(dataRows -> transferFunction(dataRows, stockcode));
+        stockTradeRecordDataAccess.insertAll(stockTradeRecordList);
     }
 
-    private static class StockDataResponse {
-        private final String stockcode;
-        private final Response response;
-        private List<String[]> dataRows;
-
-        public StockDataResponse(String stockcode, Response response) {
-            this.stockcode = stockcode;
-            this.response = response;
-            dataRows = null;
+    private List<StockTradeRecord> transferFunction(List<String[]> dataRows, String stockcode) {
+        if (dataRows.isEmpty()) {
+            return Collections.emptyList();
         }
 
-        public StockDataResponse readResponseByCSV() throws IOException, CsvException {
-            CSVReader csvReader = new CSVReader(Objects.requireNonNull(this.response.body()).charStream());
-            dataRows = csvReader.readAll();
-            return this;
-        }
+        dataRows.remove(1);
+        return dataRows.stream().filter(strings -> strings.length == 10).map(strings -> {
+            String[] dateArr = strings[0].split("/");
+            int y = Integer.parseInt(dateArr[0]) + 1911;
+            int m = Integer.parseInt(dateArr[1]);
+            int d = Integer.parseInt(dateArr[2]);
+            LocalDate dataDate = LocalDate.of(y, m, d);
+            BigDecimal tradingVolume = new BigDecimal(strings[1]
+                    .replace(",", ""));
 
-        private List<StockTradeRecord> transferRawData() {
-            if (dataRows.isEmpty()) {
-                return Collections.emptyList();
-            }
+            BigDecimal transaction = new BigDecimal(strings[2]
+                    .replace(",", "")
+                    .replace(",", ""));
 
-            dataRows.remove(1);
-            return dataRows.stream().filter(strings -> strings.length == 10).map(strings -> {
-                String[] dateArr = strings[0].split("/");
-                int y = Integer.parseInt(dateArr[0]) + 1911;
-                int m = Integer.parseInt(dateArr[1]);
-                int d = Integer.parseInt(dateArr[2]);
-                LocalDate dataDate = LocalDate.of(y, m, d);
-                BigDecimal tradingVolume = new BigDecimal(strings[1]
-                        .replace(",", ""));
+            BigDecimal openingPrice = new BigDecimal(strings[3]
+                    .replace(",", "")
+                    .replace("--", "0"));
 
-                BigDecimal transaction = new BigDecimal(strings[2]
-                        .replace(",", "")
-                        .replace(",", ""));
+            BigDecimal highestPrice = new BigDecimal(strings[4]
+                    .replace(",", "")
+                    .replace("--", "0"));
 
-                BigDecimal openingPrice = new BigDecimal(strings[3]
-                        .replace(",", "")
-                        .replace("--", "0"));
+            BigDecimal lowestPrice = new BigDecimal(strings[5]
+                    .replace(",", "")
+                    .replace("--", "0"));
 
-                BigDecimal highestPrice = new BigDecimal(strings[4]
-                        .replace(",", "")
-                        .replace("--", "0"));
+            BigDecimal closingPrice = new BigDecimal(strings[6]
+                    .replace(",", "")
+                    .replace("--", "0"));
 
-                BigDecimal lowestPrice = new BigDecimal(strings[5]
-                        .replace(",", "")
-                        .replace("--", "0"));
+            BigDecimal turnover = new BigDecimal(strings[8]
+                    .replace(",", ""));
 
-                BigDecimal closingPrice = new BigDecimal(strings[6]
-                        .replace(",", "")
-                        .replace("--", "0"));
-
-                BigDecimal turnover = new BigDecimal(strings[8]
-                        .replace(",", ""));
-
-                return StockTradeRecord.builder()
-                        .stockcode(this.stockcode)
-                        .date(dataDate)
-                        .tradingVolume(tradingVolume)
-                        .transaction(transaction)
-                        .openingPrice(openingPrice)
-                        .highestPrice(highestPrice)
-                        .lowestPrice(lowestPrice)
-                        .closingPrice(closingPrice)
-                        .turnover(turnover)
-                        .build();
-            }).collect(Collectors.toList());
-        }
+            return StockTradeRecord.builder()
+                    .stockcode(stockcode)
+                    .date(dataDate)
+                    .tradingVolume(tradingVolume)
+                    .transaction(transaction)
+                    .openingPrice(openingPrice)
+                    .highestPrice(highestPrice)
+                    .lowestPrice(lowestPrice)
+                    .closingPrice(closingPrice)
+                    .turnover(turnover)
+                    .build();
+        }).collect(Collectors.toList());
     }
 }
