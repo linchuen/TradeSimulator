@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.cooba.TradeSimulator.Mapper.CurrencyDynamicSqlSupport.currency;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
@@ -27,6 +28,15 @@ public class CurrencyDataAccess {
         return currencyMapper.insert(currency) == 1;
     }
 
+    public boolean update(Currency currency) {
+        UpdateStatementProvider query = SqlBuilder.update(CurrencyDynamicSqlSupport.currency)
+                .set(CurrencyDynamicSqlSupport.rate).equalTo(currency.getRate())
+                .set(CurrencyDynamicSqlSupport.updatedTime).equalTo(LocalDateTime.now())
+                .where(CurrencyDynamicSqlSupport.name, isEqualTo(currency.getName()))
+                .build().render(RenderingStrategies.MYBATIS3);
+        return currencyMapper.update(query) == 1;
+    }
+
     public List<Currency> selectAll() {
         SelectStatementProvider query = SqlBuilder.select(CurrencyMapper.selectList)
                 .from(currency)
@@ -35,12 +45,7 @@ public class CurrencyDataAccess {
         return currencyMapper.selectMany(query);
     }
 
-    public boolean update(Currency currency) {
-        UpdateStatementProvider query = SqlBuilder.update(CurrencyDynamicSqlSupport.currency)
-                .set(CurrencyDynamicSqlSupport.rate).equalTo(currency.getRate())
-                .set(CurrencyDynamicSqlSupport.updatedTime).equalTo(LocalDateTime.now())
-                .where(CurrencyDynamicSqlSupport.name, isEqualTo(currency.getName()))
-                .build().render(RenderingStrategies.MYBATIS3);
-        return currencyMapper.update(query) == 1;
+    public Optional<Currency> selectById(Integer currencyId) {
+        return currencyMapper.selectByPrimaryKey(currencyId);
     }
 }
