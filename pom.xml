@@ -28,21 +28,27 @@
         <profile>
             <id>prod</id>
             <properties>
-                <profile>prod</profile>
+                <build.profile.id>prod</build.profile.id>
+                <activatedProperties>prod</activatedProperties>
             </properties>
         </profile>
 
         <profile>
             <id>dev</id>
             <properties>
-                <profile>dev</profile>
+                <build.profile.id>dev</build.profile.id>
+                <activatedProperties>dev</activatedProperties>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
 
         <profile>
             <id>test</id>
             <properties>
-                <profile>test</profile>
+                <build.profile.id>test</build.profile.id>
+                <activatedProperties>test</activatedProperties>
             </properties>
             <dependencies>
                 <dependency>
@@ -51,10 +57,6 @@
                     <scope>runtime</scope>
                 </dependency>
             </dependencies>
-
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
     </profiles>
 
@@ -197,7 +199,8 @@
             </resource>
 
             <resource>
-                <directory>src/main/resources/profile/${profile}</directory>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
 
