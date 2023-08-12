@@ -1,17 +1,15 @@
 package com.cooba.TradeSimulator.DataLayer;
 
-import com.cooba.TradeSimulator.Entity.Account;
 import com.cooba.TradeSimulator.Entity.UserCurrencyWallet;
 import com.cooba.TradeSimulator.Entity.UserStockWallet;
-import com.cooba.TradeSimulator.Mapper.*;
+import com.cooba.TradeSimulator.Mapper.UserCurrencyWalletDynamicSqlSupport;
+import com.cooba.TradeSimulator.Mapper.UserCurrencyWalletMapper;
+import com.cooba.TradeSimulator.Mapper.UserStockWalletDynamicSqlSupport;
+import com.cooba.TradeSimulator.Mapper.UserStockWalletMapper;
 import com.cooba.TradeSimulator.Object.Asset;
-import com.cooba.TradeSimulator.Object.Wallet;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
-import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
-import com.cooba.TradeSimulator.Object.wallet.StockWallet;
 import org.mybatis.dynamic.sql.SqlBuilder;
-import org.mybatis.dynamic.sql.delete.render.DeleteStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
@@ -29,9 +27,9 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 @Service
 public class WalletDataAccess {
     @Autowired
-    UserCurrencyWalletMapper userCurrencyWalletMapper;
+    private UserCurrencyWalletMapper userCurrencyWalletMapper;
     @Autowired
-    UserStockWalletMapper userStockWalletMapper;
+    private UserStockWalletMapper userStockWalletMapper;
 
     public boolean insertWallet(Integer userId, Asset asset) {
         if (asset instanceof CurrencyAsset) {

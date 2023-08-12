@@ -7,5 +7,5 @@ CREATE TABLE `account` (
   `created_time` datetime DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk` (`uuid`) USING BTREE
+  UNIQUE KEY `account_uk` (`uuid`) USING BTREE
 ) ;
