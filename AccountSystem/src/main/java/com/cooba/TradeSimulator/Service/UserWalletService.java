@@ -31,27 +31,6 @@ public class UserWalletService implements WalletService {
     CurrencyDataAcccess currencyDataAcccess;
 
     @Override
-    public void deposit(Integer userId, Integer currencyId, BigDecimal amount) {
-        CurrencyAsset currencyAsset = CurrencyAsset.builder()
-                .currencyId(currencyId)
-                .amount(amount)
-                .build();
-        try {
-            assetChange(userId, currencyAsset, true);
-        } catch (InsufficientException ignored) {
-        }
-    }
-
-    @Override
-    public void withdraw(Integer userId, Integer currencyId, BigDecimal amount) throws InsufficientException {
-        CurrencyAsset currencyAsset = CurrencyAsset.builder()
-                .currencyId(currencyId)
-                .amount(amount)
-                .build();
-        assetChange(userId, currencyAsset, false);
-    }
-
-    @Override
     public List<Wallet> getWallets(Integer userId) {
         List<CurrencyAsset> currencyAssetList = walletDataAccess.selectCurrencyAssetList(userId);
         List<StockInfoAsset> stockAssetList = walletDataAccess.selectStockAssetList(userId);

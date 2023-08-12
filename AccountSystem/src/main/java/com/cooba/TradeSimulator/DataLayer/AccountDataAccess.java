@@ -55,6 +55,10 @@ public class AccountDataAccess {
         return accountMapper.selectOne(query);
     }
 
+    public Optional<Account> selectById(int userId) {
+        return accountMapper.selectByPrimaryKey(userId);
+    }
+
     public Optional<Account> selectDetailAccount(String uuid) {
         SelectStatementProvider query = SqlBuilder.select(AccountMapper.selectList)
                 .from(AccountDynamicSqlSupport.account)

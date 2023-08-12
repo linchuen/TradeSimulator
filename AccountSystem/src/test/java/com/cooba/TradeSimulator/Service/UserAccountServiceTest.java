@@ -1,9 +1,14 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.AccountDataAccess;
+import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
 import com.cooba.TradeSimulator.Entity.Account;
+import com.cooba.TradeSimulator.Exception.InsufficientException;
+import com.cooba.TradeSimulator.Exception.NotExistException;
 import com.cooba.TradeSimulator.Object.AccountDto;
 import com.cooba.TradeSimulator.Config.Configuration;
+import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
+import com.cooba.TradeSimulator.Service.Interface.AccountService;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -12,24 +17,25 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = {Configuration.class, UserAccountService.class, AccountDataAccess.class, WalletService.class})
+@ContextConfiguration(classes = {Configuration.class, UserAccountService.class, AccountDataAccess.class, UserWalletService.class})
 class UserAccountServiceTest {
     @Autowired
-    UserAccountService userAccountService;
+    private AccountService accountService;
     @Autowired
     private AccountDataAccess accountDataAccess;
-    @MockBean
+    @Autowired
     private WalletService walletService;
 
     @Test
     void createAccount() {
-        String uuid = userAccountService.createAccount("Aiden");
+        String uuid = accountService.createAccount("Aiden");
         System.out.println(uuid);
         assertNotNull(uuid);
 
@@ -40,8 +46,8 @@ class UserAccountServiceTest {
 
     @Test
     void updateAccountIfExist() {
-        String uuid = userAccountService.createAccount("Aiden");
-        userAccountService.updateAccountIfExist(uuid, "new name");
+        String uuid = accountService.createAccount("Aiden");
+        accountService.updateAccountIfExist(uuid, "new name");
 
         Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
         assertTrue(accountOptional.isPresent());
@@ -50,20 +56,55 @@ class UserAccountServiceTest {
 
     @Test
     void deleteAccountIfExist() {
-        String uuid = userAccountService.createAccount("Aiden");
+        String uuid = accountService.createAccount("Aiden");
         Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
         assertTrue(accountOptional.isPresent());
 
-        userAccountService.deleteAccountIfExist(uuid);
+        accountService.deleteAccountIfExist(uuid);
         Optional<Account> afterDelete = accountDataAccess.selectAccount(uuid);
         assertFalse(afterDelete.isPresent());
     }
 
     @Test
     void getAccount() {
-        String uuid = userAccountService.createAccount("Aiden");
-        Optional<AccountDto> accountDto = userAccountService.getAccount(uuid);
+        String uuid = accountService.createAccount("Aiden");
+        Optional<AccountDto> accountDto = accountService.getAccount(uuid);
         assertTrue(accountDto.isPresent());
         System.out.println(accountDto.get());
+    }
+
+    @Test
+    void checkAccount() {
+        assertThrows(NotExistException.class, () -> accountService.checkAccount(0));
+    }
+
+    @Test
+    void depositDefaultAccount(@Autowired WalletDataAccess walletDataAccess) throws NotExistException {
+        accountService.deposit(1, 1, BigDecimal.TEN);
+
+        Optional<CurrencyAsset> wallet = walletDataAccess.selectCurrencyAsset(1, 1);
+        assertTrue(wallet.isPresent());
+        BigDecimal expectedAmount = new BigDecimal(110);
+        assertEquals(0, expectedAmount.compareTo(wallet.get().getAmount()));
+    }
+
+    @Test
+    void depositNotExistAccount() {
+        assertThrows(NotExistException.class, () -> accountService.deposit(2, 1, BigDecimal.TEN));
+    }
+
+    @Test
+    void withdrawDefaultAccount(@Autowired WalletDataAccess walletDataAccess) throws NotExistException, InsufficientException {
+        accountService.withdraw(1, 1, BigDecimal.TEN);
+
+        Optional<CurrencyAsset> wallet = walletDataAccess.selectCurrencyAsset(1, 1);
+        assertTrue(wallet.isPresent());
+        BigDecimal expectedAmount = new BigDecimal(90);
+        assertEquals(0, expectedAmount.compareTo(wallet.get().getAmount()));
+    }
+
+    @Test
+    void withdrawNotExistAccount() {
+        assertThrows(NotExistException.class, () -> accountService.withdraw(2, 1, BigDecimal.TEN));
     }
 }

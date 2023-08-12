@@ -2,12 +2,16 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.AccountDataAccess;
 import com.cooba.TradeSimulator.Entity.Account;
+import com.cooba.TradeSimulator.Exception.InsufficientException;
+import com.cooba.TradeSimulator.Exception.NotExistException;
 import com.cooba.TradeSimulator.Object.AccountDto;
+import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Service.Interface.AccountService;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +24,7 @@ public class UserAccountService implements AccountService {
 
     @Override
     public String createAccount(String name) {
-        String uuid=UUID.randomUUID().toString();
+        String uuid = UUID.randomUUID().toString();
         Account account = Account.builder()
                 .name(name)
                 .uuid(uuid)
@@ -58,5 +62,50 @@ public class UserAccountService implements AccountService {
                     .build());
         }
         return Optional.empty();
+    }
+
+    @Override
+    public Optional<AccountDto> getAccount(Integer userId) {
+        Optional<Account> accountOptional = accountDataAccess.selectById(userId);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            return Optional.of(AccountDto.builder()
+                    .uuid(account.getUuid())
+                    .name(account.getName())
+                    .password(account.getPassword())
+                    .wallets(walletService.getWallets(account.getId()))
+                    .build());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public void checkAccount(Integer userId) throws NotExistException {
+        if (getAccount(userId).isEmpty()) throw new NotExistException();
+    }
+
+    @Override
+    public void deposit(Integer userId, Integer currencyId, BigDecimal amount) throws NotExistException {
+        checkAccount(userId);
+
+        CurrencyAsset currencyAsset = CurrencyAsset.builder()
+                .currencyId(currencyId)
+                .amount(amount)
+                .build();
+        try {
+            walletService.assetChange(userId, currencyAsset, true);
+        } catch (InsufficientException ignored) {
+        }
+    }
+
+    @Override
+    public void withdraw(Integer userId, Integer currencyId, BigDecimal amount) throws InsufficientException, NotExistException {
+        checkAccount(userId);
+
+        CurrencyAsset currencyAsset = CurrencyAsset.builder()
+                .currencyId(currencyId)
+                .amount(amount)
+                .build();
+        walletService.assetChange(userId, currencyAsset, false);
     }
 }
