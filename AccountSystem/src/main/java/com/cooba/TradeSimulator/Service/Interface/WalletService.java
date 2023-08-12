@@ -14,7 +14,7 @@ public interface WalletService {
 
     CurrencyAsset assessAssetByUnit(Integer userId, Integer currencyId) throws NotSupportCurrencyException;
 
-    CurrencyAsset exchange(Asset input, CurrencyAsset output) throws NotSupportCurrencyException;
+    CurrencyAsset exchange(Asset input, Integer currencyId) throws NotSupportCurrencyException;
 
-    void assetChange(Integer userId, Asset asset,boolean isPlus) throws InsufficientException;
+    void assetChange(Integer userId, Asset asset, boolean isPlus) throws InsufficientException;
 }

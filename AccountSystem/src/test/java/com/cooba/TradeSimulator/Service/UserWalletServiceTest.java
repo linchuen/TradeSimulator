@@ -2,7 +2,12 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Config.Configuration;
 import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
+import com.cooba.TradeSimulator.Enum.DefaultCurrency;
+import com.cooba.TradeSimulator.Exception.InsufficientException;
+import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
+import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
+import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
@@ -27,18 +32,38 @@ class UserWalletServiceTest {
     WalletDataAccess walletDataAccess;
 
     @Test
-    void getWallets() {
+    void exchange() throws NotSupportCurrencyException {
+        CurrencyAsset input = CurrencyAsset.builder()
+                .currencyId(DefaultCurrency.USD.getId())
+                .currencyName(DefaultCurrency.USD.getName())
+                .amount(BigDecimal.valueOf(1000))
+                .build();
+
+        CurrencyAsset output = walletService.exchange(input, DefaultCurrency.TWD.getId());
+        assertEquals(0, BigDecimal.valueOf(31000).compareTo(output.getAmount()));
     }
 
     @Test
-    void assessAssetByUnit() {
+    void assetAddStockWallet() throws InsufficientException {
+        StockInfoAsset asset = StockInfoAsset.builder()
+                .stockId(DefaultCurrency.TWD.getId())
+                .amount(BigDecimal.valueOf(1000))
+                .build();
+        walletService.assetChange(1, asset, true);
+
+        Optional<StockInfoAsset> wallet = walletDataAccess.selectStockAsset(1, 1);
+        assertTrue(wallet.isPresent());
+        BigDecimal expectedAmount = new BigDecimal(1000);
+        assertEquals(0, expectedAmount.compareTo(wallet.get().getAmount()));
     }
 
     @Test
-    void exchange() {
-    }
+    void assetMinusStockWallet() {
+        StockInfoAsset asset = StockInfoAsset.builder()
+                .stockId(DefaultCurrency.TWD.getId())
+                .amount(BigDecimal.valueOf(1000))
+                .build();
 
-    @Test
-    void assetChange() {
+        assertThrows(InsufficientException.class, () -> walletService.assetChange(1, asset, false));
     }
 }

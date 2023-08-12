@@ -2,9 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.CurrencyDataAcccess;
 import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
-import com.cooba.TradeSimulator.Exception.InsufficientBalanceException;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
-import com.cooba.TradeSimulator.Exception.InsufficientStockException;
 import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
 import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.Wallet;
@@ -26,9 +24,9 @@ import java.util.function.Supplier;
 @Service
 public class UserWalletService implements WalletService {
     @Autowired
-    WalletDataAccess walletDataAccess;
+    private WalletDataAccess walletDataAccess;
     @Autowired
-    CurrencyDataAcccess currencyDataAcccess;
+    private CurrencyDataAcccess currencyDataAcccess;
 
     @Override
     public List<Wallet> getWallets(Integer userId) {
@@ -47,35 +45,35 @@ public class UserWalletService implements WalletService {
         }
         CurrencyAsset result = CurrencyAsset.builder().currencyId(currencyId).amount(BigDecimal.ZERO).build();
         for (Asset asset : totalAssets) {
-            BigDecimal amount = exchange(asset, CurrencyAsset.builder().currencyId(currencyId).build()).getAmount();
+            BigDecimal amount = exchange(asset,currencyId).getAmount();
             result.setAmount(result.getAmount().add(amount));
         }
         return result;
     }
 
     @Override
-    public CurrencyAsset exchange(Asset input, CurrencyAsset output) throws NotSupportCurrencyException {
+    public CurrencyAsset exchange(Asset input, Integer currencyId) throws NotSupportCurrencyException {
         if (input instanceof CurrencyAsset) {
             Integer inId = ((CurrencyAsset) input).getCurrencyId();
             BigDecimal fromRate = currencyDataAcccess.getCurrencyRate(inId);
             if (fromRate == null) throw new NotSupportCurrencyException();
 
-            Integer outId = output.getCurrencyId();
-            BigDecimal toRate = currencyDataAcccess.getCurrencyRate(outId);
+            BigDecimal toRate = currencyDataAcccess.getCurrencyRate(currencyId);
             if (toRate == null) throw new NotSupportCurrencyException();
 
-            output.setAmount(input.getAmount().multiply(fromRate).divide(toRate, 5, RoundingMode.FLOOR));
-            return output;
+            return CurrencyAsset.builder()
+                    .amount(input.getAmount().multiply(fromRate).divide(toRate, 5, RoundingMode.FLOOR))
+                    .build();
         }
         if (input instanceof StockInfoAsset) {
             BigDecimal closingPrice = ((StockInfoAsset) input).getClosingPrice();
 
-            Integer outId = output.getCurrencyId();
-            BigDecimal toRate = currencyDataAcccess.getCurrencyRate(outId);
+            BigDecimal toRate = currencyDataAcccess.getCurrencyRate(currencyId);
             if (toRate == null) throw new NotSupportCurrencyException();
 
-            output.setAmount(input.getAmount().multiply(closingPrice).divide(toRate, 5, RoundingMode.FLOOR));
-            return output;
+            return CurrencyAsset.builder()
+                    .amount(input.getAmount().multiply(closingPrice).divide(toRate, 5, RoundingMode.FLOOR))
+                    .build();
         }
         throw new NotSupportCurrencyException();
     }
