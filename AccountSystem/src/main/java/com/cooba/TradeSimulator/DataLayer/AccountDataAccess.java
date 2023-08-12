@@ -21,9 +21,10 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 @Service
 public class AccountDataAccess {
     @Autowired
-    AccountMapper accountMapper;
+    private AccountMapper accountMapper;
 
     public boolean insertAccount(Account account) {
+        account.setIsEnable(true);
         account.setCreatedTime(LocalDateTime.now());
         account.setUpdatedTime(LocalDateTime.now());
         return accountMapper.insert(account) == 1;

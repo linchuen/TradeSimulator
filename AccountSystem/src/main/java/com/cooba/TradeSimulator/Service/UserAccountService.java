@@ -4,6 +4,7 @@ import com.cooba.TradeSimulator.DataLayer.AccountDataAccess;
 import com.cooba.TradeSimulator.Entity.Account;
 import com.cooba.TradeSimulator.Object.AccountDto;
 import com.cooba.TradeSimulator.Service.Interface.AccountService;
+import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +14,19 @@ import java.util.UUID;
 @Service
 public class UserAccountService implements AccountService {
     @Autowired
-    AccountDataAccess accountDataAccess;
+    private AccountDataAccess accountDataAccess;
     @Autowired
-    UserWalletService userWalletService;
+    private WalletService walletService;
 
     @Override
-    public void createAccount(String name) {
+    public String createAccount(String name) {
+        String uuid=UUID.randomUUID().toString();
         Account account = Account.builder()
                 .name(name)
-                .uuid(UUID.randomUUID().toString())
+                .uuid(uuid)
                 .build();
         accountDataAccess.insertAccount(account);
+        return uuid;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class UserAccountService implements AccountService {
                     .uuid(account.getUuid())
                     .name(account.getName())
                     .password(account.getPassword())
-                    .wallets(userWalletService.getWallets(account.getId()))
+                    .wallets(walletService.getWallets(account.getId()))
                     .build());
         }
         return Optional.empty();

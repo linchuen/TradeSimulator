@@ -3,11 +3,9 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/AccountSystem/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/AccountSystem/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/AccountSystem/src/main/resources/profile/dev" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/CurrencySystem/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/StockSystem/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/StockSystem/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/StockSystem/src/main/resources/profile/dev" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TradeSystem/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/TradeSystem/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
