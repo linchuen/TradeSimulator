@@ -1,12 +1,10 @@
 package com.cooba.TradeSimulator.Service.StockTrade.sell;
 
-import com.cooba.TradeSimulator.Annotation.Step;
 import com.cooba.TradeSimulator.Channel.GrpcClientAccountService;
 import com.cooba.TradeSimulator.Object.TradeData;
 import com.cooba.TradeSimulator.Object.TradeStep;
 import lombok.AllArgsConstructor;
 
-@Step(transaction = "SellStock", sort = 2)
 @AllArgsConstructor
 public class PayStockStep extends TradeStep<TradeData> {
     private final GrpcClientAccountService grpcClientAccountService;
