@@ -1,6 +1,7 @@
 package com.cooba.TradeSimulator.Util;
 
 import com.cooba.TradeSimulator.Exception.NoLockException;
+import com.cooba.TradeSimulator.Object.ThrowableRunnable;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.stream.IntStream;
 public class SimulateLock {
     Map<String, ReentrantLock> lockMap = new ConcurrentHashMap<>();
 
-    public void simulateRunning(String lockKey, int runningTime, int waitTime) throws InterruptedException, NoLockException {
+    public void fakeSimulateRunning(String lockKey, int runningTime, int waitTime) throws InterruptedException, NoLockException {
         ReentrantLock lock = getLock(lockKey);
 
         if (lock.tryLock(waitTime, TimeUnit.MILLISECONDS)) {
@@ -29,14 +30,14 @@ public class SimulateLock {
         }
     }
 
-    public void simulateGetLock(String lockKey, int waitTime, int timeout, Runnable runnable) throws InterruptedException, NoLockException {
+    public void simulateRunning(String lockKey, int waitTime, int timeout, Runnable runnable) throws InterruptedException, NoLockException {
         Lock lock = getLock(lockKey);
         if (lock.tryLock(waitTime, TimeUnit.MILLISECONDS)) {
             try {
                 long releaseTime = System.currentTimeMillis() + timeout;
                 runnable.run();
                 if (System.currentTimeMillis() > releaseTime) {
-                    System.out.println("Running time is larger than timeout");
+                    System.out.println("Warning!! Running time is larger than timeout");
                 }
             } finally {
                 lock.unlock();
