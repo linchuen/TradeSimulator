@@ -7,4 +7,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface TransactionLock {
     String value() default "";
+    long waitTime() default 10000;
+    long leaseTime() default 30000;
 }

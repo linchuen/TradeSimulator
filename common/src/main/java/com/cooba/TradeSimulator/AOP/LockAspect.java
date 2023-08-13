@@ -9,11 +9,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 @Aspect
@@ -39,9 +41,17 @@ public class LockAspect {
         }
         String lockKey = stringBuilder.toString();
 
+        long waitTime = transactionLockAnnotation.waitTime();
+        long leaseTime = transactionLockAnnotation.leaseTime();
         Object result;
+        boolean isGetLock;
         Lock lock = lockFactory.getLock(redissonEnable ? LockEnum.Redis : LockEnum.Reentrant, lockKey);
-        if (lock.tryLock()) {
+        if (lock instanceof RLock) {
+            isGetLock = ((RLock) lock).tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+        } else {
+            isGetLock = lock.tryLock(waitTime, TimeUnit.MILLISECONDS);
+        }
+        if (isGetLock) {
             try {
                 result = joinPoint.proceed();
             } finally {
