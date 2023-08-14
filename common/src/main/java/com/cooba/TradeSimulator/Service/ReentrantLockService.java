@@ -41,7 +41,8 @@ public class ReentrantLockService implements LockService {
 
             removeExpiredLock();
 
-            Lock resultLock = reentrantLockMap.putIfAbsent(key, new ReentrantLock());
+            reentrantLockMap.putIfAbsent(key, new ReentrantLock());
+            Lock resultLock = reentrantLockMap.get(key);
             long releaseTime = System.currentTimeMillis() + defaultTimeout;
             infoList.add(LockInfo.builder().key(key).releaseTime(releaseTime).build());
             return resultLock;

@@ -12,3 +12,6 @@ spring:
       enabled: true
   redisson:
     enable: false
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

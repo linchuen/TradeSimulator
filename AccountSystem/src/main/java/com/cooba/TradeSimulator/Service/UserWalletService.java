@@ -80,6 +80,7 @@ public class UserWalletService implements WalletService {
     }
 
     @Override
+    @TransactionLock
     public void assetChange(Integer userId, Asset asset, boolean isPlus) throws InsufficientException {
         if (asset instanceof CurrencyAsset) {
             int currencyId = ((CurrencyAsset) asset).getCurrencyId();

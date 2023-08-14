@@ -92,26 +92,33 @@ public class SimulateMultiThread {
     }
 
     private void printStatistics() {
-        long totalCostTime = 0;
+        long successCostTime = 0;
+        long failureCostTime = 0;
         for (CompletableFuture<Result> completableFuture : completableFutureList) {
             try {
                 Result result = completableFuture.get();
-                totalCostTime = totalCostTime + result.costTime;
                 if (result.success) {
+                    successCostTime = successCostTime + result.costTime;
                     successTime++;
                 } else {
                     System.out.println(result.threadName + " error message: " + result.errorMessage);
+                    failureCostTime = failureCostTime + result.costTime;
                     failureTime++;
                 }
             } catch (Exception e) {
                 failureTime++;
             }
         }
+        long totalCostTime = successCostTime + failureCostTime;
+        long avgSuccessCost = successTime == 0 ? 0 : successCostTime / successTime;
+        long avgFailureCost = failureTime == 0 ? 0 : failureCostTime / failureTime;
         System.out.println("--------------------------------");
         System.out.println("avgCostTime = " + totalCostTime / completableFutureList.size());
         System.out.println("totalCostTime = " + totalCostTime);
-        System.out.println("successTime = " + successTime);
-        System.out.println("failureTime = " + failureTime);
+        System.out.println("avgSuccessCost = " + avgSuccessCost);
+        System.out.println("success = " + successTime);
+        System.out.println("avgFailureCost = " + avgFailureCost);
+        System.out.println("failure = " + failureTime);
     }
 
     public ReentrantLock getLock(String lockKey) {

@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-
 @ContextConfiguration(classes = {Configuration.class, WalletDataAccess.class})
 class WalletDataAccessTest {
     @Autowired
