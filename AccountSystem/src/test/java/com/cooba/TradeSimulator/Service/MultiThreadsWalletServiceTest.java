@@ -5,6 +5,7 @@ import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
 import com.cooba.TradeSimulator.Enum.DefaultCurrency;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
 import com.cooba.TradeSimulator.Exception.NoLockException;
+import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import com.cooba.TradeSimulator.Util.SimulateLock;
@@ -43,6 +44,25 @@ class MultiThreadsWalletServiceTest {
         Optional<StockInfoAsset> wallet = walletDataAccess.selectStockAsset(1, 1);
         assertTrue(wallet.isPresent());
         BigDecimal expectedAmount = new BigDecimal(5000);
+        BigDecimal resultAmount = wallet.get().getAmount();
+        System.out.println(resultAmount);
+        assertEquals(0, expectedAmount.compareTo(resultAmount));
+    }
+
+    @Test
+    void assetMinusStockWallet() {
+        CurrencyAsset asset = CurrencyAsset.builder()
+                .currencyId(DefaultCurrency.TWD.getId())
+                .amount(BigDecimal.valueOf(1))
+                .build();
+
+        SimulateMultiThread simulateMultiThread = new SimulateMultiThread("",3000,1000);
+        simulateMultiThread.runWithLock(100,
+                () -> walletService.assetChange(1, asset, false));
+
+        Optional<CurrencyAsset> wallet = walletDataAccess.selectCurrencyAsset(1, 1);
+        assertTrue(wallet.isPresent());
+        BigDecimal expectedAmount = new BigDecimal(0);
         BigDecimal resultAmount = wallet.get().getAmount();
         System.out.println(resultAmount);
         assertEquals(0, expectedAmount.compareTo(resultAmount));
