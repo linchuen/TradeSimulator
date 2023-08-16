@@ -25,11 +25,17 @@ public enum DefaultCurrency {
     private final String name;
     private final BigDecimal rate;
     private final static Map<Integer, BigDecimal> currencyMap = new HashMap<>();
+    private final static Map<String, DefaultCurrency> nameMap = new HashMap<>();
 
     static {
         for (DefaultCurrency value : DefaultCurrency.values()) {
             currencyMap.put(value.id, value.rate);
+            nameMap.put(value.name, value);
         }
+    }
+
+    public static Map<String, DefaultCurrency> getCurrencyNameMap() {
+        return nameMap;
     }
 
     public static Map<Integer, BigDecimal> getCurrencyMap() {

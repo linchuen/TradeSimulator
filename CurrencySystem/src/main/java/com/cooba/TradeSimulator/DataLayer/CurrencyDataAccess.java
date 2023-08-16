@@ -1,6 +1,7 @@
 package com.cooba.TradeSimulator.DataLayer;
 
 import com.cooba.TradeSimulator.Entity.Currency;
+import com.cooba.TradeSimulator.Enum.DefaultCurrency;
 import com.cooba.TradeSimulator.Mapper.CurrencyDynamicSqlSupport;
 import com.cooba.TradeSimulator.Mapper.CurrencyMapper;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.cooba.TradeSimulator.Mapper.CurrencyDynamicSqlSupport.currency;
@@ -23,6 +25,9 @@ public class CurrencyDataAccess {
     private final CurrencyMapper currencyMapper;
 
     public boolean insert(Currency currency) {
+        Map<String, DefaultCurrency> defaultCurrencyMap = DefaultCurrency.getCurrencyNameMap();
+        DefaultCurrency defaultCurrency = defaultCurrencyMap.get(currency.getName());
+        currency.setId(defaultCurrency == null ? null : defaultCurrency.getId());
         currency.setCreatedTime(LocalDateTime.now());
         currency.setUpdatedTime(LocalDateTime.now());
         return currencyMapper.insert(currency) == 1;

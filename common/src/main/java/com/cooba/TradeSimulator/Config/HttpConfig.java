@@ -16,12 +16,11 @@ public class HttpConfig {
     public OkHttpClient httpClient() {
         X509TrustManager manager = SSLSocketClientUtil.getX509TrustManager();
 
-        OkHttpClient client = new OkHttpClient.Builder()
+        return new OkHttpClient.Builder()
                 .readTimeout(3, TimeUnit.SECONDS)
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .sslSocketFactory(SSLSocketClientUtil.getSocketFactory(manager), manager)
                 .hostnameVerifier(SSLSocketClientUtil.getHostnameVerifier())
                 .build();
-        return client;
     }
 }

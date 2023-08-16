@@ -8,6 +8,7 @@ import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.exceptions.CsvException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,10 +23,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class FiatCurrencyService implements CurrencyService {
-    private final HttpUtil httpUtil;
-    private final CurrencyDataAccess currencyDataAccess;
+    @Autowired
+    private HttpUtil httpUtil;
+    @Autowired
+    private CurrencyDataAccess currencyDataAccess;
 
     public void downloadCurrencyData() throws IOException, CsvException {
         LocalDate today = LocalDate.now();
@@ -50,7 +52,7 @@ public class FiatCurrencyService implements CurrencyService {
         }
     }
 
-    public List<Currency> transferFunction(List<String[]> dataRows) {
+    private List<Currency> transferFunction(List<String[]> dataRows) {
         if (dataRows.isEmpty()) {
             return Collections.emptyList();
         }
