@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 @Service
 public class GoodInfoDataDownloadService implements StockDataDownloadService {
     @Autowired
-    StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
     @Autowired
-    SkipDateService skipDateService;
+    private SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException {

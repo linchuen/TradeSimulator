@@ -16,10 +16,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
-@AllArgsConstructor
 public class YahooDataDownloadService implements StockDataDownloadService {
-    private final StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    private final SkipDateService skipDateService;
+    @Autowired
+    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    @Autowired
+    private SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) {

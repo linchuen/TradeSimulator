@@ -9,13 +9,17 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.ActiveProfiles;
 
 @MapperScan("com.cooba.TradeSimulator.Mapper")
-@ComponentScan("com.cooba.TradeSimulator.DataLayer")
+@ComponentScan(value = {
+        "com.cooba.TradeSimulator.DataLayer",
+        "com.cooba.TradeSimulator.Util"})
 @ActiveProfiles(value = "test")
 @TestConfiguration
 @EnableAspectJAutoProxy
 public class Configuration {
+    @Autowired(required = false)
+    ApplicationContext context;
 
-    public void checkBeans(@Autowired(required = false) ApplicationContext context){
+    public void checkBeans(){
         System.out.println("Loaded beans");
         for (String beanDefinitionName : context.getBeanDefinitionNames()) {
             System.out.println(beanDefinitionName);

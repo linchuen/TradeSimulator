@@ -22,11 +22,13 @@ import java.util.stream.Collectors;
 
 
 @Service
-@AllArgsConstructor
 public class TWSEDataDownloadService implements StockDataDownloadService {
-    private final HttpUtil httpUtil;
-    private final StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    private final SkipDateService skipDateService;
+    @Autowired
+    private HttpUtil httpUtil;
+    @Autowired
+    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    @Autowired
+    private SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException, CsvException {

@@ -21,12 +21,15 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class StockDataServiceImpl implements StockDataService {
-    private final SkipDateService skipDateService;
-    private final StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    private final StockDownloadPriorityService stockDownloadPriorityService;
-    private final StockInfoDataAccess stockInfoDataAccess;
+    @Autowired
+    private SkipDateService skipDateService;
+    @Autowired
+    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    @Autowired
+    private StockDownloadPriorityService stockDownloadPriorityService;
+    @Autowired
+    private StockInfoDataAccess stockInfoDataAccess;
 
     @Override
     public StockTradeRecord getTodayStockData(String stockcode) throws Exception {

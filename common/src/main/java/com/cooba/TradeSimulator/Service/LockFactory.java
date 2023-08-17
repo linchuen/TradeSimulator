@@ -1,4 +1,4 @@
-package com.cooba.TradeSimulator.Util;
+package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Enum.LockEnum;
 import com.cooba.TradeSimulator.Service.Interface.LockService;

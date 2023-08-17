@@ -23,10 +23,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-@AllArgsConstructor
 public class TWSESkipDateService implements SkipDateService {
-    private final HttpUtil httpUtil;
-    private final SkipDateDataAccess skipDateDataAccess;
+    @Autowired
+    private HttpUtil httpUtil;
+    @Autowired
+    private SkipDateDataAccess skipDateDataAccess;
 
     @Override
     public void downloadData(int year) throws IOException, CsvException {

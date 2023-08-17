@@ -4,7 +4,7 @@ import com.cooba.TradeSimulator.Annotation.Key;
 import com.cooba.TradeSimulator.Annotation.TransactionLock;
 import com.cooba.TradeSimulator.Enum.LockEnum;
 import com.cooba.TradeSimulator.Exception.NoLockException;
-import com.cooba.TradeSimulator.Util.LockFactory;
+import com.cooba.TradeSimulator.Service.LockFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

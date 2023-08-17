@@ -11,12 +11,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+
 public class StockDownloadPriorityService {
-    private final TWSEDataDownloadService twseDataDownloadService;
-    private final GoodInfoDataDownloadService goodInfoDataDownloadService;
-    private final AnueDataDownloadService anueDataDownloadService;
-    private final YahooDataDownloadService yahooDataDownloadService;
+    @Autowired
+    private TWSEDataDownloadService twseDataDownloadService;
+    @Autowired
+    private GoodInfoDataDownloadService goodInfoDataDownloadService;
+    @Autowired
+    private AnueDataDownloadService anueDataDownloadService;
+    @Autowired
+    private YahooDataDownloadService yahooDataDownloadService;
 
     final Map<Integer, StockDataDownloadService> downloadPriorityMap = new HashMap<>();
     List<StockDataDownloadService> downloadPriorityList;

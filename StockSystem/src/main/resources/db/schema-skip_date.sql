@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS `skip_date` (
   `created_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk` (`date`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
