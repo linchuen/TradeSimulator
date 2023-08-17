@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `stock_trade_record` (
-  `id` bigint(20) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `stockcode` varchar(20) NOT NULL,
   `date` date DEFAULT NULL,
   `trading_volume` varchar(20) NOT NULL,
@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS `stock_trade_record` (
   `closing_price` decimal(10,5) NOT NULL,
   `created_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk` (`stockcode`,`date`) USING BTREE
-) ;
+  UNIQUE KEY `stock_trade_record_uk` (`stockcode`,`date`) USING BTREE
+);

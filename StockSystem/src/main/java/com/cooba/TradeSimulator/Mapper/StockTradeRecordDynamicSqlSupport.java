@@ -13,7 +13,7 @@ public final class StockTradeRecordDynamicSqlSupport {
     public static final StockTradeRecord stockTradeRecord = new StockTradeRecord();
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<Long> id = stockTradeRecord.id;
+    public static final SqlColumn<Integer> id = stockTradeRecord.id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<String> stockcode = stockTradeRecord.stockcode;
@@ -47,7 +47,7 @@ public final class StockTradeRecordDynamicSqlSupport {
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final class StockTradeRecord extends SqlTable {
-        public final SqlColumn<Long> id = column("id", JDBCType.BIGINT);
+        public final SqlColumn<Integer> id = column("id", JDBCType.INTEGER);
 
         public final SqlColumn<String> stockcode = column("stockcode", JDBCType.VARCHAR);
 

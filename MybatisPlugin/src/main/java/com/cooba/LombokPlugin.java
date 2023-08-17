@@ -19,11 +19,13 @@ public class LombokPlugin extends PluginAdapter {
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         //添加domain的import
         topLevelClass.addImportedType("lombok.Data");
-        topLevelClass.addImportedType("lombok.SuperBuilder");
+        topLevelClass.addImportedType("lombok.Builder");
+//        topLevelClass.addImportedType("lombok.experimental.SuperBuilder");
 
         //添加domain的注解
         topLevelClass.addAnnotation("@Data");
         topLevelClass.addAnnotation("@Builder");
+//        topLevelClass.addAnnotation("@SuperBuilder");
 
         return true;
     }

@@ -6,13 +6,12 @@ import java.time.LocalDateTime;
 import javax.annotation.Generated;
 import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder
+@Builder
 public class StockTradeRecord {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private Long id;
+    private Integer id;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private String stockcode;

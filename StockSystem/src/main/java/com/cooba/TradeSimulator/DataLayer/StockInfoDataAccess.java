@@ -8,6 +8,7 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,9 @@ public class StockInfoDataAccess {
     }
 
     public boolean insertAll(List<StockInfo> entities) {
+        for (StockInfo entity : entities) {
+            entity.setUpdatedTime(LocalDateTime.now());
+        }
         return stockInfoMapper.insertMultiple(entities) > 0;
     }
 }

@@ -61,7 +61,7 @@ public interface StockTradeRecordMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
     @Results(id="StockTradeRecordResult", value = {
-        @Result(column="id", property="id", jdbcType=JdbcType.BIGINT, id=true),
+        @Result(column="id", property="id", jdbcType=JdbcType.INTEGER, id=true),
         @Result(column="stockcode", property="stockcode", jdbcType=JdbcType.VARCHAR),
         @Result(column="date", property="date", jdbcType=JdbcType.DATE),
         @Result(column="trading_volume", property="tradingVolume", jdbcType=JdbcType.DECIMAL),
@@ -90,7 +90,7 @@ public interface StockTradeRecordMapper {
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default int deleteByPrimaryKey(Long id_) {
+    default int deleteByPrimaryKey(Integer id_) {
         return delete(c -> 
             c.where(id, isEqualTo(id_))
         );
@@ -163,7 +163,7 @@ public interface StockTradeRecordMapper {
     }
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    default Optional<StockTradeRecord> selectByPrimaryKey(Long id_) {
+    default Optional<StockTradeRecord> selectByPrimaryKey(Integer id_) {
         return selectOne(c ->
             c.where(id, isEqualTo(id_))
         );

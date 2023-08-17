@@ -1,14 +1,13 @@
 package com.cooba.TradeSimulator.Entity;
 
-import lombok.Data;
-import lombok.experimental.SuperBuilder;
-
-import javax.annotation.Generated;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import javax.annotation.Generated;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
-@SuperBuilder
+@Builder
 public class SkipDate {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private Integer id;
