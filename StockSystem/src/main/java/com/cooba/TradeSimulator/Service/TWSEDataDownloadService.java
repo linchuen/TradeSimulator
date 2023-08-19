@@ -2,15 +2,11 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
-import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Util.DateUtil;
 import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import lombok.AllArgsConstructor;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +23,6 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
     private HttpUtil httpUtil;
     @Autowired
     private StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    @Autowired
-    private SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException, CsvException {
@@ -41,7 +35,23 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
                 .sendHttpRequest("https://www.twse.com.tw/exchangeReport/STOCK_DAY", map)
                 .readResponseByCSV()
                 .transferRawData(dataRows -> transferFunction(dataRows, stockcode));
-        stockTradeRecordDataAccess.insertAll(stockTradeRecordList);
+
+        List<StockTradeRecord> dbList = stockTradeRecordDataAccess.findByStockCodeAndMonth(stockcode, localDate.getYear(), localDate.getDayOfMonth());
+        if (dbList.isEmpty()) {
+            stockTradeRecordDataAccess.insertAll(stockTradeRecordList);
+            return;
+        }
+
+        Map<LocalDate, StockTradeRecord> dateMap = dbList.stream().collect(Collectors.toMap(StockTradeRecord::getDate, stockTradeRecord -> stockTradeRecord));
+        for (StockTradeRecord stockTradeRecord : stockTradeRecordList) {
+            StockTradeRecord dbRecord = dateMap.get(stockTradeRecord.getDate());
+            if (dbRecord != null) {
+                stockTradeRecord.setId(dbRecord.getId());
+                stockTradeRecordDataAccess.update(stockTradeRecord);
+            } else {
+                stockTradeRecordDataAccess.insert(stockTradeRecord);
+            }
+        }
     }
 
     private List<StockTradeRecord> transferFunction(List<String[]> dataRows, String stockcode) {
