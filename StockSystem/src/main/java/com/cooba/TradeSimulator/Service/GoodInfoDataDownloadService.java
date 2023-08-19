@@ -14,24 +14,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class GoodInfoDataDownloadService implements StockDataDownloadService {
     @Autowired
     private StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    @Autowired
-    private SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException {
-        if (skipDateService.isSkipDate(localDate)) return;
-
-        if (LocalDateTime.now().isBefore(localDate.atTime(10, 0))) {
-            localDate = LocalDate.now().minusDays(1);
-        } else {
-            localDate = LocalDate.now();
-        }
-
         final String UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36";
 
         String stockUrl = String.format("https://goodinfo.tw/tw/StockDetail.asp?STOCK_ID=%s", stockcode);
@@ -40,11 +31,7 @@ public class GoodInfoDataDownloadService implements StockDataDownloadService {
                 .userAgent(UA)
                 .referrer("http://www.google.com")
                 .get();
-        Element infotable = doc.getElementsByClass("b1 p4_4 r10").get(0);
-        String industryType = infotable.select("tbody > tr:nth-child(3) > td:nth-child(2)").text();
-        String companyType = infotable.select(" tbody > tr:nth-child(4) > td:nth-child(2) > nobr").text();
-        Element table = doc.getElementsByClass("b1 p4_2 r10").get(0);
-        String name = table.select("tbody > tr > td:nth-child(1) > nobr > a").text().split(" ")[1];
+        Element table = doc.select("body > table:nth-child(8) > tbody > tr > td:nth-child(3) > table > tbody > tr:nth-child(1) > td > table > tbody > tr > td:nth-child(1) > table").get(0);
         String price = table.select("tbody > tr:nth-child(3) > td:nth-child(1)").text();
         String lastprice = table.select("tbody > tr:nth-child(3) > td:nth-child(2)").text();
         String open = table.select("tbody > tr:nth-child(3) > td:nth-child(6)").text();
@@ -55,7 +42,7 @@ public class GoodInfoDataDownloadService implements StockDataDownloadService {
 
         StockTradeRecord stockTradeRecord = StockTradeRecord.builder()
                 .stockcode(stockcode)
-                .date(localDate)
+                .date(LocalDate.parse(createdTime, DateTimeFormatter.ofPattern("yyyy/MM/dd")))
                 .closingPrice(new BigDecimal(price))
                 .openingPrice(new BigDecimal(open))
                 .highestPrice(new BigDecimal(highest))

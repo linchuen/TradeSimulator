@@ -13,24 +13,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class AnueDataDownloadService implements StockDataDownloadService {
     @Autowired
     private StockTradeRecordDataAccess stockTradeRecordDataAccess;
-    @Autowired
-    private SkipDateService skipDateService;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException {
-        if (skipDateService.isSkipDate(localDate)) return;
-
-        if (LocalDateTime.now().isBefore(localDate.atTime(10, 0))) {
-            localDate = LocalDate.now().minusDays(1);
-        } else {
-            localDate = LocalDate.now();
-        }
-
         final String UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36";
 
         String stockUrl = String.format("https://invest.cnyes.com/twstock/TWS/%s", stockcode);
@@ -48,7 +39,7 @@ public class AnueDataDownloadService implements StockDataDownloadService {
 
         StockTradeRecord stockTradeRecord = StockTradeRecord.builder()
                 .stockcode(stockcode)
-                .date(localDate)
+                .date(LocalDate.parse(createdTime, DateTimeFormatter.ofPattern("yyyy/MM/dd")))
                 .closingPrice(new BigDecimal(price))
                 .openingPrice(new BigDecimal(open))
                 .highestPrice(new BigDecimal(highest))
