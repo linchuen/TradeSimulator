@@ -6,10 +6,12 @@ import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
+import com.cooba.TradeSimulator.Util.RegexUtil;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import lombok.AllArgsConstructor;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +35,7 @@ public class TWSESkipDateService implements SkipDateService {
     public void downloadData(int year) throws IOException, CsvException {
         Map<String, String> map = new HashMap(Map.of(
                 "response", "csv",
-                "queryYear", year - 1911));
+                "queryYear", String.valueOf(year - 1911)));
 
         List<SkipDate> skipDateList = HttpCsvResponse.build(httpUtil)
                 .sendHttpRequest("https://www.twse.com.tw/holidaySchedule/holidaySchedule", map)
@@ -46,29 +48,31 @@ public class TWSESkipDateService implements SkipDateService {
         if (dataRows.isEmpty()) {
             return Collections.emptyList();
         }
-        dataRows = dataRows.subList(2, dataRows.size() - 1);
-        return dataRows.stream().filter(strings -> {
-            String reason = strings[0];
-            String date = strings[1];
-            String regex = "(\\d+)月(\\d+)日";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(date);
+        dataRows = dataRows.subList(2, dataRows.size());
 
-            return !reason.contains("開始") && matcher.find();
-        }).map(strings -> {
-            String date = strings[1];
+        List<SkipDate> result = new LinkedList<>();
+        Set<LocalDate> dateSet = new HashSet<>();
+        for (String[] dataRow : dataRows) {
+            String reason = dataRow[0];
+            String date = dataRow[1];
             String regex = "(\\d+)月(\\d+)日";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(date);
+            Matcher matcher = RegexUtil.getMatcher(date, regex);
 
+            if (reason.contains("開始交易") || reason.contains("最後交易")) continue;
+            if (!matcher.find()) continue;
             int month = Integer.parseInt(matcher.group(1));
             int day = Integer.parseInt(matcher.group(2));
 
-            return SkipDate.builder()
-                    .reason(strings[0])
-                    .date(LocalDate.of(year, month, day))
-                    .build();
-        }).collect(Collectors.toList());
+            LocalDate localDate = LocalDate.of(year, month, day);
+            if (dateSet.contains(localDate)) continue;
+
+            dateSet.add(localDate);
+            result.add(SkipDate.builder()
+                    .reason(dataRow[0])
+                    .date(localDate)
+                    .build());
+        }
+        return result;
     }
 
     public boolean isSkipDate(LocalDate date) {
