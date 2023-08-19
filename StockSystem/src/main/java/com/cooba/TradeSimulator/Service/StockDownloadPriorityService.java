@@ -1,7 +1,9 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
+import com.cooba.TradeSimulator.Util.RandomUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,13 +51,6 @@ public class StockDownloadPriorityService {
     }
 
     public StockDataDownloadService getDownloadServiceByWeight() {
-        Random random = new SecureRandom();
-        int rand = random.nextInt(downloadWeightMap.values().stream().reduce(0, Integer::sum)) + 1;
-        for (Map.Entry<StockDataDownloadService, Integer> entry : downloadWeightMap.entrySet()) {
-            rand = rand - entry.getValue();
-
-            if (rand <= 0) return entry.getKey();
-        }
-        return null;
+        return RandomUtil.randomByWeight(downloadWeightMap);
     }
 }
