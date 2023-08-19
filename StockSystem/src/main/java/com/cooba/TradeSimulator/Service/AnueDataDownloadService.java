@@ -38,13 +38,13 @@ public class AnueDataDownloadService implements StockDataDownloadService {
                 .userAgent(UA)
                 .referrer("http://www.google.com")
                 .get();
-        String price = doc.selectXpath(String.format("//*[@id='_profile-TWS:%s:STOCK']/div[2]/div[2]/div/div[6]/div[2]", stockcode)).text();
-        String lastprice = doc.selectXpath(String.format("//*[@id='_profile-TWS:%s:STOCK']/div[2]/div[2]/div/div[4]/div[2]", stockcode)).text();
-        String open = doc.selectXpath(String.format("//*[@id='_profile-TWS:%s:STOCK']/div[2]/div[2]/div/div[5]/div[2]", stockcode)).text();
-        String highest = doc.selectXpath(String.format("//*[@id='_profile-TWS:%s:STOCK']/div[2]/div[2]/div/div[2]/div[2]", stockcode)).text().split("- ")[1];
-        String lowest = doc.selectXpath(String.format("//*[@id='_profile-TWS:%s:STOCK']/div[2]/div[2]/div/div[2]/div[2]", stockcode)).text().split("- ")[0];
-        String tradingVolume = doc.selectXpath(String.format("//*[@id='_profile-TWS:%s:STOCK']/div[2]/div[2]/div/div[1]/div[2]", stockcode)).text().replaceAll("[, 張]", "");
-        String createdTime = LocalDate.now().getYear() + "/" + doc.selectXpath(String.format("//*[@id='_profile-TWS:%s:STOCK']/div[1]/div[2]/time", stockcode)).text().split(" ")[0];
+        String price = doc.selectXpath("//*[@id=\"anue-ga-wrapper\"]/div[4]/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/h3").text();
+        String lastPrice = doc.selectXpath("//*[@id=\"anue-ga-wrapper\"]/div[4]/div[2]/div[1]/div[1]/div[1]/div/div[3]/div[2]/ul[1]/li[4]/span[2]").text();
+        String open = doc.selectXpath("//*[@id=\"anue-ga-wrapper\"]/div[4]/div[2]/div[1]/div[1]/div[1]/div/div[3]/div[2]/ul[1]/li[1]/span[2]").text();
+        String highest = doc.selectXpath("//*[@id=\"anue-ga-wrapper\"]/div[4]/div[2]/div[1]/div[1]/div[1]/div/div[3]/div[2]/ul[1]/li[2]/span[2]").text();
+        String lowest = doc.selectXpath("//*[@id=\"anue-ga-wrapper\"]/div[4]/div[2]/div[1]/div[1]/div[1]/div/div[3]/div[2]/ul[1]/li[5]/span[2]").text();
+        String tradingVolume = doc.selectXpath("//*[@id=\"anue-ga-wrapper\"]/div[4]/div[2]/div[1]/div[1]/div[1]/div/div[3]/div[2]/ul[1]/li[3]/span[2]").text().replaceAll(",","");
+        String createdTime = LocalDate.now().getYear() + "/" + doc.selectXpath("//*[@id=\"anue-ga-wrapper\"]/div[4]/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div[2]/span[2]").text().split(" ")[0];
 
         StockTradeRecord stockTradeRecord = StockTradeRecord.builder()
                 .stockcode(stockcode)

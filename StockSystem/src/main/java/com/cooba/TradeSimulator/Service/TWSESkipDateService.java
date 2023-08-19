@@ -57,6 +57,8 @@ public class TWSESkipDateService implements SkipDateService {
             String date = dataRow[1];
             String regex = "(\\d+)月(\\d+)日";
             Matcher matcher = RegexUtil.getMatcher(date, regex);
+//            System.out.println(reason);
+//            System.out.println(date);
 
             if (reason.contains("開始交易") || reason.contains("最後交易")) continue;
             if (!matcher.find()) continue;
