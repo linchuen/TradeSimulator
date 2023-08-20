@@ -2,6 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.StockInfoDataAccess;
 import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.Entity.StockInfo;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Exception.DownloadException;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
@@ -14,9 +15,12 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -30,6 +34,16 @@ public class StockDataServiceImpl implements StockDataService {
     private StockDownloadPriorityService stockDownloadPriorityService;
     @Autowired
     private StockInfoDataAccess stockInfoDataAccess;
+
+    private final Map<Integer, String> stockCodeMap = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        List<StockInfo> stockInfos = stockInfoDataAccess.findAll();
+        for (StockInfo stockInfo : stockInfos) {
+            stockCodeMap.put(stockInfo.getId(), stockInfo.getStockcode());
+        }
+    }
 
     @Override
     public StockTradeRecord getTodayStockData(String stockcode) throws Exception {
@@ -46,8 +60,8 @@ public class StockDataServiceImpl implements StockDataService {
 
     @Override
     public StockTradeRecord getTodayStockData(Integer stockId) throws Exception {
-        String stockcode = stockInfoDataAccess.findById(stockId).get().getStockcode();
-        return getTodayStockData(stockcode);
+        String stockCode = stockCodeMap.get(stockId);
+        return getTodayStockData(stockCode);
     }
 
     @NotNull

@@ -1,5 +1,7 @@
 package com.cooba.TradeSimulator.Service.StockTrade;
 
+import com.cooba.TradeSimulator.Annotation.Step;
+import com.cooba.TradeSimulator.Annotation.Steps;
 import com.cooba.TradeSimulator.Channel.GrpcClientCurrencyService;
 import com.cooba.TradeSimulator.Channel.GrpcClientStockService;
 import com.cooba.TradeSimulator.Object.CurrencyInfo;
@@ -11,6 +13,7 @@ import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Steps(steps = {@Step(transaction = "BuyStock", sort = 1), @Step(transaction = "SellStock", sort = 1)})
 @AllArgsConstructor
 public class PrepareStep extends TradeStep<TradeData> {
     private final GrpcClientStockService grpcClientStockService;

@@ -4,6 +4,7 @@ import com.cooba.TradeSimulator.Annotation.Step;
 import com.cooba.TradeSimulator.Annotation.Steps;
 import com.cooba.TradeSimulator.Object.TradeStep;
 import com.cooba.TradeSimulator.Object.Transaction;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Configuration;
@@ -25,15 +26,14 @@ public class TransactionServiceInit {
             Class<? extends TradeStep> clazz = tradeStep.getClass();
 
             if (clazz.isAnnotationPresent(Step.class)) {
-                String transaction = clazz.getAnnotation(Step.class).transaction();
-                putIntoMap(tradeStepMap, tradeStep, transaction);
+                Step step = clazz.getAnnotation(Step.class);
+                buildTransactionChain(tradeStepMap, tradeStep, step);
             }
 
             if (clazz.isAnnotationPresent(Steps.class)) {
                 Step[] steps = clazz.getAnnotation(Steps.class).steps();
                 for (Step step : steps) {
-                    String transaction = step.transaction();
-                    putIntoMap(tradeStepMap, tradeStep, transaction);
+                    buildTransactionChain(tradeStepMap, tradeStep, step);
                 }
             }
         }
@@ -72,16 +72,20 @@ public class TransactionServiceInit {
         })).toList();
     }
 
-    private void putIntoMap(Map<String, List<TradeStep>> tradeStepMap, TradeStep tradeStep, String transaction) {
-        tradeStepMap.compute(transaction, (k, stepList) -> {
-            if (stepList == null) {
-                List<TradeStep> newList = new ArrayList<>();
-                newList.add(tradeStep);
-                return newList;
-            }
+    private void buildTransactionChain(Map<String, List<TradeStep>> tradeStepMap, TradeStep tradeStep, Step step) {
+        String transaction = step.transaction();
+        tradeStepMap.compute(transaction, (k, stepList) -> addTradeStep(stepList, tradeStep));
+    }
 
-            stepList.add(tradeStep);
-            return stepList;
-        });
+    @NotNull
+    private List<TradeStep> addTradeStep(List<TradeStep> stepList, TradeStep tradeStep) {
+        if (stepList == null) {
+            List<TradeStep> newList = new ArrayList<>();
+            newList.add(tradeStep);
+            return newList;
+        }
+
+        stepList.add(tradeStep);
+        return stepList;
     }
 }
