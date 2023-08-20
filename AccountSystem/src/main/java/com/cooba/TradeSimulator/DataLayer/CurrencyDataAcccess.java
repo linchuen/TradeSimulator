@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 @Service
-public class CurrencyDataAcccess {
+public class CurrencyDataAcccess implements CurrencyData{
 
     public BigDecimal getCurrencyRate(Integer currencyId){
         return DefaultCurrency.getCurrencyMap().get(currencyId);

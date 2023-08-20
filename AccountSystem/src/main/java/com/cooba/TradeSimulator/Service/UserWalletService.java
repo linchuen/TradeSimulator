@@ -46,37 +46,15 @@ public class UserWalletService implements WalletService {
         }
         CurrencyAsset result = CurrencyAsset.builder().currencyId(currencyId).amount(BigDecimal.ZERO).build();
         for (Asset asset : totalAssets) {
-            BigDecimal amount = exchange(asset,currencyId).getAmount();
+            BigDecimal amount = asset.exchange(currencyId, currencyDataAcccess).getAmount();
             result.setAmount(result.getAmount().add(amount));
         }
         return result;
     }
 
     @Override
-    public CurrencyAsset exchange(Asset input, Integer currencyId) throws NotSupportCurrencyException {
-        if (input instanceof CurrencyAsset) {
-            Integer inId = ((CurrencyAsset) input).getCurrencyId();
-            BigDecimal fromRate = currencyDataAcccess.getCurrencyRate(inId);
-            if (fromRate == null) throw new NotSupportCurrencyException();
-
-            BigDecimal toRate = currencyDataAcccess.getCurrencyRate(currencyId);
-            if (toRate == null) throw new NotSupportCurrencyException();
-
-            return CurrencyAsset.builder()
-                    .amount(input.getAmount().multiply(fromRate).divide(toRate, 5, RoundingMode.FLOOR))
-                    .build();
-        }
-        if (input instanceof StockInfoAsset) {
-            BigDecimal closingPrice = ((StockInfoAsset) input).getClosingPrice();
-
-            BigDecimal toRate = currencyDataAcccess.getCurrencyRate(currencyId);
-            if (toRate == null) throw new NotSupportCurrencyException();
-
-            return CurrencyAsset.builder()
-                    .amount(input.getAmount().multiply(closingPrice).divide(toRate, 5, RoundingMode.FLOOR))
-                    .build();
-        }
-        throw new NotSupportCurrencyException();
+    public CurrencyAsset exchange(Asset input, Integer currencyId) {
+        return (CurrencyAsset) input.exchange(currencyId, currencyDataAcccess);
     }
 
     @Override
