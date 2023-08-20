@@ -8,8 +8,9 @@ CREATE TABLE if not exists `user_trade_record` (
   `amount` decimal(20,5) DEFAULT NULL,
   `currency_id` int(5) DEFAULT NULL,
   `status` int(1) NOT NULL DEFAULT 0,
+  `err_msg` varchar(100) DEFAULT NULL,
   `created_time` datetime DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk` (`account_id`,`bill_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  UNIQUE KEY `user_trade_record_uk` (`account_id`,`bill_id`) USING BTREE
+);

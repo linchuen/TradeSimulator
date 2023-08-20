@@ -1,6 +1,5 @@
 package com.cooba.TradeSimulator.DataLayer;
 
-import com.cooba.TradeSimulator.Annotation.TransactionLock;
 import com.cooba.TradeSimulator.Entity.UserCurrencyWallet;
 import com.cooba.TradeSimulator.Entity.UserStockWallet;
 import com.cooba.TradeSimulator.Mapper.UserCurrencyWalletDynamicSqlSupport;

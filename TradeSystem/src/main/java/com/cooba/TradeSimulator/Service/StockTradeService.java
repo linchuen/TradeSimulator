@@ -26,7 +26,7 @@ public class StockTradeService implements TradeService {
         this.userTradeRecordDataAccess = userTradeRecordDataAccess;
     }
 
-    public void buy(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
+    public String buy(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
         String billId = UUID.randomUUID().toString();
         TradeData tradeData = new TradeData();
         tradeData.setBillId(billId);
@@ -39,9 +39,10 @@ public class StockTradeService implements TradeService {
         } catch (Exception e) {
             logTradeError(userId, billId, e.getMessage());
         }
+        return billId;
     }
 
-    public void sell(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
+    public String sell(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
         String billId = UUID.randomUUID().toString();
         TradeData tradeData = new TradeData();
         tradeData.setBillId(billId);
@@ -54,6 +55,7 @@ public class StockTradeService implements TradeService {
         } catch (Exception e) {
             logTradeError(userId, billId, e.getMessage());
         }
+        return billId;
     }
 
     private void logBeforeTrade(String billId, Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {

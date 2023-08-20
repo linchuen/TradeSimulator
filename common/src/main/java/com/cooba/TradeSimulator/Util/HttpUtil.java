@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @Component
 public class HttpUtil {
-    @Autowired
+    @Autowired(required = false)
     OkHttpClient okHttpClient;
 
-    @Autowired
+    @Autowired(required = false)
     ObjectMapper objectMapper;
 
     public <T> Optional<T> httpGet(String url, Map<String, String> param, Map<String, String> header, Class<T> clazz) {

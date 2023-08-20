@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Configuration
-public class TransactionServiceInit {
+public class TransactionInitConfig {
     @Autowired
     List<? extends TradeStep> tradeSteps;
     @Autowired
