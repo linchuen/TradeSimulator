@@ -14,8 +14,9 @@ public class TradeData {
     private Integer currencyId;
     private TradeStockInfo tradeStockInfo;
     private BigDecimal amount;
-    private CurrencyInfo currencyInfo;
     private BigDecimal price;
+    private CurrencyInfo currencyInfo;
+    private BigDecimal money;
     private boolean isPaySuccess = false;
     private boolean isAddSuccess = false;
 }

@@ -35,7 +35,7 @@ import org.mybatis.dynamic.sql.util.mybatis3.MyBatis3Utils;
 @Mapper
 public interface UserTradeRecordMapper {
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    BasicColumn[] selectList = BasicColumn.columnList(id, billId, accountId, stockId, price, stockDate, amount, currencyId, status, errMsg, createdTime, updatedTime);
+    BasicColumn[] selectList = BasicColumn.columnList(id, billId, accountId, stockId, stockDate, price, amount, currencyId, money, status, errMsg, createdTime, updatedTime);
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     @SelectProvider(type=SqlProviderAdapter.class, method="select")
@@ -65,10 +65,11 @@ public interface UserTradeRecordMapper {
         @Result(column="bill_id", property="billId", jdbcType=JdbcType.VARCHAR),
         @Result(column="account_id", property="accountId", jdbcType=JdbcType.INTEGER),
         @Result(column="stock_id", property="stockId", jdbcType=JdbcType.INTEGER),
-        @Result(column="price", property="price", jdbcType=JdbcType.DECIMAL),
         @Result(column="stock_date", property="stockDate", jdbcType=JdbcType.DATE),
+        @Result(column="price", property="price", jdbcType=JdbcType.DECIMAL),
         @Result(column="amount", property="amount", jdbcType=JdbcType.DECIMAL),
         @Result(column="currency_id", property="currencyId", jdbcType=JdbcType.INTEGER),
+        @Result(column="money", property="money", jdbcType=JdbcType.DECIMAL),
         @Result(column="status", property="status", jdbcType=JdbcType.INTEGER),
         @Result(column="err_msg", property="errMsg", jdbcType=JdbcType.VARCHAR),
         @Result(column="created_time", property="createdTime", jdbcType=JdbcType.TIMESTAMP),
@@ -104,10 +105,11 @@ public interface UserTradeRecordMapper {
             .map(billId).toProperty("billId")
             .map(accountId).toProperty("accountId")
             .map(stockId).toProperty("stockId")
-            .map(price).toProperty("price")
             .map(stockDate).toProperty("stockDate")
+            .map(price).toProperty("price")
             .map(amount).toProperty("amount")
             .map(currencyId).toProperty("currencyId")
+            .map(money).toProperty("money")
             .map(status).toProperty("status")
             .map(errMsg).toProperty("errMsg")
             .map(createdTime).toProperty("createdTime")
@@ -122,10 +124,11 @@ public interface UserTradeRecordMapper {
             .map(billId).toProperty("billId")
             .map(accountId).toProperty("accountId")
             .map(stockId).toProperty("stockId")
-            .map(price).toProperty("price")
             .map(stockDate).toProperty("stockDate")
+            .map(price).toProperty("price")
             .map(amount).toProperty("amount")
             .map(currencyId).toProperty("currencyId")
+            .map(money).toProperty("money")
             .map(status).toProperty("status")
             .map(errMsg).toProperty("errMsg")
             .map(createdTime).toProperty("createdTime")
@@ -140,10 +143,11 @@ public interface UserTradeRecordMapper {
             .map(billId).toPropertyWhenPresent("billId", record::getBillId)
             .map(accountId).toPropertyWhenPresent("accountId", record::getAccountId)
             .map(stockId).toPropertyWhenPresent("stockId", record::getStockId)
-            .map(price).toPropertyWhenPresent("price", record::getPrice)
             .map(stockDate).toPropertyWhenPresent("stockDate", record::getStockDate)
+            .map(price).toPropertyWhenPresent("price", record::getPrice)
             .map(amount).toPropertyWhenPresent("amount", record::getAmount)
             .map(currencyId).toPropertyWhenPresent("currencyId", record::getCurrencyId)
+            .map(money).toPropertyWhenPresent("money", record::getMoney)
             .map(status).toPropertyWhenPresent("status", record::getStatus)
             .map(errMsg).toPropertyWhenPresent("errMsg", record::getErrMsg)
             .map(createdTime).toPropertyWhenPresent("createdTime", record::getCreatedTime)
@@ -184,10 +188,11 @@ public interface UserTradeRecordMapper {
                 .set(billId).equalTo(record::getBillId)
                 .set(accountId).equalTo(record::getAccountId)
                 .set(stockId).equalTo(record::getStockId)
-                .set(price).equalTo(record::getPrice)
                 .set(stockDate).equalTo(record::getStockDate)
+                .set(price).equalTo(record::getPrice)
                 .set(amount).equalTo(record::getAmount)
                 .set(currencyId).equalTo(record::getCurrencyId)
+                .set(money).equalTo(record::getMoney)
                 .set(status).equalTo(record::getStatus)
                 .set(errMsg).equalTo(record::getErrMsg)
                 .set(createdTime).equalTo(record::getCreatedTime)
@@ -200,10 +205,11 @@ public interface UserTradeRecordMapper {
                 .set(billId).equalToWhenPresent(record::getBillId)
                 .set(accountId).equalToWhenPresent(record::getAccountId)
                 .set(stockId).equalToWhenPresent(record::getStockId)
-                .set(price).equalToWhenPresent(record::getPrice)
                 .set(stockDate).equalToWhenPresent(record::getStockDate)
+                .set(price).equalToWhenPresent(record::getPrice)
                 .set(amount).equalToWhenPresent(record::getAmount)
                 .set(currencyId).equalToWhenPresent(record::getCurrencyId)
+                .set(money).equalToWhenPresent(record::getMoney)
                 .set(status).equalToWhenPresent(record::getStatus)
                 .set(errMsg).equalToWhenPresent(record::getErrMsg)
                 .set(createdTime).equalToWhenPresent(record::getCreatedTime)
@@ -216,10 +222,11 @@ public interface UserTradeRecordMapper {
             c.set(billId).equalTo(record::getBillId)
             .set(accountId).equalTo(record::getAccountId)
             .set(stockId).equalTo(record::getStockId)
-            .set(price).equalTo(record::getPrice)
             .set(stockDate).equalTo(record::getStockDate)
+            .set(price).equalTo(record::getPrice)
             .set(amount).equalTo(record::getAmount)
             .set(currencyId).equalTo(record::getCurrencyId)
+            .set(money).equalTo(record::getMoney)
             .set(status).equalTo(record::getStatus)
             .set(errMsg).equalTo(record::getErrMsg)
             .set(createdTime).equalTo(record::getCreatedTime)
@@ -234,10 +241,11 @@ public interface UserTradeRecordMapper {
             c.set(billId).equalToWhenPresent(record::getBillId)
             .set(accountId).equalToWhenPresent(record::getAccountId)
             .set(stockId).equalToWhenPresent(record::getStockId)
-            .set(price).equalToWhenPresent(record::getPrice)
             .set(stockDate).equalToWhenPresent(record::getStockDate)
+            .set(price).equalToWhenPresent(record::getPrice)
             .set(amount).equalToWhenPresent(record::getAmount)
             .set(currencyId).equalToWhenPresent(record::getCurrencyId)
+            .set(money).equalToWhenPresent(record::getMoney)
             .set(status).equalToWhenPresent(record::getStatus)
             .set(errMsg).equalToWhenPresent(record::getErrMsg)
             .set(createdTime).equalToWhenPresent(record::getCreatedTime)

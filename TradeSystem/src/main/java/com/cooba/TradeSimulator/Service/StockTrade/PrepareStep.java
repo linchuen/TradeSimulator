@@ -29,6 +29,7 @@ public class PrepareStep extends TradeStep<TradeData> {
 
         BigDecimal payPrice = tradeStockInfo.getCurrentPrice().divide(currency.getExchangeRate(), 5, RoundingMode.DOWN);
         tradeData.setPrice(payPrice);
+        tradeData.setMoney(payPrice.multiply(tradeData.getAmount()));
     }
 
     @Override

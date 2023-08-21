@@ -25,16 +25,19 @@ public final class UserTradeRecordDynamicSqlSupport {
     public static final SqlColumn<Integer> stockId = userTradeRecord.stockId;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<BigDecimal> price = userTradeRecord.price;
+    public static final SqlColumn<LocalDate> stockDate = userTradeRecord.stockDate;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<LocalDate> stockDate = userTradeRecord.stockDate;
+    public static final SqlColumn<BigDecimal> price = userTradeRecord.price;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<BigDecimal> amount = userTradeRecord.amount;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<Integer> currencyId = userTradeRecord.currencyId;
+
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
+    public static final SqlColumn<BigDecimal> money = userTradeRecord.money;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<Integer> status = userTradeRecord.status;
@@ -58,13 +61,15 @@ public final class UserTradeRecordDynamicSqlSupport {
 
         public final SqlColumn<Integer> stockId = column("stock_id", JDBCType.INTEGER);
 
-        public final SqlColumn<BigDecimal> price = column("price", JDBCType.DECIMAL);
-
         public final SqlColumn<LocalDate> stockDate = column("stock_date", JDBCType.DATE);
+
+        public final SqlColumn<BigDecimal> price = column("price", JDBCType.DECIMAL);
 
         public final SqlColumn<BigDecimal> amount = column("amount", JDBCType.DECIMAL);
 
         public final SqlColumn<Integer> currencyId = column("currency_id", JDBCType.INTEGER);
+
+        public final SqlColumn<BigDecimal> money = column("money", JDBCType.DECIMAL);
 
         public final SqlColumn<Integer> status = column("status", JDBCType.INTEGER);
 

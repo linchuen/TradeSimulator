@@ -1,12 +1,11 @@
 package com.cooba.TradeSimulator.Entity;
 
-import lombok.Builder;
-import lombok.Data;
-
-import javax.annotation.Generated;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import javax.annotation.Generated;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder
@@ -24,16 +23,19 @@ public class UserTradeRecord {
     private Integer stockId;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private BigDecimal price;
+    private LocalDate stockDate;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private LocalDate stockDate;
+    private BigDecimal price;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private BigDecimal amount;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private Integer currencyId;
+
+    @Generated("org.mybatis.generator.api.MyBatisGenerator")
+    private BigDecimal money;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private Integer status;

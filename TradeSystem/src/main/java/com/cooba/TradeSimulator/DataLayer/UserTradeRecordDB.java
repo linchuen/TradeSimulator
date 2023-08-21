@@ -29,6 +29,7 @@ public class UserTradeRecordDB {
             UpdateStatementProvider query = SqlBuilder.update(UserTradeRecordDynamicSqlSupport.userTradeRecord)
                     .set(UserTradeRecordDynamicSqlSupport.status).equalTo(1)
                     .set(UserTradeRecordDynamicSqlSupport.price).equalTo(userTradeRecord.getPrice())
+                    .set(UserTradeRecordDynamicSqlSupport.money).equalTo(userTradeRecord.getMoney())
                     .set(UserTradeRecordDynamicSqlSupport.stockDate).equalTo(userTradeRecord.getStockDate())
                     .set(UserTradeRecordDynamicSqlSupport.updatedTime).equalTo(DateUtil.now())
                     .where(UserTradeRecordDynamicSqlSupport.accountId, isEqualTo(userTradeRecord.getAccountId()))

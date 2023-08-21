@@ -13,7 +13,7 @@ public class PayMoneyStep extends TradeStep<TradeData> {
 
     @Override
     public void action(TradeData tradeData) {
-        boolean isPaySuccess = grpcClientAccountService.minusMoney(tradeData.getUserId(), tradeData.getCurrencyId(), tradeData.getPrice());
+        boolean isPaySuccess = grpcClientAccountService.minusMoney(tradeData.getUserId(), tradeData.getCurrencyId(), tradeData.getMoney());
         tradeData.setPaySuccess(isPaySuccess);
     }
 

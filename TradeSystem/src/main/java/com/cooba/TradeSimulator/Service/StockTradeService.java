@@ -7,6 +7,7 @@ import com.cooba.TradeSimulator.Object.TradeData;
 import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import com.cooba.TradeSimulator.Object.Transaction;
 import com.cooba.TradeSimulator.Service.Interface.TradeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class StockTradeService implements TradeService {
     private final Transaction<TradeData> buyStockTransaction;
     private final Transaction<TradeData> sellStockTransaction;
@@ -31,12 +33,16 @@ public class StockTradeService implements TradeService {
         TradeData tradeData = new TradeData();
         tradeData.setBillId(billId);
         tradeData.setAmount(amount);
+        tradeData.setStockId(stockId);
+        tradeData.setCurrencyId(currencyId);
+        tradeData.setUserId(userId);
 
         try {
             logBeforeTrade(billId, userId, stockId, currencyId, amount);
             buyStockTransaction.startTransaction(tradeData);
-            logAfterTrade(billId, userId, tradeData.getTradeStockInfo(), tradeData.getCurrencyInfo());
+            logAfterTrade(billId, userId, tradeData.getTradeStockInfo(), tradeData.getCurrencyInfo(), tradeData.getMoney());
         } catch (Exception e) {
+            log.error("Error while: {}", e.getMessage());
             logTradeError(userId, billId, e.getMessage());
         }
         return billId;
@@ -51,7 +57,7 @@ public class StockTradeService implements TradeService {
         try {
             logBeforeTrade(billId, userId, stockId, currencyId, amount.negate());
             sellStockTransaction.startTransaction(tradeData);
-            logAfterTrade(billId, userId, tradeData.getTradeStockInfo(), tradeData.getCurrencyInfo());
+            logAfterTrade(billId, userId, tradeData.getTradeStockInfo(), tradeData.getCurrencyInfo(), tradeData.getMoney());
         } catch (Exception e) {
             logTradeError(userId, billId, e.getMessage());
         }
@@ -72,11 +78,12 @@ public class StockTradeService implements TradeService {
         userTradeRecordDB.insert(userTradeRecord);
     }
 
-    private void logAfterTrade(String billId, Integer userId, TradeStockInfo tradeStockInfo, CurrencyInfo currency) {
+    private void logAfterTrade(String billId, Integer userId, TradeStockInfo tradeStockInfo, CurrencyInfo currency, BigDecimal money) {
         UserTradeRecord userTradeRecord = UserTradeRecord.builder()
                 .billId(billId)
                 .accountId(userId)
                 .price(tradeStockInfo.getCurrentPrice())
+                .money(money)
                 .stockDate(tradeStockInfo.getDate())
                 .status(1)
                 .updatedTime(LocalDateTime.now())
