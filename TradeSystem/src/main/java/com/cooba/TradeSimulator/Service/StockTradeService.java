@@ -1,10 +1,10 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDataAccess;
+import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.UserTradeRecord;
-import com.cooba.TradeSimulator.Object.CurrencyInfo;
+import com.cooba.TradeSimulator.Object.currency.CurrencyInfo;
 import com.cooba.TradeSimulator.Object.TradeData;
-import com.cooba.TradeSimulator.Object.TradeStockInfo;
+import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import com.cooba.TradeSimulator.Object.Transaction;
 import com.cooba.TradeSimulator.Service.Interface.TradeService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,12 +18,12 @@ import java.util.UUID;
 public class StockTradeService implements TradeService {
     private final Transaction<TradeData> buyStockTransaction;
     private final Transaction<TradeData> sellStockTransaction;
-    private final UserTradeRecordDataAccess userTradeRecordDataAccess;
+    private final UserTradeRecordDB userTradeRecordDB;
 
-    public StockTradeService(@Qualifier("BuyStock") Transaction<TradeData> buyStockTransaction, @Qualifier("SellStock") Transaction<TradeData> sellStockTransaction, UserTradeRecordDataAccess userTradeRecordDataAccess) {
+    public StockTradeService(@Qualifier("BuyStock") Transaction<TradeData> buyStockTransaction, @Qualifier("SellStock") Transaction<TradeData> sellStockTransaction, UserTradeRecordDB userTradeRecordDB) {
         this.buyStockTransaction = buyStockTransaction;
         this.sellStockTransaction = sellStockTransaction;
-        this.userTradeRecordDataAccess = userTradeRecordDataAccess;
+        this.userTradeRecordDB = userTradeRecordDB;
     }
 
     public String buy(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
@@ -69,7 +69,7 @@ public class StockTradeService implements TradeService {
                 .createdTime(LocalDateTime.now())
                 .updatedTime(LocalDateTime.now())
                 .build();
-        userTradeRecordDataAccess.insert(userTradeRecord);
+        userTradeRecordDB.insert(userTradeRecord);
     }
 
     private void logAfterTrade(String billId, Integer userId, TradeStockInfo tradeStockInfo, CurrencyInfo currency) {
@@ -81,7 +81,7 @@ public class StockTradeService implements TradeService {
                 .status(1)
                 .updatedTime(LocalDateTime.now())
                 .build();
-        userTradeRecordDataAccess.update(userTradeRecord);
+        userTradeRecordDB.update(userTradeRecord);
     }
 
     private void logTradeError(Integer userId, String billId, String errMsg) {
@@ -91,6 +91,6 @@ public class StockTradeService implements TradeService {
                 .status(-1)
                 .errMsg(errMsg)
                 .build();
-        userTradeRecordDataAccess.update(userTradeRecord);
+        userTradeRecordDB.update(userTradeRecord);
     }
 }

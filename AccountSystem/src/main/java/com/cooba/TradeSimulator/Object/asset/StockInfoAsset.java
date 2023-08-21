@@ -1,7 +1,6 @@
 package com.cooba.TradeSimulator.Object.asset;
 
 import com.cooba.TradeSimulator.DataLayer.CurrencyData;
-import com.cooba.TradeSimulator.Object.Asset;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;

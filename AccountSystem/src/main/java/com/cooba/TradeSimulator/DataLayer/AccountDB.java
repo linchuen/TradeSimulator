@@ -19,7 +19,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 
 @Service
-public class AccountDataAccess {
+public class AccountDB {
     @Autowired
     private AccountMapper accountMapper;
 

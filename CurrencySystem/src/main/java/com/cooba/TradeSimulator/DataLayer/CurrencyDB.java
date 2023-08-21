@@ -21,7 +21,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Service
 @AllArgsConstructor
-public class CurrencyDataAccess {
+public class CurrencyDB {
     private final CurrencyMapper currencyMapper;
 
     public boolean insert(Currency currency) {

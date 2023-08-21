@@ -1,6 +1,5 @@
 package com.cooba.TradeSimulator.Object.wallet;
 
-import com.cooba.TradeSimulator.Object.Wallet;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

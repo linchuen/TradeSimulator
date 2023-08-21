@@ -1,14 +1,11 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Config.Configuration;
-import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
+import com.cooba.TradeSimulator.DataLayer.WalletDB;
 import com.cooba.TradeSimulator.Enum.DefaultCurrency;
-import com.cooba.TradeSimulator.Exception.InsufficientException;
-import com.cooba.TradeSimulator.Exception.NoLockException;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
-import com.cooba.TradeSimulator.Util.SimulateLock;
 import com.cooba.TradeSimulator.Util.SimulateMultiThread;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -28,7 +25,7 @@ class MultiThreadsWalletServiceTest {
     @Autowired
     WalletService walletService;
     @Autowired
-    WalletDataAccess walletDataAccess;
+    WalletDB walletDB;
 
     @Test
     void assetAddStockWallet() {
@@ -41,7 +38,7 @@ class MultiThreadsWalletServiceTest {
         simulateMultiThread.runWithLock(5,
                 () -> walletService.assetChange(1, asset, true));
 
-        Optional<StockInfoAsset> wallet = walletDataAccess.selectStockAsset(1, 1);
+        Optional<StockInfoAsset> wallet = walletDB.selectStockAsset(1, 1);
         assertTrue(wallet.isPresent());
         BigDecimal expectedAmount = new BigDecimal(5000);
         BigDecimal resultAmount = wallet.get().getAmount();
@@ -60,7 +57,7 @@ class MultiThreadsWalletServiceTest {
         simulateMultiThread.runWithLock(100,
                 () -> walletService.assetChange(1, asset, false));
 
-        Optional<CurrencyAsset> wallet = walletDataAccess.selectCurrencyAsset(1, 1);
+        Optional<CurrencyAsset> wallet = walletDB.selectCurrencyAsset(1, 1);
         assertTrue(wallet.isPresent());
         BigDecimal expectedAmount = new BigDecimal(0);
         BigDecimal resultAmount = wallet.get().getAmount();

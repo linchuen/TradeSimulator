@@ -1,4 +1,4 @@
-package com.cooba.TradeSimulator.Object;
+package com.cooba.TradeSimulator.Object.asset;
 
 import com.cooba.TradeSimulator.DataLayer.CurrencyData;
 import lombok.Data;

@@ -1,19 +1,16 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Config.Configuration;
-import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
+import com.cooba.TradeSimulator.DataLayer.WalletDB;
 import com.cooba.TradeSimulator.Enum.DefaultCurrency;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
 import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
-import com.cooba.TradeSimulator.Object.Asset;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.annotation.Configurations;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -29,7 +26,7 @@ class UserWalletServiceTest {
     @Autowired
     WalletService walletService;
     @Autowired
-    WalletDataAccess walletDataAccess;
+    WalletDB walletDB;
 
     @Test
     void exchange() throws NotSupportCurrencyException {
@@ -51,7 +48,7 @@ class UserWalletServiceTest {
                 .build();
         walletService.assetChange(1, asset, true);
 
-        Optional<StockInfoAsset> wallet = walletDataAccess.selectStockAsset(1, 1);
+        Optional<StockInfoAsset> wallet = walletDB.selectStockAsset(1, 1);
         assertTrue(wallet.isPresent());
         BigDecimal expectedAmount = new BigDecimal(1000);
         assertEquals(0, expectedAmount.compareTo(wallet.get().getAmount()));

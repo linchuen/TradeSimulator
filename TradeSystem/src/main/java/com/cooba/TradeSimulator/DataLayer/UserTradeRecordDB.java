@@ -11,14 +11,13 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Service
 @AllArgsConstructor
-public class UserTradeRecordDataAccess {
+public class UserTradeRecordDB {
     private final UserTradeRecordMapper userTradeRecordMapper;
 
     public boolean insert(UserTradeRecord userTradeRecord) {

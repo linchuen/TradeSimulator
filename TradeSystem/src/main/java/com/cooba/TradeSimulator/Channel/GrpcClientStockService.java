@@ -1,7 +1,7 @@
 package com.cooba.TradeSimulator.Channel;
 
 
-import com.cooba.TradeSimulator.Object.TradeStockInfo;
+import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import com.cooba.TradeSimulator.service.StockReply;
 import com.cooba.TradeSimulator.service.StockRequest;
 import com.cooba.TradeSimulator.service.StockServiceGrpc;

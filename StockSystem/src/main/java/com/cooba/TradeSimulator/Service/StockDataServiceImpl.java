@@ -1,7 +1,7 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.StockInfoDataAccess;
-import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.DataLayer.StockInfoDB;
+import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.StockInfo;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Exception.DownloadException;
@@ -9,7 +9,6 @@ import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataService;
 import com.cooba.TradeSimulator.Util.DateUtil;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +28,17 @@ public class StockDataServiceImpl implements StockDataService {
     @Autowired
     private SkipDateService skipDateService;
     @Autowired
-    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private StockTradeRecordDB stockTradeRecordDB;
     @Autowired
     private StockDownloadPriorityService stockDownloadPriorityService;
     @Autowired
-    private StockInfoDataAccess stockInfoDataAccess;
+    private StockInfoDB stockInfoDB;
 
     private final Map<Integer, String> stockCodeMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
-        List<StockInfo> stockInfos = stockInfoDataAccess.findAll();
+        List<StockInfo> stockInfos = stockInfoDB.findAll();
         for (StockInfo stockInfo : stockInfos) {
             stockCodeMap.put(stockInfo.getId(), stockInfo.getStockcode());
         }
@@ -66,7 +65,7 @@ public class StockDataServiceImpl implements StockDataService {
 
     @NotNull
     private Optional<StockTradeRecord> findTradeRecordByDate(String stockcode, LocalDate date) {
-        return stockTradeRecordDataAccess.findByStockCodeAndDate(stockcode, date);
+        return stockTradeRecordDB.findByStockCodeAndDate(stockcode, date);
     }
 
     @NotNull

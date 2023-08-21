@@ -1,8 +1,7 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
-import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,13 +11,12 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
 public class AnueDataDownloadService implements StockDataDownloadService {
     @Autowired
-    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private StockTradeRecordDB stockTradeRecordDB;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException {
@@ -47,6 +45,6 @@ public class AnueDataDownloadService implements StockDataDownloadService {
                 .tradingVolume(new BigDecimal(tradingVolume))
                 .build();
 
-        stockTradeRecordDataAccess.insert(stockTradeRecord);
+        stockTradeRecordDB.insert(stockTradeRecord);
     }
 }

@@ -1,7 +1,7 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Config.HttpConfig;
-import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDB;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.exceptions.CsvException;
@@ -24,11 +24,11 @@ class TWSEDataDownloadServiceTest {
     TWSEDataDownloadService downloadService;
 
     @MockBean
-    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private StockTradeRecordDB stockTradeRecordDB;
 
     @Test
     void downloadData() throws IOException, CsvException {
         downloadService.downloadData("2330", LocalDate.now());
-        Mockito.verify(stockTradeRecordDataAccess).insertAll(ArgumentMatchers.anyList());
+        Mockito.verify(stockTradeRecordDB).insertAll(ArgumentMatchers.anyList());
     }
 }

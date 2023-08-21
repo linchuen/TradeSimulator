@@ -1,5 +1,7 @@
 package com.cooba.TradeSimulator.Object;
 
+import com.cooba.TradeSimulator.Object.currency.CurrencyInfo;
+import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import lombok.Data;
 
 import java.math.BigDecimal;

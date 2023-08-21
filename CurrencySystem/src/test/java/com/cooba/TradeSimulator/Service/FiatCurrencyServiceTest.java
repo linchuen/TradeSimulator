@@ -2,7 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Config.Configuration;
 import com.cooba.TradeSimulator.Config.HttpConfig;
-import com.cooba.TradeSimulator.DataLayer.CurrencyDataAccess;
+import com.cooba.TradeSimulator.DataLayer.CurrencyDB;
 import com.cooba.TradeSimulator.Entity.Currency;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opencsv.exceptions.CsvException;
@@ -24,13 +24,13 @@ class FiatCurrencyServiceTest {
     @Autowired
     FiatCurrencyService currencyService;
     @Autowired
-    CurrencyDataAccess currencyDataAccess;
+    CurrencyDB currencyDB;
 
 
     @Test
     void downloadCurrencyData() throws IOException, CsvException {
         currencyService.downloadCurrencyData();
-        List<Currency> currencies = currencyDataAccess.selectAll();
+        List<Currency> currencies = currencyDB.selectAll();
         for (Currency currency : currencies) {
             System.out.println(currency);
             assertNotNull(currency.getRate());

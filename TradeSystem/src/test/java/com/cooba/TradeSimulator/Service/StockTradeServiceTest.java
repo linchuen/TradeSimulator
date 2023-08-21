@@ -4,7 +4,7 @@ import com.cooba.TradeSimulator.Channel.GrpcClientAccountService;
 import com.cooba.TradeSimulator.Channel.GrpcClientCurrencyService;
 import com.cooba.TradeSimulator.Channel.GrpcClientStockService;
 import com.cooba.TradeSimulator.Config.TransactionInitConfig;
-import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDataAccess;
+import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.UserTradeRecord;
 import com.cooba.TradeSimulator.TestConfig.Configuration;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class StockTradeServiceTest {
     @Autowired
     StockTradeService stockTradeService;
     @Autowired
-    UserTradeRecordDataAccess userTradeRecordDataAccess;
+    UserTradeRecordDB userTradeRecordDB;
 
     @MockBean
     GrpcClientAccountService grpcClientAccountService;
@@ -43,7 +43,7 @@ class StockTradeServiceTest {
         BigDecimal amount = BigDecimal.ONE;
 
         String billId = stockTradeService.buy(userId, stockId, currencyId, amount);
-        Optional<UserTradeRecord> userTradeRecordOptional = userTradeRecordDataAccess.selectByBillId(billId);
+        Optional<UserTradeRecord> userTradeRecordOptional = userTradeRecordDB.selectByBillId(billId);
         System.out.println(userTradeRecordOptional.get());
     }
 }

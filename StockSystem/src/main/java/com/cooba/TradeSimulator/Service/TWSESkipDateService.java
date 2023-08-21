@@ -1,17 +1,12 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.SkipDateDataAccess;
+import com.cooba.TradeSimulator.DataLayer.SkipDateDB;
 import com.cooba.TradeSimulator.Entity.SkipDate;
-import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
 import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.cooba.TradeSimulator.Util.RegexUtil;
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
-import lombok.AllArgsConstructor;
-import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +15,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,7 +23,7 @@ public class TWSESkipDateService implements SkipDateService {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private SkipDateDataAccess skipDateDataAccess;
+    private SkipDateDB skipDateDB;
 
     @Override
     public void downloadData(int year) throws IOException, CsvException {
@@ -41,7 +35,7 @@ public class TWSESkipDateService implements SkipDateService {
                 .sendHttpRequest("https://www.twse.com.tw/holidaySchedule/holidaySchedule", map)
                 .readResponseByCSV()
                 .transferRawData(dataRows -> transferFunction(dataRows, year));
-        skipDateDataAccess.insertAll(skipDateList);
+        skipDateDB.insertAll(skipDateList);
     }
 
     private List<SkipDate> transferFunction(List<String[]> dataRows, int year) {
@@ -80,7 +74,7 @@ public class TWSESkipDateService implements SkipDateService {
         if (weekend.contains(date.getDayOfWeek())) {
             return true;
         }
-        return skipDateDataAccess.findByDate(date).isPresent();
+        return skipDateDB.findByDate(date).isPresent();
     }
 }
 

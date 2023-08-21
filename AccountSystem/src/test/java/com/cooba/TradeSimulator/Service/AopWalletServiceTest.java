@@ -2,7 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.AOP.LockAspect;
 import com.cooba.TradeSimulator.Config.Configuration;
-import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
+import com.cooba.TradeSimulator.DataLayer.WalletDB;
 import com.cooba.TradeSimulator.Enum.DefaultCurrency;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
@@ -26,7 +26,7 @@ class AopWalletServiceTest {
     @Autowired
     WalletService walletService;
     @Autowired
-    WalletDataAccess walletDataAccess;
+    WalletDB walletDB;
 
     @Test
     void assetAddStockWallet() throws InsufficientException {
@@ -39,7 +39,7 @@ class AopWalletServiceTest {
             walletService.assetChange(1, asset, true);
         }
 
-        Optional<StockInfoAsset> wallet = walletDataAccess.selectStockAsset(1, 1);
+        Optional<StockInfoAsset> wallet = walletDB.selectStockAsset(1, 1);
         assertTrue(wallet.isPresent());
         BigDecimal expectedAmount = new BigDecimal(5000);
         BigDecimal resultAmount = wallet.get().getAmount();

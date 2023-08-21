@@ -15,7 +15,7 @@ import java.util.Optional;
 import static com.cooba.TradeSimulator.Mapper.StockInfoDynamicSqlSupport.stockInfo;
 
 @Component
-public class StockInfoDataAccess {
+public class StockInfoDB {
     @Autowired
     StockInfoMapper stockInfoMapper;
 

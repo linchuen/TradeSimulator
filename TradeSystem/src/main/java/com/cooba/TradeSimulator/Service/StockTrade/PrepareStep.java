@@ -4,10 +4,10 @@ import com.cooba.TradeSimulator.Annotation.Step;
 import com.cooba.TradeSimulator.Annotation.Steps;
 import com.cooba.TradeSimulator.Channel.GrpcClientCurrencyService;
 import com.cooba.TradeSimulator.Channel.GrpcClientStockService;
-import com.cooba.TradeSimulator.Object.CurrencyInfo;
+import com.cooba.TradeSimulator.Object.currency.CurrencyInfo;
 import com.cooba.TradeSimulator.Object.TradeData;
 import com.cooba.TradeSimulator.Object.TradeStep;
-import com.cooba.TradeSimulator.Object.TradeStockInfo;
+import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;

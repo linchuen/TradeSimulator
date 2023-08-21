@@ -1,6 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.AccountDataAccess;
+import com.cooba.TradeSimulator.DataLayer.AccountDB;
 import com.cooba.TradeSimulator.Entity.Account;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
 import com.cooba.TradeSimulator.Exception.NotExistException;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class UserAccountService implements AccountService {
     @Autowired
-    private AccountDataAccess accountDataAccess;
+    private AccountDB accountDB;
     @Autowired
     private WalletService walletService;
 
@@ -29,29 +29,29 @@ public class UserAccountService implements AccountService {
                 .name(name)
                 .uuid(uuid)
                 .build();
-        accountDataAccess.insertAccount(account);
+        accountDB.insertAccount(account);
         return uuid;
     }
 
     @Override
     public void updateAccountIfExist(String uuid, String name) {
-        Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
             account.setName(name);
-            accountDataAccess.updateAccount(account);
+            accountDB.updateAccount(account);
         }
     }
 
     @Override
     public void deleteAccountIfExist(String uuid) {
-        Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
-        accountOptional.ifPresent(account -> accountDataAccess.deleteAccount(uuid));
+        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
+        accountOptional.ifPresent(account -> accountDB.deleteAccount(uuid));
     }
 
     @Override
     public Optional<AccountDto> getAccount(String uuid) {
-        Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
             return Optional.of(AccountDto.builder()
@@ -66,7 +66,7 @@ public class UserAccountService implements AccountService {
 
     @Override
     public Optional<AccountDto> getAccount(Integer userId) {
-        Optional<Account> accountOptional = accountDataAccess.selectById(userId);
+        Optional<Account> accountOptional = accountDB.selectById(userId);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
             return Optional.of(AccountDto.builder()

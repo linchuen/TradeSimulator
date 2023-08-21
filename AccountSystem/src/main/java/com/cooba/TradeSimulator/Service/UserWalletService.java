@@ -1,12 +1,12 @@
 package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.Annotation.TransactionLock;
-import com.cooba.TradeSimulator.DataLayer.CurrencyDataAcccess;
-import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
+import com.cooba.TradeSimulator.DataLayer.CurrencyDB;
+import com.cooba.TradeSimulator.DataLayer.WalletDB;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
 import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
-import com.cooba.TradeSimulator.Object.Asset;
-import com.cooba.TradeSimulator.Object.Wallet;
+import com.cooba.TradeSimulator.Object.asset.Asset;
+import com.cooba.TradeSimulator.Object.wallet.Wallet;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +24,14 @@ import java.util.function.Supplier;
 @Service
 public class UserWalletService implements WalletService {
     @Autowired
-    private WalletDataAccess walletDataAccess;
+    private WalletDB walletDB;
     @Autowired
-    private CurrencyDataAcccess currencyDataAcccess;
+    private CurrencyDB currencyDataAcccess;
 
     @Override
     public List<Wallet> getWallets(Integer userId) {
-        List<CurrencyAsset> currencyAssetList = walletDataAccess.selectCurrencyAssetList(userId);
-        List<StockInfoAsset> stockAssetList = walletDataAccess.selectStockAssetList(userId);
+        List<CurrencyAsset> currencyAssetList = walletDB.selectCurrencyAssetList(userId);
+        List<StockInfoAsset> stockAssetList = walletDB.selectStockAssetList(userId);
         CurrencyWallet currencyWallet = CurrencyWallet.builder().userId(userId).assets(currencyAssetList).build();
         StockWallet stockWallet = StockWallet.builder().userId(userId).assets(stockAssetList).build();
         return List.of(currencyWallet, stockWallet);
@@ -62,11 +61,11 @@ public class UserWalletService implements WalletService {
     public void assetChange(Integer userId, Asset asset, boolean isPlus) throws InsufficientException {
         if (asset instanceof CurrencyAsset) {
             int currencyId = ((CurrencyAsset) asset).getCurrencyId();
-            assetChange(userId, asset, isPlus, () -> walletDataAccess.selectCurrencyAsset(userId, currencyId));
+            assetChange(userId, asset, isPlus, () -> walletDB.selectCurrencyAsset(userId, currencyId));
         }
         if (asset instanceof StockInfoAsset) {
             int stockId = ((StockInfoAsset) asset).getStockId();
-            assetChange(userId, asset, isPlus, () -> walletDataAccess.selectStockAsset(userId, stockId));
+            assetChange(userId, asset, isPlus, () -> walletDB.selectStockAsset(userId, stockId));
         }
     }
 
@@ -77,7 +76,7 @@ public class UserWalletService implements WalletService {
         if (assetOptional.isEmpty()) {
             BigDecimal result = isPlus ? asset.getAmount() : BigDecimal.ZERO;
             asset.setAmount(result);
-            walletDataAccess.insertWallet(userId, asset);
+            walletDB.insertWallet(userId, asset);
 
             if (result.compareTo(BigDecimal.ZERO) == 0) throw new InsufficientException();
         } else {
@@ -86,7 +85,7 @@ public class UserWalletService implements WalletService {
             if (result.compareTo(BigDecimal.ZERO) < 0) throw new InsufficientException();
 
             dbAsset.setAmount(result);
-            walletDataAccess.updateAssetAmount(userId, dbAsset);
+            walletDB.updateAssetAmount(userId, dbAsset);
         }
     }
 }

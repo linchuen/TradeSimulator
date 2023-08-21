@@ -1,21 +1,15 @@
 package com.cooba.TradeSimulator.DataLayer;
 
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
-import com.cooba.TradeSimulator.Mapper.SkipDateMapper;
 import com.cooba.TradeSimulator.Mapper.StockTradeRecordDynamicSqlSupport;
 import com.cooba.TradeSimulator.Mapper.StockTradeRecordMapper;
 import lombok.AllArgsConstructor;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
-import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.object.UpdatableSqlQuery;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +20,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Service
 @AllArgsConstructor
-public class StockTradeRecordDataAccess {
+public class StockTradeRecordDB {
     private final StockTradeRecordMapper stockTradeRecordMapper;
 
     public Optional<StockTradeRecord> findByStockCodeAndDate(String stockcode, LocalDate date) {

@@ -1,13 +1,12 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.CurrencyDataAccess;
+import com.cooba.TradeSimulator.DataLayer.CurrencyDB;
 import com.cooba.TradeSimulator.Entity.Currency;
 import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
 import com.cooba.TradeSimulator.Service.Interface.CurrencyService;
 import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.opencsv.exceptions.CsvException;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,13 +26,13 @@ public class FiatCurrencyService implements CurrencyService {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private CurrencyDataAccess currencyDataAccess;
+    private CurrencyDB currencyDB;
 
     public void downloadCurrencyData() throws IOException, CsvException {
         LocalDate today = LocalDate.now();
         String todayStr = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        List<Currency> dbCurrencyList = currencyDataAccess.selectAll();
+        List<Currency> dbCurrencyList = currencyDB.selectAll();
 
         List<Currency> currencyList = HttpCsvResponse.build(httpUtil)
                 .sendHttpRequest("https://rate.bot.com.tw/xrt/flcsv/0/" + todayStr, Collections.emptyMap())
@@ -45,9 +44,9 @@ public class FiatCurrencyService implements CurrencyService {
             String name = currency.getName();
 
             if (keyMap.containsKey(name)) {
-                currencyDataAccess.update(currency);
+                currencyDB.update(currency);
             } else {
-                currencyDataAccess.insert(currency);
+                currencyDB.insert(currency);
             }
         }
     }
@@ -71,7 +70,7 @@ public class FiatCurrencyService implements CurrencyService {
     }
 
     public Currency getCurrencyInfo(Integer currencyId) throws NotSupportCurrencyException, IOException, CsvException {
-        Optional<Currency> currencyOptional = currencyDataAccess.selectById(currencyId);
+        Optional<Currency> currencyOptional = currencyDB.selectById(currencyId);
 
         if (currencyOptional.isEmpty())
             throw new NotSupportCurrencyException();
@@ -82,6 +81,6 @@ public class FiatCurrencyService implements CurrencyService {
         if (currency.getUpdatedTime().isBefore(today.atStartOfDay())) {
             downloadCurrencyData();
         }
-       return currencyDataAccess.selectById(currencyId).orElseThrow(NotSupportCurrencyException::new);
+       return currencyDB.selectById(currencyId).orElseThrow(NotSupportCurrencyException::new);
     }
 }

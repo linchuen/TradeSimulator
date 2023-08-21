@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,7 +17,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Service
 @AllArgsConstructor
-public class SkipDateDataAccess {
+public class SkipDateDB {
     private final SkipDateMapper skipDateMapper;
 
     public Optional<SkipDate> findByDate(LocalDate date) {

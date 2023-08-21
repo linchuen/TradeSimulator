@@ -1,5 +1,6 @@
-package com.cooba.TradeSimulator.Object;
+package com.cooba.TradeSimulator.Object.wallet;
 
+import com.cooba.TradeSimulator.Object.asset.Asset;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

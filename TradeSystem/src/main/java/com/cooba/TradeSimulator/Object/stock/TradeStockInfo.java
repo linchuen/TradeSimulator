@@ -1,5 +1,6 @@
-package com.cooba.TradeSimulator.Object;
+package com.cooba.TradeSimulator.Object.stock;
 
+import com.cooba.TradeSimulator.Object.stock.Stock;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;

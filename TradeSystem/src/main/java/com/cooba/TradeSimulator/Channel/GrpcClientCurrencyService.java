@@ -1,16 +1,12 @@
 package com.cooba.TradeSimulator.Channel;
 
 
-import com.cooba.TradeSimulator.Object.CurrencyInfo;
-import com.cooba.TradeSimulator.Object.TradeStockInfo;
+import com.cooba.TradeSimulator.Object.currency.CurrencyInfo;
 import com.cooba.TradeSimulator.service.*;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 @Service
 public class GrpcClientCurrencyService {

@@ -1,7 +1,7 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.AccountDataAccess;
-import com.cooba.TradeSimulator.DataLayer.WalletDataAccess;
+import com.cooba.TradeSimulator.DataLayer.AccountDB;
+import com.cooba.TradeSimulator.DataLayer.WalletDB;
 import com.cooba.TradeSimulator.Entity.Account;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
 import com.cooba.TradeSimulator.Exception.NotExistException;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
@@ -24,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(classes = {Configuration.class, UserAccountService.class, AccountDataAccess.class, UserWalletService.class})
+@ContextConfiguration(classes = {Configuration.class, UserAccountService.class, AccountDB.class, UserWalletService.class})
 class UserAccountServiceTest {
     @Autowired
     private AccountService accountService;
     @Autowired
-    private AccountDataAccess accountDataAccess;
+    private AccountDB accountDB;
     @Autowired
     private WalletService walletService;
 
@@ -39,7 +38,7 @@ class UserAccountServiceTest {
         System.out.println(uuid);
         assertNotNull(uuid);
 
-        Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
         assertTrue(accountOptional.isPresent());
         assertEquals("Aiden", accountOptional.get().getName());
     }
@@ -49,7 +48,7 @@ class UserAccountServiceTest {
         String uuid = accountService.createAccount("Aiden");
         accountService.updateAccountIfExist(uuid, "new name");
 
-        Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
         assertTrue(accountOptional.isPresent());
         assertEquals("new name", accountOptional.get().getName());
     }
@@ -57,11 +56,11 @@ class UserAccountServiceTest {
     @Test
     void deleteAccountIfExist() {
         String uuid = accountService.createAccount("Aiden");
-        Optional<Account> accountOptional = accountDataAccess.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
         assertTrue(accountOptional.isPresent());
 
         accountService.deleteAccountIfExist(uuid);
-        Optional<Account> afterDelete = accountDataAccess.selectAccount(uuid);
+        Optional<Account> afterDelete = accountDB.selectAccount(uuid);
         assertFalse(afterDelete.isPresent());
     }
 
@@ -79,10 +78,10 @@ class UserAccountServiceTest {
     }
 
     @Test
-    void depositDefaultAccount(@Autowired WalletDataAccess walletDataAccess) throws NotExistException {
+    void depositDefaultAccount(@Autowired WalletDB walletDB) throws NotExistException {
         accountService.deposit(1, 1, BigDecimal.TEN);
 
-        Optional<CurrencyAsset> wallet = walletDataAccess.selectCurrencyAsset(1, 1);
+        Optional<CurrencyAsset> wallet = walletDB.selectCurrencyAsset(1, 1);
         assertTrue(wallet.isPresent());
         BigDecimal expectedAmount = new BigDecimal(110);
         assertEquals(0, expectedAmount.compareTo(wallet.get().getAmount()));
@@ -94,10 +93,10 @@ class UserAccountServiceTest {
     }
 
     @Test
-    void withdrawDefaultAccount(@Autowired WalletDataAccess walletDataAccess) throws NotExistException, InsufficientException {
+    void withdrawDefaultAccount(@Autowired WalletDB walletDB) throws NotExistException, InsufficientException {
         accountService.withdraw(1, 1, BigDecimal.TEN);
 
-        Optional<CurrencyAsset> wallet = walletDataAccess.selectCurrencyAsset(1, 1);
+        Optional<CurrencyAsset> wallet = walletDB.selectCurrencyAsset(1, 1);
         assertTrue(wallet.isPresent());
         BigDecimal expectedAmount = new BigDecimal(90);
         assertEquals(0, expectedAmount.compareTo(wallet.get().getAmount()));

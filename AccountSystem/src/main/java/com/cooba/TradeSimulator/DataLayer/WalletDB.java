@@ -6,7 +6,7 @@ import com.cooba.TradeSimulator.Mapper.UserCurrencyWalletDynamicSqlSupport;
 import com.cooba.TradeSimulator.Mapper.UserCurrencyWalletMapper;
 import com.cooba.TradeSimulator.Mapper.UserStockWalletDynamicSqlSupport;
 import com.cooba.TradeSimulator.Mapper.UserStockWalletMapper;
-import com.cooba.TradeSimulator.Object.Asset;
+import com.cooba.TradeSimulator.Object.asset.Asset;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import org.mybatis.dynamic.sql.SqlBuilder;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Service
-public class WalletDataAccess {
+public class WalletDB {
     @Autowired
     private UserCurrencyWalletMapper userCurrencyWalletMapper;
     @Autowired

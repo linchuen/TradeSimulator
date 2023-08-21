@@ -2,8 +2,8 @@ package com.cooba.TradeSimulator.Service.Interface;
 
 import com.cooba.TradeSimulator.Exception.InsufficientException;
 import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
-import com.cooba.TradeSimulator.Object.Asset;
-import com.cooba.TradeSimulator.Object.Wallet;
+import com.cooba.TradeSimulator.Object.asset.Asset;
+import com.cooba.TradeSimulator.Object.wallet.Wallet;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 
 import java.util.List;

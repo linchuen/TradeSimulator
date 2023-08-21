@@ -1,6 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDataAccess;
+import com.cooba.TradeSimulator.DataLayer.StockTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.StockTradeRecord;
 import com.cooba.TradeSimulator.Service.Interface.StockDataDownloadService;
 import com.cooba.TradeSimulator.Util.DateUtil;
@@ -22,7 +22,7 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private StockTradeRecordDataAccess stockTradeRecordDataAccess;
+    private StockTradeRecordDB stockTradeRecordDB;
 
     @Override
     public void downloadData(String stockcode, LocalDate localDate) throws IOException, CsvException {
@@ -36,9 +36,9 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
                 .readResponseByCSV()
                 .transferRawData(dataRows -> transferFunction(dataRows, stockcode));
 
-        List<StockTradeRecord> dbList = stockTradeRecordDataAccess.findByStockCodeAndMonth(stockcode, localDate.getYear(), localDate.getDayOfMonth());
+        List<StockTradeRecord> dbList = stockTradeRecordDB.findByStockCodeAndMonth(stockcode, localDate.getYear(), localDate.getDayOfMonth());
         if (dbList.isEmpty()) {
-            stockTradeRecordDataAccess.insertAll(stockTradeRecordList);
+            stockTradeRecordDB.insertAll(stockTradeRecordList);
             return;
         }
 
@@ -47,9 +47,9 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
             StockTradeRecord dbRecord = dateMap.get(stockTradeRecord.getDate());
             if (dbRecord != null) {
                 stockTradeRecord.setId(dbRecord.getId());
-                stockTradeRecordDataAccess.update(stockTradeRecord);
+                stockTradeRecordDB.update(stockTradeRecord);
             } else {
-                stockTradeRecordDataAccess.insert(stockTradeRecord);
+                stockTradeRecordDB.insert(stockTradeRecord);
             }
         }
     }
