@@ -4,12 +4,11 @@ import com.cooba.TradeSimulator.Channel.GrpcClientAccountService;
 import com.cooba.TradeSimulator.Channel.GrpcClientCurrencyService;
 import com.cooba.TradeSimulator.Channel.GrpcClientStockService;
 import com.cooba.TradeSimulator.Config.TransactionInitConfig;
-import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDataAccess;
+import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.UserTradeRecord;
-import com.cooba.TradeSimulator.Object.CurrencyInfo;
-import com.cooba.TradeSimulator.Object.TradeStockInfo;
+import com.cooba.TradeSimulator.Object.currency.CurrencyInfo;
+import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import com.cooba.TradeSimulator.TestConfig.Configuration;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -86,7 +84,7 @@ class StockTradeServiceTest {
 
         String billId = stockTradeService.buy(userId, stockId, currencyId, amount);
 
-        Optional<UserTradeRecord> userTradeRecordOptional = userTradeRecordDataAccess.selectByBillId(billId);
+        Optional<UserTradeRecord> userTradeRecordOptional = userTradeRecordDB.selectByBillId(billId);
         Assertions.assertTrue(userTradeRecordOptional.isPresent());
         UserTradeRecord result = userTradeRecordOptional.get();
         System.out.println("ErrMsg = " + result.getErrMsg());
