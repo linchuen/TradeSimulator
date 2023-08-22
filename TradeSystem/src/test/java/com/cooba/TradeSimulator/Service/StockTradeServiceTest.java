@@ -6,6 +6,7 @@ import com.cooba.TradeSimulator.Channel.GrpcClientStockService;
 import com.cooba.TradeSimulator.Config.TransactionInitConfig;
 import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.UserTradeRecord;
+import com.cooba.TradeSimulator.Object.TransactionReply;
 import com.cooba.TradeSimulator.Object.currency.CurrencyInfo;
 import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import com.cooba.TradeSimulator.TestConfig.Configuration;
@@ -65,21 +66,42 @@ class StockTradeServiceTest {
     }
 
     private void payMoney(BigDecimal money, boolean isSuccess) {
-        Mockito.when(grpcClientAccountService.minusMoney(userId, currencyId, money)).thenReturn(isSuccess);
-        Mockito.when(grpcClientAccountService.minusMoney(anyInt(), anyInt(), any(BigDecimal.class))).thenReturn(false);
+        Mockito.when(grpcClientAccountService.minusMoney(userId, currencyId, money)).thenReturn(TransactionReply.builder().isSuccess(isSuccess).errorMsg("Error").build());
+        Mockito.when(grpcClientAccountService.minusMoney(anyInt(), anyInt(), any(BigDecimal.class))).thenReturn(TransactionReply.builder().isSuccess(false).errorMsg("Error").build());
     }
 
     private void addStock(BigDecimal amount, boolean isSuccess) {
-        Mockito.when(grpcClientAccountService.addStock(userId, stockId, amount)).thenReturn(isSuccess);
-        Mockito.when(grpcClientAccountService.addStock(anyInt(), anyInt(), any(BigDecimal.class))).thenReturn(false);
+        Mockito.when(grpcClientAccountService.addStock(userId, stockId, amount)).thenReturn(TransactionReply.builder().isSuccess(isSuccess).errorMsg("Error").build());
+        Mockito.when(grpcClientAccountService.addStock(anyInt(), anyInt(), any(BigDecimal.class))).thenReturn(TransactionReply.builder().isSuccess(false).errorMsg("Error").build());
     }
 
     @Test
-    public void buy() {
+    public void buySuccess() {
         BigDecimal amount = BigDecimal.valueOf(2);
 
         prepareTradeInfo(BigDecimal.valueOf(900), BigDecimal.valueOf(4.5));
         payMoney(BigDecimal.valueOf(400), true);
+        addStock(BigDecimal.valueOf(2), true);
+
+        String billId = stockTradeService.buy(userId, stockId, currencyId, amount);
+
+        Optional<UserTradeRecord> userTradeRecordOptional = userTradeRecordDB.selectByBillId(billId);
+        Assertions.assertTrue(userTradeRecordOptional.isPresent());
+        UserTradeRecord result = userTradeRecordOptional.get();
+        System.out.println("ErrMsg = " + result.getErrMsg());
+        System.out.println("Price = " + result.getPrice());
+        System.out.println("Amount = " + result.getAmount());
+        System.out.println("Money = " + result.getMoney());
+        Assertions.assertNull(result.getErrMsg());
+        Assertions.assertEquals(0, result.getMoney().compareTo(BigDecimal.valueOf(400)));
+    }
+
+    @Test
+    public void PayMoneyError() {
+        BigDecimal amount = BigDecimal.valueOf(2);
+
+        prepareTradeInfo(BigDecimal.valueOf(900), BigDecimal.valueOf(4.5));
+        payMoney(BigDecimal.valueOf(400), false);
         addStock(BigDecimal.valueOf(2), true);
 
         String billId = stockTradeService.buy(userId, stockId, currencyId, amount);

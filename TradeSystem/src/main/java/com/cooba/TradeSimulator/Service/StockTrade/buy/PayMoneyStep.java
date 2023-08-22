@@ -2,6 +2,7 @@ package com.cooba.TradeSimulator.Service.StockTrade.buy;
 
 import com.cooba.TradeSimulator.Annotation.Step;
 import com.cooba.TradeSimulator.Channel.GrpcClientAccountService;
+import com.cooba.TradeSimulator.Object.Response;
 import com.cooba.TradeSimulator.Object.TradeData;
 import com.cooba.TradeSimulator.Object.TradeStep;
 import lombok.AllArgsConstructor;
@@ -13,8 +14,12 @@ public class PayMoneyStep extends TradeStep<TradeData> {
 
     @Override
     public void action(TradeData tradeData) {
-        boolean isPaySuccess = grpcClientAccountService.minusMoney(tradeData.getUserId(), tradeData.getCurrencyId(), tradeData.getMoney());
-        tradeData.setPaySuccess(isPaySuccess);
+        Response response = grpcClientAccountService.minusMoney(tradeData.getUserId(), tradeData.getCurrencyId(), tradeData.getMoney());
+        if (response.isSuccess()) {
+            tradeData.setPaySuccess(true);
+        } else {
+            throw new RuntimeException(response.getErrorMsg());
+        }
     }
 
     @Override

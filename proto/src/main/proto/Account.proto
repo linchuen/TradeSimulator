@@ -31,4 +31,5 @@ message StockTradeRequest {
 // The response message containing the greetings
 message Reply {
     bool isSuccess = 1;
+    string errorMsg = 2;
 }

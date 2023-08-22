@@ -23,4 +23,5 @@ message CurrencyReply {
     int32 currencyId = 1;
     string name = 2;
     string exchangeRate = 3;
+    string errorMsg = 4;
 }

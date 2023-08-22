@@ -23,4 +23,5 @@ message StockReply {
     string stockcode = 2;
     string currentPrice = 3;
     int64 date = 4;
+    string errorMsg = 5;
 }

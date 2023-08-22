@@ -27,7 +27,7 @@ public abstract class TradeStep<T> {
         }
     }
 
-     public abstract void action(T t);
+    public abstract void action(T t);
 
-     public abstract void rollback(T t);
+    public abstract void rollback(T t);
 }
