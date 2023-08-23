@@ -1,7 +1,6 @@
 package com.cooba.TradeSimulator.Config;
 
 import com.cooba.TradeSimulator.Annotation.Step;
-import com.cooba.TradeSimulator.Annotation.Steps;
 import com.cooba.TradeSimulator.Object.TradeStep;
 import com.cooba.TradeSimulator.Object.Transaction;
 import org.jetbrains.annotations.NotNull;
@@ -29,13 +28,6 @@ public class TransactionInitConfig {
                 Step step = clazz.getAnnotation(Step.class);
                 buildTransactionChain(tradeStepMap, tradeStep, step);
             }
-
-            if (clazz.isAnnotationPresent(Steps.class)) {
-                Step[] steps = clazz.getAnnotation(Steps.class).steps();
-                for (Step step : steps) {
-                    buildTransactionChain(tradeStepMap, tradeStep, step);
-                }
-            }
         }
 
         tradeStepMap.forEach((name, stepList) -> {
@@ -57,16 +49,6 @@ public class TransactionInitConfig {
             Class<? extends TradeStep> clazz = tradeStep.getClass();
             if (clazz.isAnnotationPresent(Step.class)) {
                 return clazz.getAnnotation(Step.class).sort();
-            }
-
-            if (clazz.isAnnotationPresent(Steps.class)) {
-                Step[] steps = clazz.getAnnotation(Steps.class).steps();
-                for (Step step : steps) {
-                    String transaction = step.transaction();
-                    if (transaction.equals(name)) {
-                        return step.sort();
-                    }
-                }
             }
             return 0;
         })).toList();

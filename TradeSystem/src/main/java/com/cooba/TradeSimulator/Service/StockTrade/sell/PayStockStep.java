@@ -6,26 +6,20 @@ import com.cooba.TradeSimulator.Object.Response;
 import com.cooba.TradeSimulator.Object.TradeData;
 import com.cooba.TradeSimulator.Object.TradeStep;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Step(transaction = "SellStock", sort = 2)
-@AllArgsConstructor
 public class PayStockStep extends TradeStep<TradeData> {
-    private final GrpcClientAccountService grpcClientAccountService;
+    @Autowired
+    private SellStock sellStock;
 
     @Override
     public void action(TradeData tradeData) {
-        Response response =  grpcClientAccountService.minusStock(tradeData.getUserId(), tradeData.getTradeStockInfo().getStockId(), tradeData.getAmount());
-        if (response.isSuccess()) {
-            tradeData.setAddSuccess(true);
-        } else {
-            throw new RuntimeException(response.getErrorMsg());
-        }
+        sellStock.payStock(tradeData);
     }
 
     @Override
     public void rollback(TradeData tradeData) {
-        if (tradeData.isPaySuccess()) {
-            grpcClientAccountService.addStock(tradeData.getUserId(), tradeData.getTradeStockInfo().getStockId(), tradeData.getAmount());
-        }
+       sellStock.payStockRollback(tradeData);
     }
 }
