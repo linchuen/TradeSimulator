@@ -11,8 +11,11 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.mybatis.dynamic.sql.update.render.UpdateStatementProvider;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static org.mybatis.dynamic.sql.SqlBuilder.isBetween;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Service
@@ -56,5 +59,13 @@ public class UserTradeRecordDB {
                 .where(UserTradeRecordDynamicSqlSupport.billId, isEqualTo(billId))
                 .build().render(RenderingStrategies.MYBATIS3);
         return userTradeRecordMapper.selectOne(query);
+    }
+
+    public List<UserTradeRecord> selectBetweenTime(LocalDateTime startTime, LocalDateTime endTime) {
+        SelectStatementProvider query = SqlBuilder.select(UserTradeRecordMapper.selectList)
+                .from(UserTradeRecordDynamicSqlSupport.userTradeRecord)
+                .where(UserTradeRecordDynamicSqlSupport.createdTime, isBetween(startTime).and(endTime))
+                .build().render(RenderingStrategies.MYBATIS3);
+        return userTradeRecordMapper.selectMany(query);
     }
 }

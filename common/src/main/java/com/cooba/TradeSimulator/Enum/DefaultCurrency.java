@@ -11,8 +11,8 @@ public enum DefaultCurrency {
     TWD(1, "TWD", BigDecimal.ONE),
     USD(2, "USD", BigDecimal.valueOf(31)),
     JPY(3, "JPY", BigDecimal.valueOf(0.2131)),
-    KRD(4, "USD", BigDecimal.valueOf(0.02273)),
-    CNY(5, "USD", BigDecimal.valueOf(4.263)),
+    KRD(4, "KRD", BigDecimal.valueOf(0.02273)),
+    CNY(5, "CNY", BigDecimal.valueOf(4.263)),
     ;
 
     DefaultCurrency(int id, String name, BigDecimal rate) {

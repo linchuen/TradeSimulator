@@ -8,6 +8,7 @@ import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;
 import com.cooba.TradeSimulator.Object.Transaction;
 import com.cooba.TradeSimulator.Service.Interface.TradeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +19,14 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class StockTradeService implements TradeService {
-    private final Transaction<TradeData> buyStockTransaction;
-    private final Transaction<TradeData> sellStockTransaction;
-    private final UserTradeRecordDB userTradeRecordDB;
-
-    public StockTradeService(@Qualifier("BuyStock") Transaction<TradeData> buyStockTransaction, @Qualifier("SellStock") Transaction<TradeData> sellStockTransaction, UserTradeRecordDB userTradeRecordDB) {
-        this.buyStockTransaction = buyStockTransaction;
-        this.sellStockTransaction = sellStockTransaction;
-        this.userTradeRecordDB = userTradeRecordDB;
-    }
+    @Autowired
+    @Qualifier("BuyStock")
+    private  Transaction<TradeData> buyStockTransaction;
+    @Autowired
+    @Qualifier("SellStock")
+    private  Transaction<TradeData> sellStockTransaction;
+    @Autowired
+    private  UserTradeRecordDB userTradeRecordDB;
 
     public String buy(Integer userId, Integer stockId, Integer currencyId, BigDecimal amount) {
         String billId = UUID.randomUUID().toString();
