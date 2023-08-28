@@ -10,6 +10,15 @@ spring:
   h2:
     console:
       enabled: true
+  redisson:
+    enable: false
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+grpc:
+  client:
+    currency-grpc:
+      address: 'static://localhost:9091'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

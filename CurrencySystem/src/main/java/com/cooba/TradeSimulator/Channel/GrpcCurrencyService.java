@@ -10,16 +10,20 @@ import com.cooba.TradeSimulator.service.CurrencyServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.math.BigDecimal;
 
 @GrpcService
-@AllArgsConstructor
 public class GrpcCurrencyService extends CurrencyServiceGrpc.CurrencyServiceImplBase {
-    private final CurrencyService currencyService;
+    @Autowired
+    private CurrencyService currencyService;
 
     public void getCurrencyInfo(CurrencyRequest request, StreamObserver<CurrencyReply> responseObserver) {
         int currencyId = request.getCurrencyId();
         try {
-            Currency currency = currencyService.getCurrencyInfo(currencyId);
+//            Currency currency = currencyService.getCurrencyInfo(currencyId);
+            Currency currency=Currency.builder().id(1).name("test").rate(BigDecimal.ONE).build();
             CurrencyReply reply = CurrencyReply.newBuilder()
                     .setCurrencyId(currency.getId())
                     .setName(currency.getName())
@@ -27,7 +31,7 @@ public class GrpcCurrencyService extends CurrencyServiceGrpc.CurrencyServiceImpl
                     .build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
-        } catch (Exception | NotSupportCurrencyException e) {
+        } catch (Exception e) {
             responseObserver.onError(e);
         }
     }

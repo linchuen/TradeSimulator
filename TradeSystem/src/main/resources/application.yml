@@ -8,5 +8,7 @@ pagehelper:
   reasonable: false
   defaultCount: true
 spring:
+  application:
+    name: local-grpc-client
   profiles:
     include: @activatedProperties@

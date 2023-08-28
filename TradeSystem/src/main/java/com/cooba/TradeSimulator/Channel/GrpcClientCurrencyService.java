@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Service
 public class GrpcClientCurrencyService {
 
-    @GrpcClient("currency-grpc-server")
+    @GrpcClient("currency-grpc")
     private CurrencyServiceGrpc.CurrencyServiceBlockingStub currencyServiceBlockingStub;
 
     public CurrencyInfo getCurrencyInfo(int currencyId) {
