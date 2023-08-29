@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Service
 public class GrpcClientAccountService {
 
-    @GrpcClient("account-grpc-server")
+    @GrpcClient("account-grpc")
     private AccountServiceGrpc.AccountServiceBlockingStub accountServiceBlockingStub;
 
     public Response minusMoney(Integer userId, Integer currencyId, BigDecimal payPrice) {

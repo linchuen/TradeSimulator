@@ -16,7 +16,7 @@ import java.time.ZoneId;
 @Service
 public class GrpcClientStockService {
 
-    @GrpcClient("stock-grpc-server")
+    @GrpcClient("stock-grpc")
     private StockServiceGrpc.StockServiceBlockingStub stockServiceBlockingStub;
 
     public TradeStockInfo getStockInfo(Integer id) {

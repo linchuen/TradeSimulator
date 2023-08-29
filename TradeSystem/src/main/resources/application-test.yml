@@ -17,8 +17,18 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 grpc:
   client:
+    account-grpc:
+      address: 'static://localhost:9090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
     currency-grpc:
       address: 'static://localhost:9091'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+    stock-grpc:
+      address: 'static://localhost:9092'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext

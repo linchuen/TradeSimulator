@@ -22,8 +22,7 @@ public class GrpcCurrencyService extends CurrencyServiceGrpc.CurrencyServiceImpl
     public void getCurrencyInfo(CurrencyRequest request, StreamObserver<CurrencyReply> responseObserver) {
         int currencyId = request.getCurrencyId();
         try {
-//            Currency currency = currencyService.getCurrencyInfo(currencyId);
-            Currency currency=Currency.builder().id(1).name("test").rate(BigDecimal.ONE).build();
+            Currency currency = currencyService.getCurrencyInfo(currencyId);
             CurrencyReply reply = CurrencyReply.newBuilder()
                     .setCurrencyId(currency.getId())
                     .setName(currency.getName())
@@ -31,7 +30,7 @@ public class GrpcCurrencyService extends CurrencyServiceGrpc.CurrencyServiceImpl
                     .build();
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
-        } catch (Exception e) {
+        } catch (Exception | NotSupportCurrencyException e) {
             responseObserver.onError(e);
         }
     }

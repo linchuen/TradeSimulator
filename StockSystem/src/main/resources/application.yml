@@ -1,5 +1,8 @@
 server:
   port: 8082
+grpc:
+  server:
+    port: 9092
 mybatis:
   mapper-locations: classpath:mappers/*xml
   configration:
@@ -8,5 +11,7 @@ pagehelper:
   reasonable: false
   defaultCount: true
 spring:
+  application:
+    name: stock-grpc-server
   profiles:
     include: @activatedProperties@
