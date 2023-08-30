@@ -7,7 +7,6 @@ import com.cooba.TradeSimulator.Config.TransactionInitConfig;
 import com.cooba.TradeSimulator.DataLayer.UserTradeRecordDB;
 import com.cooba.TradeSimulator.Entity.UserTradeRecord;
 import com.cooba.TradeSimulator.Enum.DefaultCurrency;
-import com.cooba.TradeSimulator.Exception.NoLockException;
 import com.cooba.TradeSimulator.Object.TransactionReply;
 import com.cooba.TradeSimulator.Object.currency.CurrencyInfo;
 import com.cooba.TradeSimulator.Object.stock.TradeStockInfo;

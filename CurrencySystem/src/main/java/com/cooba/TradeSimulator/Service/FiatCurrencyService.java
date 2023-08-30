@@ -2,6 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.CurrencyDB;
 import com.cooba.TradeSimulator.Entity.Currency;
+import com.cooba.TradeSimulator.Enum.DefaultCurrency;
 import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
 import com.cooba.TradeSimulator.Service.Interface.CurrencyService;
 import com.cooba.TradeSimulator.Util.HttpCsvResponse;
@@ -40,6 +41,16 @@ public class FiatCurrencyService implements CurrencyService {
                 .transferRawData(this::transferFunction);
 
         Map<String, Currency> keyMap = dbCurrencyList.stream().collect(Collectors.toMap(Currency::getName, currency -> currency));
+
+        Map<String, DefaultCurrency> defaultCurrencyMap = DefaultCurrency.getCurrencyNameMap();
+        Map<Boolean, List<Currency>> isDefaultCurrencyMap = currencyList.stream().collect(Collectors.groupingBy(currency -> defaultCurrencyMap.containsKey(currency.getName())));
+
+        //make sure default currency order is correct
+        upsertCurrency(isDefaultCurrencyMap.get(true), keyMap);
+        upsertCurrency(isDefaultCurrencyMap.get(false), keyMap);
+    }
+
+    private void upsertCurrency(List<Currency> currencyList, Map<String, Currency> keyMap) {
         for (Currency currency : currencyList) {
             String name = currency.getName();
 
@@ -81,6 +92,6 @@ public class FiatCurrencyService implements CurrencyService {
         if (currency.getUpdatedTime().isBefore(today.atStartOfDay())) {
             downloadCurrencyData();
         }
-       return currencyDB.selectById(currencyId).orElseThrow(NotSupportCurrencyException::new);
+        return currencyDB.selectById(currencyId).orElseThrow(NotSupportCurrencyException::new);
     }
 }
