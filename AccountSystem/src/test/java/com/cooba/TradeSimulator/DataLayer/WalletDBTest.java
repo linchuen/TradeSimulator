@@ -63,7 +63,7 @@ class WalletDBTest {
         Optional<CurrencyAsset> currencyAssetOptional = walletDB.selectCurrencyAsset(1, 1);
         assertTrue(currencyAssetOptional.isPresent());
         CurrencyAsset currencyAsset = currencyAssetOptional.get();
-        assertEquals(0, BigDecimal.ZERO.compareTo(currencyAsset.getAmount()));
+        assertEquals(0, BigDecimal.valueOf(100).compareTo(currencyAsset.getAmount()));
     }
 
     @Test
