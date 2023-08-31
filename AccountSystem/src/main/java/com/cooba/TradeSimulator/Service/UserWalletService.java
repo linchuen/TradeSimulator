@@ -4,13 +4,12 @@ import com.cooba.TradeSimulator.Annotation.TransactionLock;
 import com.cooba.TradeSimulator.DataLayer.CurrencyDB;
 import com.cooba.TradeSimulator.DataLayer.WalletDB;
 import com.cooba.TradeSimulator.Exception.InsufficientException;
-import com.cooba.TradeSimulator.Exception.NotSupportCurrencyException;
 import com.cooba.TradeSimulator.Object.asset.Asset;
-import com.cooba.TradeSimulator.Object.wallet.Wallet;
 import com.cooba.TradeSimulator.Object.asset.CurrencyAsset;
 import com.cooba.TradeSimulator.Object.asset.StockInfoAsset;
 import com.cooba.TradeSimulator.Object.wallet.CurrencyWallet;
 import com.cooba.TradeSimulator.Object.wallet.StockWallet;
+import com.cooba.TradeSimulator.Object.wallet.Wallet;
 import com.cooba.TradeSimulator.Service.Interface.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class UserWalletService implements WalletService {
     @Autowired
     private WalletDB walletDB;
     @Autowired
-    private CurrencyDB currencyDataAcccess;
+    private CurrencyDB currencyDB;
 
     @Override
     public List<Wallet> getWallets(Integer userId) {
@@ -38,14 +37,14 @@ public class UserWalletService implements WalletService {
     }
 
     @Override
-    public CurrencyAsset assessAssetByUnit(Integer userId, Integer currencyId) throws NotSupportCurrencyException {
+    public CurrencyAsset assessAssetByUnit(Integer userId, Integer currencyId) {
         List<Asset> totalAssets = new LinkedList<>();
         for (Wallet wallet : getWallets(userId)) {
             totalAssets.addAll(wallet.getAssets());
         }
         CurrencyAsset result = CurrencyAsset.builder().currencyId(currencyId).amount(BigDecimal.ZERO).build();
         for (Asset asset : totalAssets) {
-            BigDecimal amount = asset.exchange(currencyId, currencyDataAcccess).getAmount();
+            BigDecimal amount = asset.exchange(currencyId, currencyDB).getAmount();
             result.setAmount(result.getAmount().add(amount));
         }
         return result;
@@ -53,7 +52,7 @@ public class UserWalletService implements WalletService {
 
     @Override
     public CurrencyAsset exchange(Asset input, Integer currencyId) {
-        return (CurrencyAsset) input.exchange(currencyId, currencyDataAcccess);
+        return (CurrencyAsset) input.exchange(currencyId, currencyDB);
     }
 
     @Override

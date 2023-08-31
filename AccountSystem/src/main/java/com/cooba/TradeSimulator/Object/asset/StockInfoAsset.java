@@ -1,6 +1,6 @@
 package com.cooba.TradeSimulator.Object.asset;
 
-import com.cooba.TradeSimulator.DataLayer.CurrencyData;
+import com.cooba.TradeSimulator.DataLayer.CurrencyDatabase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -20,10 +20,10 @@ public class StockInfoAsset extends Asset {
 
 
     @Override
-    public Asset exchange(Integer currencyId, CurrencyData currencyData) {
+    public Asset exchange(Integer currencyId, CurrencyDatabase currencyDatabase) {
         BigDecimal closingPrice = this.closingPrice;
 
-        BigDecimal toRate = currencyData.getCurrencyRate(currencyId);
+        BigDecimal toRate = currencyDatabase.getRate(currencyId);
 
         return CurrencyAsset.builder()
                 .amount(this.getAmount().multiply(closingPrice).divide(toRate, 5, RoundingMode.FLOOR))
