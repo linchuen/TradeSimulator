@@ -36,7 +36,9 @@ public class CurrencyDB {
         currency.setId(defaultCurrency == null ? null : defaultCurrency.getId());
         currency.setCreatedTime(LocalDateTime.now());
         currency.setUpdatedTime(LocalDateTime.now());
-        return currencyMapper.insert(currency) == 1;
+        int row = currencyMapper.insert(currency);
+        redisUtil.put(RedisKey.currency.name(), String.valueOf(currency.getId()), JsonUtil.toJson(currency));
+        return row == 1;
     }
 
     public boolean update(Currency currency) {
@@ -60,7 +62,7 @@ public class CurrencyDB {
     public Optional<Currency> selectById(Integer currencyId) {
         String json = redisUtil.get(RedisKey.currency.name(), String.valueOf(currencyId));
         if (json != null) {
-            return Optional.ofNullable(JsonUtil.readJson(json,Currency.class));
+            return Optional.ofNullable(JsonUtil.readJson(json, Currency.class));
         }
 
         return currencyMapper.selectByPrimaryKey(currencyId);

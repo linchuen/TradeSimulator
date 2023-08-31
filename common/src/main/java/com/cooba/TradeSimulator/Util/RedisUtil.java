@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 public class RedisUtil {
     @Autowired(required = false)
     private RedisTemplate<String, String> redisTemplate;
-    @Value("${spring.redisson.enable}")
-    private boolean redissonEnable;
 
     public void put(String key, String hashKey, String value) {
         redisTemplate.opsForHash().put(key, hashKey, value);
