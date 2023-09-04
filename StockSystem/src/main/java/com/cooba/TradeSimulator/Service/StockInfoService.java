@@ -2,6 +2,7 @@ package com.cooba.TradeSimulator.Service;
 
 import com.cooba.TradeSimulator.DataLayer.StockInfoDB;
 import com.cooba.TradeSimulator.Entity.StockInfo;
+import com.cooba.TradeSimulator.Service.Interface.InfoService;
 import com.cooba.TradeSimulator.Util.SSLHelper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class StockInfoService {
+public class StockInfoService implements InfoService {
     @Autowired
     private StockInfoDB stockInfoDB;
 
@@ -54,8 +55,8 @@ public class StockInfoService {
     }
 
     public List<StockInfo> findAllStockInfo() throws IOException {
-        List<StockInfo> stockInfos=stockInfoDB.findAll();
-        if (stockInfos.isEmpty()){
+        List<StockInfo> stockInfos = stockInfoDB.findAll();
+        if (stockInfos.isEmpty()) {
             crawlIndustry();
         }
         return stockInfoDB.findAll();
