@@ -38,7 +38,7 @@ class UserAccountServiceTest {
         System.out.println(uuid);
         assertNotNull(uuid);
 
-        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.select(uuid);
         assertTrue(accountOptional.isPresent());
         assertEquals("Aiden", accountOptional.get().getName());
     }
@@ -48,7 +48,7 @@ class UserAccountServiceTest {
         String uuid = accountService.createAccount("Aiden");
         accountService.updateAccountIfExist(uuid, "new name");
 
-        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.select(uuid);
         assertTrue(accountOptional.isPresent());
         assertEquals("new name", accountOptional.get().getName());
     }
@@ -56,11 +56,11 @@ class UserAccountServiceTest {
     @Test
     void deleteAccountIfExist() {
         String uuid = accountService.createAccount("Aiden");
-        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.select(uuid);
         assertTrue(accountOptional.isPresent());
 
         accountService.deleteAccountIfExist(uuid);
-        Optional<Account> afterDelete = accountDB.selectAccount(uuid);
+        Optional<Account> afterDelete = accountDB.select(uuid);
         assertFalse(afterDelete.isPresent());
     }
 

@@ -29,29 +29,29 @@ public class UserAccountService implements AccountService {
                 .name(name)
                 .uuid(uuid)
                 .build();
-        accountDB.insertAccount(account);
+        accountDB.insert(account);
         return uuid;
     }
 
     @Override
     public void updateAccountIfExist(String uuid, String name) {
-        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.select(uuid);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
             account.setName(name);
-            accountDB.updateAccount(account);
+            accountDB.update(account);
         }
     }
 
     @Override
     public void deleteAccountIfExist(String uuid) {
-        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
-        accountOptional.ifPresent(account -> accountDB.deleteAccount(uuid));
+        Optional<Account> accountOptional = accountDB.select(uuid);
+        accountOptional.ifPresent(account -> accountDB.delete(uuid));
     }
 
     @Override
     public Optional<AccountDto> getAccount(String uuid) {
-        Optional<Account> accountOptional = accountDB.selectAccount(uuid);
+        Optional<Account> accountOptional = accountDB.select(uuid);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
             return Optional.of(AccountDto.builder()

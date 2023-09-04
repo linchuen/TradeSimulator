@@ -23,14 +23,14 @@ public class AccountDB {
     @Autowired
     private AccountMapper accountMapper;
 
-    public boolean insertAccount(Account account) {
+    public boolean insert(Account account) {
         account.setIsEnable(true);
         account.setCreatedTime(LocalDateTime.now());
         account.setUpdatedTime(LocalDateTime.now());
         return accountMapper.insert(account) == 1;
     }
 
-    public boolean updateAccount(Account account) {
+    public boolean update(Account account) {
         UpdateStatementProvider query = SqlBuilder.update(AccountDynamicSqlSupport.account)
                 .set(AccountDynamicSqlSupport.name).equalTo(account.getName())
                 .set(AccountDynamicSqlSupport.updatedTime).equalTo(LocalDateTime.now())
@@ -39,7 +39,7 @@ public class AccountDB {
         return accountMapper.update(query) == 1;
     }
 
-    public boolean deleteAccount(String uuid) {
+    public boolean delete(String uuid) {
         DeleteStatementProvider query = SqlBuilder.deleteFrom(AccountDynamicSqlSupport.account)
                 .where(AccountDynamicSqlSupport.uuid, isEqualTo(uuid))
                 .build()
@@ -47,7 +47,7 @@ public class AccountDB {
         return accountMapper.delete(query) == 1;
     }
 
-    public Optional<Account> selectAccount(String uuid) {
+    public Optional<Account> select(String uuid) {
         SelectStatementProvider query = SqlBuilder.select(AccountMapper.selectList)
                 .from(AccountDynamicSqlSupport.account)
                 .where(AccountDynamicSqlSupport.uuid, isEqualTo(uuid))
