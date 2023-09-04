@@ -22,6 +22,7 @@
         <module>TradeSystem</module>
         <module>CurrencySystem</module>
         <module>proto</module>
+        <module>TelegramSystem</module>
     </modules>
 
     <profiles>
@@ -81,7 +82,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
         <dependency>

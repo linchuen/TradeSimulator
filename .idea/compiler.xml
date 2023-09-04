@@ -10,6 +10,7 @@
         <module name="AccountSystem" />
         <module name="MybatisPlugin" />
         <module name="common" />
+        <module name="TelegramSystem" />
         <module name="proto" />
         <module name="TradeSystem" />
         <module name="CurrencySystem" />
@@ -22,6 +23,7 @@
       <module name="AccountSystem" options="-parameters" />
       <module name="CurrencySystem" options="-parameters" />
       <module name="StockSystem" options="-parameters" />
+      <module name="TelegramSystem" options="-parameters" />
       <module name="TradeSimulator" options="-parameters" />
       <module name="TradeSystem" options="-parameters" />
       <module name="common" options="-parameters" />

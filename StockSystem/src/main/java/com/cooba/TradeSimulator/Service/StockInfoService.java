@@ -53,7 +53,11 @@ public class StockInfoService {
         stockInfoDB.insertAll(stockInfoList);
     }
 
-    public List<StockInfo> findAllStockInfo() {
+    public List<StockInfo> findAllStockInfo() throws IOException {
+        List<StockInfo> stockInfos=stockInfoDB.findAll();
+        if (stockInfos.isEmpty()){
+            crawlIndustry();
+        }
         return stockInfoDB.findAll();
     }
 

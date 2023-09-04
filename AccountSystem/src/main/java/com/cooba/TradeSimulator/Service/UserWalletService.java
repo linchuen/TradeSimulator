@@ -1,5 +1,6 @@
 package com.cooba.TradeSimulator.Service;
 
+import com.cooba.TradeSimulator.Annotation.Key;
 import com.cooba.TradeSimulator.Annotation.TransactionLock;
 import com.cooba.TradeSimulator.DataLayer.CurrencyDB;
 import com.cooba.TradeSimulator.DataLayer.WalletDB;
@@ -57,7 +58,7 @@ public class UserWalletService implements WalletService {
 
     @Override
     @TransactionLock
-    public void assetChange(Integer userId, Asset asset, boolean isPlus) throws InsufficientException {
+    public void assetChange(@Key Integer userId, Asset asset, boolean isPlus) throws InsufficientException {
         if (asset instanceof CurrencyAsset) {
             int currencyId = ((CurrencyAsset) asset).getCurrencyId();
             assetChange(userId, asset, isPlus, () -> walletDB.selectCurrencyAsset(userId, currencyId));

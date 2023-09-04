@@ -40,6 +40,7 @@ public class FiatCurrencyService implements CurrencyService {
                 .readResponseByCSV()
                 .transferRawData(this::transferFunction);
 
+        currencyList.add(Currency.builder().id(1).name(DefaultCurrency.TWD.getName()).rate(BigDecimal.ONE).build());
         Map<String, Currency> keyMap = dbCurrencyList.stream().collect(Collectors.toMap(Currency::getName, currency -> currency));
 
         Map<String, DefaultCurrency> defaultCurrencyMap = DefaultCurrency.getCurrencyNameMap();
