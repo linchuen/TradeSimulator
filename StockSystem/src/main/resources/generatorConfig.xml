@@ -61,5 +61,7 @@
         </table>
         <table tableName="stock_trade_record">
         </table>
+        <table tableName="top_transaction_stock">
+        </table>
     </context>
 </generatorConfiguration>

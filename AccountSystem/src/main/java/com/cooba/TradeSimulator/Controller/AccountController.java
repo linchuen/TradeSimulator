@@ -45,9 +45,9 @@ public class AccountController {
     }
 
     @GetMapping("/{uuid}")
-    public Mono<ResponseEntity> getAccount(@PathVariable String uuid) throws NotExistException {
+    public Mono<ResponseEntity<AccountDto>> getAccount(@PathVariable String uuid) throws NotExistException {
         Optional<AccountDto> accountDtoOptional = accountService.getAccount(uuid);
-        return accountDtoOptional.<Mono<ResponseEntity>>map(accountDto -> Mono.just(ResponseEntity.ok(accountDto)))
+        return accountDtoOptional.map(accountDto -> Mono.just(ResponseEntity.ok(accountDto)))
                 .orElseThrow(NotExistException::new);
     }
 
@@ -73,9 +73,9 @@ public class AccountController {
     }
 
     @GetMapping("/detail/{uuid}")
-    public Mono<ResponseEntity> selectDetailAccount(@PathVariable String uuid) throws NotExistException {
+    public Mono<ResponseEntity<Account>> selectDetailAccount(@PathVariable String uuid) throws NotExistException {
         Optional<Account> accountOptional = accountDB.selectDetailAccount(uuid);
-        return accountOptional.<Mono<ResponseEntity>>map(account -> Mono.just(ResponseEntity.ok(account)))
+        return accountOptional.map(account -> Mono.just(ResponseEntity.ok(account)))
                 .orElseThrow(NotExistException::new);
     }
 }
