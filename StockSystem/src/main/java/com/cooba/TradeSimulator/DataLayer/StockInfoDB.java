@@ -17,7 +17,7 @@ import static com.cooba.TradeSimulator.Mapper.StockInfoDynamicSqlSupport.stockIn
 @Component
 public class StockInfoDB {
     @Autowired
-    StockInfoMapper stockInfoMapper;
+    private StockInfoMapper stockInfoMapper;
 
     public List<StockInfo> findAll() {
         SelectStatementProvider query = SqlBuilder.select(StockInfoMapper.selectList)

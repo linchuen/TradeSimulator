@@ -1,43 +1,44 @@
 package com.cooba.TradeSimulator.Service;
 
-import com.cooba.TradeSimulator.DataLayer.SkipDateDB;
-import com.cooba.TradeSimulator.Entity.SkipDate;
-import com.cooba.TradeSimulator.Entity.StockTradeRecord;
+import com.cooba.TradeSimulator.DataLayer.TopTransactionDB;
 import com.cooba.TradeSimulator.Entity.TopTransactionStock;
-import com.cooba.TradeSimulator.Service.Interface.SkipDateService;
+import com.cooba.TradeSimulator.Exception.DownloadException;
 import com.cooba.TradeSimulator.Service.Interface.TopTransactionService;
 import com.cooba.TradeSimulator.Util.HttpCsvResponse;
 import com.cooba.TradeSimulator.Util.HttpUtil;
 import com.cooba.TradeSimulator.Util.RegexUtil;
 import com.opencsv.exceptions.CsvException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+@Slf4j
 @Service
 public class TWSETopTransactionService implements TopTransactionService {
     @Autowired
     private HttpUtil httpUtil;
     @Autowired
-    private SkipDateDB skipDateDB;
+    private TopTransactionDB topTransactionDB;
 
-    public void downloadData(int year) throws IOException, CsvException {
-        Map<String, String> map = new HashMap(Map.of(
-                "response", "csv"));
+    public void downloadData() throws IOException, CsvException {
+        Map<String, String> map = Map.of("response", "csv");
 
         List<TopTransactionStock> topTransactionStocks = HttpCsvResponse.build(httpUtil)
                 .sendHttpRequest("https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX20", map)
                 .readResponseByCSV()
-                .transferRawData(dataRows -> transferFunction(dataRows));
-        skipDateDB.insertAll(skipDateList);
+                .transferRawData(this::transferFunction);
+
+        topTransactionDB.insertAll(topTransactionStocks);
     }
 
     private List<TopTransactionStock> transferFunction(List<String[]> dataRows) {
@@ -50,7 +51,7 @@ public class TWSETopTransactionService implements TopTransactionService {
 
         LocalDate localDate;
         if (matcher.find()) {
-            int year = Integer.parseInt(matcher.group(1));
+            int year = Integer.parseInt(matcher.group(1)) + 1911;
             int month = Integer.parseInt(matcher.group(2));
             int day = Integer.parseInt(matcher.group(3));
             localDate = LocalDate.of(year, month, day);
@@ -59,7 +60,8 @@ public class TWSETopTransactionService implements TopTransactionService {
         }
 
         dataRows = dataRows.subList(2, dataRows.size());
-        return dataRows.stream().filter(strings -> strings.length == 13).map(strings -> {
+        int totalDataColumn = 14;
+        return dataRows.stream().filter(strings -> strings.length == totalDataColumn).map(strings -> {
             int rank = Integer.parseInt(strings[0]);
 
             String stockcode = strings[1];
@@ -70,48 +72,47 @@ public class TWSETopTransactionService implements TopTransactionService {
                     .replace(",", ""));
 
             BigDecimal transaction = new BigDecimal(strings[4]
-                    .replace(",", "")
                     .replace(",", ""));
 
             BigDecimal openingPrice = new BigDecimal(strings[5]
-                    .replace(",", "")
-                    .replace("--", "0"));
-
-            BigDecimal highestPrice = new BigDecimal(strings[6]
-                    .replace(",", "")
-                    .replace("--", "0"));
-
-            BigDecimal lowestPrice = new BigDecimal(strings[7]
-                    .replace(",", "")
-                    .replace("--", "0"));
-
-            BigDecimal closingPrice = new BigDecimal(strings[8]
-                    .replace(",", "")
-                    .replace("--", "0"));
-
-            BigDecimal turnover = new BigDecimal(strings[9]
                     .replace(",", ""));
 
-            return StockTradeRecord.builder()
+            BigDecimal highestPrice = new BigDecimal(strings[6]
+                    .replace(",", ""));
+
+            BigDecimal lowestPrice = new BigDecimal(strings[7]
+                    .replace(",", ""));
+
+            BigDecimal closingPrice = new BigDecimal(strings[8]
+                    .replace(",", ""));
+
+            return TopTransactionStock.builder()
+                    .rank(rank)
+                    .name(name)
                     .stockcode(stockcode)
-                    .date(dataDate)
+                    .date(localDate)
                     .tradingVolume(tradingVolume)
                     .transaction(transaction)
                     .openingPrice(openingPrice)
                     .highestPrice(highestPrice)
                     .lowestPrice(lowestPrice)
                     .closingPrice(closingPrice)
-                    .turnover(turnover)
                     .build();
         }).collect(Collectors.toList());
     }
 
-    public boolean isSkipDate(LocalDate date) {
-        List<DayOfWeek> weekend = Stream.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).collect(Collectors.toList());
-        if (weekend.contains(date.getDayOfWeek())) {
-            return true;
+    public List<TopTransactionStock> getTodayTopTransactionStock() throws DownloadException {
+        List<TopTransactionStock> topTransactionStocks = topTransactionDB.findByDate(LocalDate.now());
+        if (!topTransactionStocks.isEmpty()){
+            return topTransactionStocks;
         }
-        return skipDateDB.findByDate(date).isPresent();
+        try {
+            downloadData();
+        }catch (Exception e) {
+            log.error("Error downloading top transaction data, Date:{}", LocalDate.now());
+            throw new DownloadException();
+        }
+        return topTransactionDB.findByDate(LocalDate.now());
     }
 }
 

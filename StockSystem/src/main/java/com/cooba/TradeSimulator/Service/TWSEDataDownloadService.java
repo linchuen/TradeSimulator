@@ -60,7 +60,8 @@ public class TWSEDataDownloadService implements StockDataDownloadService {
         }
 
         dataRows.remove(1);
-        return dataRows.stream().filter(strings -> strings.length == 10).map(strings -> {
+        int totalDataColumn = 10;
+        return dataRows.stream().filter(strings -> strings.length == totalDataColumn).map(strings -> {
             String[] dateArr = strings[0].split("/");
             int y = Integer.parseInt(dateArr[0]) + 1911;
             int m = Integer.parseInt(dateArr[1]);

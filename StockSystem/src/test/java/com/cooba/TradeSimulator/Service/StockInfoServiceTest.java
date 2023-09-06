@@ -3,6 +3,7 @@ package com.cooba.TradeSimulator.Service;
 import com.cooba.TradeSimulator.Config.Configuration;
 import com.cooba.TradeSimulator.Config.HttpConfig;
 import com.cooba.TradeSimulator.Entity.StockInfo;
+import com.cooba.TradeSimulator.Exception.DownloadException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -23,7 +24,7 @@ class StockInfoServiceTest {
     StockInfoService stockInfoService;
 
     @Test
-    void crawlIndustry() throws IOException {
+    void crawlIndustry() throws DownloadException, IOException {
         stockInfoService.crawlIndustry();
 
         List<StockInfo> stockInfoList = stockInfoService.findAllStockInfo();

@@ -46,9 +46,6 @@ public final class TopTransactionStockDynamicSqlSupport {
     public static final SqlColumn<BigDecimal> closingPrice = topTransactionStock.closingPrice;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    public static final SqlColumn<BigDecimal> turnover = topTransactionStock.turnover;
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     public static final SqlColumn<LocalDateTime> createdTime = topTransactionStock.createdTime;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
@@ -74,8 +71,6 @@ public final class TopTransactionStockDynamicSqlSupport {
         public final SqlColumn<BigDecimal> lowestPrice = column("lowest_price", JDBCType.DECIMAL);
 
         public final SqlColumn<BigDecimal> closingPrice = column("closing_price", JDBCType.DECIMAL);
-
-        public final SqlColumn<BigDecimal> turnover = column("turnover", JDBCType.DECIMAL);
 
         public final SqlColumn<LocalDateTime> createdTime = column("created_time", JDBCType.TIMESTAMP);
 

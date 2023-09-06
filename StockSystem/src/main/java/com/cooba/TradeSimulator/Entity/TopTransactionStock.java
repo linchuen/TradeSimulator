@@ -44,8 +44,5 @@ public class TopTransactionStock {
     private BigDecimal closingPrice;
 
     @Generated("org.mybatis.generator.api.MyBatisGenerator")
-    private BigDecimal turnover;
-
-    @Generated("org.mybatis.generator.api.MyBatisGenerator")
     private LocalDateTime createdTime;
 }
